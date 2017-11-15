@@ -1,0 +1,62 @@
+\clearpage
+\vspace*{\stretch{2}}%{\fill}
+\begin{center}
+\begin{minipage}{.75\textwidth}
+\section{Introducción}
+En este capítulo presentamos la idea general del sistema desarrollado y su entorno, los objetivos perseguidos, algunos conceptos básicos relacionados con las tecnologías usadas y la estructura de la memoria.% \pagebreak
+\end{minipage}
+\end{center}
+\vspace{\stretch{3}} % \vfill % equivalent to \vspace{\fill}
+\clearpage% https://tex.stackexchange.com/questions/70714/center-horizontally-and-vertically-a-block-of-text
+
+\subsection{Aplicaciones y servicios telemáticos y sensores}
+
+A finales del Siglo XX quedó claro que Internet había cambiado para siempre la vida de los seres humanos. Los nuevos servicios telemáticos que era capaz de proporcionar no hicieron más que despegar, cambiando definitivamente la forma de vida de las personas. A principios del Siglo XXI se ha visto una nueva revolución en los servicios telemáticos basados en Internet: el uso de sensores para aumentar la potencia de estos servicios. Surge así un nuevo concepto denominado Internet of things (\acrshort{IoT}) \cite{IOT2}. Este amplio concepto, lo que en el fondo aprecia es la posibilidad de usar Internet como red de comunicación universal para comunicar datos provenientes de sensores a todo lo largo y ancho del Mundo; con la posibilidad de usar valores sensados para aumentar la expresividad de los servicios telemáticos; el caso más simple: poder referenciar fotos en base al lugar en el que se toman y poder comunicarlas de tal manera que el receptor pueda saber gráficamente donde se hicieron las fotos de manera instantánea.
+
+En los últimos años ha surgido una derivada de la IoT que consiste en usar los dispositivos móviles y ordenadores cuentan con una amplia gama de sensores que les permiten monitorizar gran cantidad de datos sobre su entorno. Esto facilita la obtención de sensado y ofrece una alta variedad de funciones relacionadas con los sensores. Los dispositivos de esta clase presentes habitualmente son acelerómetros, giroscopios, sensores de temperatura, sonido, luz… El conjunto de técnicas relacionadas con esta modalidad de sensado suele denominarse \emph{sensado móvil}.
+
+La presencia de estos sensores en los diferentes dispositivos de uso cotidiano junto con las tecnologías de ubicación actuales permite la captura y recopilación de grandes cantidades de datos localizados con las consiguientes posibilidades de uso. Los proyectos de ciudades inteligentes o \emph{smartcities} pueden hacer uso de esta facilidad para realizar diversas tareas de análisis particularizados por distritos, zonas comerciales u otros criterios y en tiempo real. Mediante aplicaciones dedicadas y el cuidado adecuado de la privacidad, las empresas pueden solicitar a los usuarios de sus servicios el acceso puntual a ciertos sensores del teléfono. Los datos que recopilan les pueden ser de utilidad a cambio de servicios añadidos. Ejemplos de estos servicios añadidos sería el acceso gratuito a su red \emph{Wireless Fidelity} (\acrshort{WiFi}), y ejemplos de empresas que podrían proporcionar este servicio son hoteles o franquicias de restauración.
+
+Para llevar esto a cabo, los puntos de acceso actuales pueden contar con mecanismos que requieran de ciertas acciones por parte de los dispositivos que se conectan a ellos antes de proporcionarles acceso a internet. En el caso de este \emph{Trabajo Fin de Grado} (TFG), partimos de la situación en la que se implementaría un servidor que proporcione acceso a Internet a un dispositivo móvil a cambio de los datos de su sensor. Extendiendo este supuesto a un caso general, una empresa que tenga dispositivos conectados a sus redes puede ofertar servicios contextuales a los mismos a cambio de que hagan sensado gratuito.
+
+\subsection{Computadores empotrados y tecnologías Web para servicios telemáticos}
+
+No sólo se ha avanzado en la comercialización de dispositivos móviles, sino que en los últimos años ha habido una verdadera explosión de nuevos computadores de muy reducidas dimensiones que caben íntegramente en un una sóla placa electrónica. Ejemplos de estos computadores son los denominados \emph{Raspberry Pi} \cite{RasPi1}. En este tipo de computadores se pueden alojar clientes y servidores de servicios telemáticos para Internet.
+
+La tecnología Web ha alcanzado un alto grado de desarrollo, por lo que ahora tiene el potencial de ofrecer y explotar servicios que hasta hace poco tiempo requerían de una aplicación nativa, particularmente en los dispositivos móviles que ya están ampliamente extendidos y cuyo tráfico web generado representa más la mitad del total mundial.
+ 
+Los tradicionales elementos de la programación Web en el Cliente como pueden ser \emph{HyperText Markup Language} (\acrshort{HTML}) \cite{HTML5}, \emph{Cascading Style Sheets} (\acrshort{CSS}) \cite{HTML5CSS3} y JavaScript \cite{FrontEndBNR, LibroNode2} (\acrshort{JS}) se han visto reforzados con la salida de nuevos \emph{frameworks} e interfaces de programación de aplicaciones (\emph{Application Programming Interface}, \acrshort{API}) que implementan una amplia gama de funciones cada vez mayor y para la que anteriormente se requería mucho más esfuerzo de computación. El \emph{Web RealTime Communications} (\acrshort{WebRTC}) \cite{LibroWebRTC1} es uno de estos \emph{frameworks} en el ámbito de la comunicación multimedia en tiempo real. Del mismo modo, las tecnologías en el servidor como \emph{Pre Hypertext Processor} (\acrshort{PHP}) \cite{PHPMySQLJavaScript} han visto la aparición de alternativas que utilizan lenguajes propios del lado del cliente como Node.js \cite{LibroNode1}, que gozan de gran adopción y de una comunidad de desarrolladores muy activa.
+
+Dada la amplia variedad de dispositivos móviles existentes en la actualidad (clientes móviles), de tabletas, computadores de sobremesa… es necesario el diseño de aplicaciones Web que sean capaces de producir resultados adaptables a los distintos tipos de pantalla. Estas aplicaciones Web se denominan responsivas (\emph{responsive}) \cite{ResponsiveWD}. Este hecho es importante tenerlo en cuenta a la hora de diseñar servicios telemáticos basados en sensores capaces de enviar datos a distintos tipos de terminales programando únicamente un único código para la aplicación Web.
+
+Por todo esto, hoy en día es posible el uso de todas estas tecnologías para obtener datos de los sensores de un dispositivo que acceda a una aplicación web, implementando medios alternativos de acceso a un sistema. Estos sistemas toman cada día mayor importancia como nuevos servicios de telecomunicación y es el ámbito en el que desarrollamos este TFG.
+
+\subsection{Objetivos}
+
+El objetivo general de este TFG es dar un uso real a todo lo expuesto anteriormente, uso de sensores móviles y tecnologías web actuales, desarrollando un sistema completo de sensado móvil aprovechando el micrófono de los dispositivos móviles. Sobre una Raspberry Pi 3 se instala un punto de acceso WiFi a Internet y un servidor Web que exporta una aplicación Web responsiva. Los terminales móviles podrían acceder a esa aplicación Web para abrir una sesión de acceso a Internet. Cosa que lograrían si habilitan el acceso a su micrófono para que se registre el ruido o sonido ambiente durante una cierta cantidad de tiempo.
+ 
+Usando una de las API de WebRTC, estos datos se recopilan junto a la ubicación del dispositivo y una marca de tiempo y se envían a un servidor Web implementado con Node.js en una Raspberry Pi 3 que actuaría como punto de acceso WiFi a Internet. Este punto de acceso contaría con un grupo de elementos software que, trabajando conjuntamente con la aplicación web, proporcionarán acceso a internet al dispositivo a cambio de recibir los datos del sensor cada cierto tiempo, eventualmente disponiendo de dichos ficheros para realizar algún otro procesamiento como mapeo de niveles de audio o pruebas de localización acústica.
+
+Este objetivo general se llevará a cabo mediante la consecución de los diferentes objetivos operativos detallados a continuación:
+\begin{itemize}
+\item Desarrollar un prototipo de la aplicación Web responsiva y realizar pruebas en dispositivos reales (computador empotrado y dispositivos móviles).
+\item Desarrollar un prototipo del servidor Web que proporcione acceso a Internet al recibir los datos de la aplicación Web responsiva cada cierto tiempo y realizar pruebas en dispositivos reales.
+\item Realizar pruebas de campo de captura, transmisión y representación de los datos en entornos reales observando el rendimiento del sistema completo.
+\end{itemize}
+
+\subsection{Estructura de la memoria}
+En este primer capítulo hemos expuesto las ideas básicas del entorno y el objetivo del TFG.
+
+En el capítulo 2 presentamos las ideas básicas del sensado colaborativo y su aplicación para el acceso gratuito a Internet a través de una red WiFi con infraestructura de una sola celda.
+
+En el capítulo 3 presentamos una descripción somera de todas las tecnologías utilizadas para el desarrollo del proyecto.
+
+En el capítulo 4 mostramos el análisis de requisitos y el funcional (visión de alto nivel de los distintos módulos funcionales principales de que consta el sistema) del sistema completo para proporcionar una visión general de los distintos componentes del sistema.
+
+En el capítulo 5 analizamos orgánicamente el diseño de los componentes software que hemos utilizado para implantar en la práctica el sistema. El análisis de la instalación del software básico de la Rapsberry Pi 3 se muestra en el Apéndice \ref{ApendiceA}. Leído ese Apéndice se puede entender mejor qué software explicado en este capítulo, que se ha instalado y configurado.
+
+En el capítulo 6 se muestra un análisis de los resultados experimentales para demostrar la potencia del sistema desarrollado.
+ 
+Finalmente en el capítulo 7 se muestran las conclusiones y algunas posibles ampliaciones del sistema, una vez hemos aprendido que es posible implantarlo y observado distintos problemas que han ido surgiendo sobre la marcha. Justamente para analizar esos aspectos y otros detalles se han provisto otros apéndices.
+
+En el capítulo del Pliego de condiciones y presupuesto se exponen primero, la posible problemática en el uso del sistema y un análisis del coste económico de su implantación.

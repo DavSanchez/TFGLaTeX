@@ -1,0 +1,104 @@
+% Definiendo el estilo del documento
+\documentclass[12pt]{article}
+
+%Para el resto del proyecto se utilizará folio DIN A4, hojas
+%numeradas, interlineado de 1.5 cm y márgenes interior de 3 cm,
+%exterior de 2.5 cm, y superior e inferior de 2.5 cm cada uno. El
+%encabezado y pie de página, si los hubiese, deben incluirse
+%dentro del margen indicado.
+
+\usepackage{geometry}
+\geometry{a4paper,
+left=30mm,
+right=25mm,
+top=25mm,
+bottom=25mm}
+
+% Interlineado
+\linespread{1.25}
+
+% Paquetes que gestionan el español y otros caracteres especiales
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{parskip} % Quita indentación de primera línea
+\usepackage{pdfpages}
+\usepackage{microtype}
+
+% Paquete para gestionar imágenes
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[figurewithin=section, tablewithin=section]{caption}
+\newcommand{\source}[1]{\caption*{Fuente: {#1}} }
+\captionsetup[table]{name=Tabla}
+
+% Paquete para gestionar links (URL)
+\usepackage[hyphens]{url} % Para que las URLs se dividan (usar también /sloppy en el documento)
+%\usepackage[bookmarks=true]{hyperref}
+\usepackage{bookmark}
+
+\usepackage[toc,page,title]{appendix}
+\renewcommand{\appendixname}{Ap\'{e}ndice}
+\renewcommand{\appendixtocname}{Ap\'{e}ndices}
+\renewcommand{\appendixpagename}{Ap\'{e}ndices}
+
+\usepackage{etoolbox}
+\makeatletter
+\appto{\appendices}{\def\Hy@chapapp{Appendix}}
+\makeatother
+
+% Paquete para adjuntar código
+\usepackage[section]{minted} % Fragmentos de código
+\renewcommand{\listingscaption}{Código} % Nombre del fragmento de código
+\usepackage{xcolor} % Gestión de color
+
+\usepackage{csquotes}
+\usepackage[backend=biber,sorting=none,style=ieee,language=auto]{biblatex}
+\addbibresource{ReferenciasBib.bib}
+\addbibresource{ReferenciasWeb.bib}
+
+\usepackage[acronym,toc,nonumberlist,nogroupskip]{glossaries}
+\makenoidxglossaries
+\loadglsentries{./X_Glosario/X_Glosario}
+
+% Comenzamos documento
+\begin{document}
+\pagenumbering{gobble}
+\thispagestyle{empty}
+\clearpage
+\includepdf[pages={2-4},pagecommand={},fitpaper=true]{Portada.pdf}
+\clearpage
+
+\clearpage\mbox{}\clearpage
+
+% Construimos tabla de contenidos
+\pagenumbering{arabic}
+\tableofcontents
+
+\pagebreak
+
+\include{./1_Intro/1_Intro}
+\include{./2_SensadoCol/2_SensadoCol}
+\include{./3_Tecnologias/3_Tecnologias}
+\include{./4_AnalisisFuncional/4_AnalisisFuncional}
+\include{./5_AnalisisOrganico/5_AnalisisOrganico}
+\include{./6_EvalEmpirica/6_EvalEmpirica}
+\include{./7_Conclusiones/7_Conclusiones}
+\include{./X_Anexos/X_Anexos}
+
+% Referencias, para compilarlas compilamos primero ESTE documento en LaTeX,
+% luego, lo compilamos en BibTeX (pillará el documento .bib referenciado en bibliography)
+% finalmente, compilamos en LaTeX DOS VECES.
+
+\nocite{*}
+\printbibliography[title={Referencias},nottype=online, heading=bibintoc]%
+\printbibliography[title={Referencias Web}, type=online, heading=bibintoc]%
+
+\pagebreak
+
+\printnoidxglossary[type=acronym,title={Glosario},toctitle={Glosario}]
+
+\include{./X_PresupuestoPliego/X_PresupuestoPliego}
+
+% Termina el documento
+\end{document}

@@ -1,0 +1,53 @@
+\clearpage
+\vspace*{\stretch{2}}%{\fill}
+\begin{center}
+\begin{minipage}{.75\textwidth}
+\section{Conclusiones y posibles ampliaciones}
+
+Presentados los resultados experimentales de la evaluación del sistema con distintos tipos de terminales móviles. En este capítulos presentamos las conclusiones principales así como posibles ampliaciones. % \pagebreak
+\end{minipage}
+\end{center}
+\vspace{\stretch{3}} % \vfill % equivalent to \vspace{\fill}
+\clearpage% https://tex.stackexchange.com/questions/70714/center-horizontally-and-vertically-a-block-of-text
+
+\sloppy
+\subsection{Conclusiones}
+Se ha implementado un sistema de acceso a la red a cambio de audio recogido por el micrófono cuya interacción con los clientes se realiza de forma muy sencilla y sin hacer uso de aplicaciones o dispositivos externos al terminal, funcionando a través del navegador Web. El sistema al completo es transversal, ya que las diferentes módulo hardware y software utilizados se organizan en una arquitectura de niveles similar a la de la arquitectura de Internet. Además, para la Aplicación Web se han usado tecnologías en pleno desarrollo actual y con proyección de futuro como son Node.js y WebRTC.
+
+Una vez probado en diversos dispositivos móviles de diferente tipo y gama (ordenadores, móviles y tablets) podemos determinar que el sistema desarrollado cumple con los objetivos planteados en la propuesta de TFG. Además, durante el desarrollo del mismo se ha adquirido gran familiaridad con las tecnologías implicadas, como las diferentes API y frameworks utilizados, y se ha comprobado cómo estas, particularmente las más recientes, evolucionan en el tiempo cambiando las condiciones actuales y futuras del sistema.
+
+Un ejemplo de ello son las versiones de Node.js, que durante el desarrollo del TFG y en el momento de escribir esta conclusión pasaron de la 7 a la 9, introduciendo diversos cambios. Sin embargo, un ejemplo de hecho más relevante es la decisión de Apple de implementar soporte WebRTC en su motor de renderizado web, \emph{WebKit}, durante el desarrollo de este TFG, lo que ocasiona que desde la versión 11 de Safari, lanzado durante la escritura de este documento, algunas opciones de WebRTC puedan implementarse ahora en los dispositivos iOS. Lamentablemente, la API \emph{MediaStream Recording} que utilizamos en este TFG sigue sin tener soporte, pero es de esperar que tal y como sucedió con otros aspectos de WebRTC se empiece a trabajar en ello próximamente.
+
+Un inconveniente de trabajar con tecnologías de este tipo es que, a diferencia de lo mencionado en el párrafo anterior, no todos los cambios introducidos son positivos. En cualquier momento podría lanzarse una nueva versión de la API y una revisión de los navegadores que obligue a los desarrolladores a modificar su proyecto o que complique el mantener una sintaxis de código final consistente.
+
+\subsection{Posibles ampliaciones futuras}
+
+Existen varios aspectos a tener en cuenta a la hora de llevar a cabo este proyecto. A continuación se detallan algunos de ellos junto a posibles ampliaciones que pueden llevarse a cabo en el futuro.
+
+\subsubsection{Replicabilidad}
+
+En este Trabajo Fin de Grado se detalla paso a paso cómo conseguir el producto final, descargando y configurando todo el software y realizando el código desde cero. Sin embargo, el hecho de que el sistema esté implementado sobre una Raspberry Pi 3 permite replicar el sistema con gran facilidad. Al estar el sistema operativo en su totalidad almacenado en una tarjeta MicroSD, puede obtenerse un archivo imagen de esta y luego clonarse en todas las tarjetas de este tipo que se desee, obteniendo múltiples copias del sistema en las que solo haría falta modificar unos pocos archivos y configuraciones (como el archivo \emph{config} de CoovaChilli o la contraseña del usuario \emph{root} de Raspbian) para adecuarlo a las necesidades específicas de la implementación.
+
+\subsubsection{Privacidad}
+
+La privacidad se ha convertido en uno de los elementos más cruciales, analizados y debatidos en el campo de las tecnologías de la información y la comunicación. El sistema desarrollado en este TFG está diseñado para capturar una muestra de audio de los usuarios del servicio cada cierto tiempo, almacenando a priori un tipo de información potencialmente sensible en un servidor ajeno. En las implementaciones de este servicio el usuario debería ser plenamente consciente de lo que está ocurriendo con la información que se obtendría de él, por lo que es ético que la información ofrecida en el portal cautivo y las condiciones de uso sean lo más transparentes posibles para el usuario final.
+
+Otra opción, que queda fuera del ámbito de este trabajo, es el cifrado de los datos transferidos o el uso de otras herramientas de anonimización que puedan emplearse a la hora de implementar el servicio, o que directamente el audio no sea transferido, sino que según las necesidades del sistema (como por ejemplo si solo se desea obtener el nivel de intensidad sonora) este sea procesado directamente en la \emph{Aplicación Web} y se transmita tan solo un valor o resultado numérico que no proporcione información sensible sobre el usuario.
+
+\subsubsection{Procesado del audio obtenido}
+
+Aunque en un principio se deseaba entrar en este aspecto, las restricciones de tiempo hicieron imposible dedicar recursos a los posibles procesados de los archivos de audio generados por el sistema. A continuación se mencionan algunos de estos posibles usos.
+
+\begin{itemize}
+\item \emph{Mapeo de nivel de audio}: uno de los usos más inmediatos que son posibles en este sistema es el de realizar mapas de ruido en el área de cobertura del punto de acceso utilizando los ficheros generados y la información de ubicación que les acompaña. La información de estos mapas de nivel puede volverse más fiable si existen varios puntos de acceso que tomen medidas de dispositivos cliente cercanos. En estos casos, sería conveniente también obtener la información del dispositivo que ha grabado el audio para poder aplicar las correcciones y ponderaciones pertinentes a la muestra.
+\item \emph{Localización acústica}: si contamos con varios puntos de acceso y grupos de usuarios cercanos entre sí en los que haya al menos un usuario conectado a cada punto (algo que podría lograrse con técnicas de balance de carga) podrían utilizarse técnicas de procesado de señal para intentar obtener la ubicación de estos grupos de forma acústica, atendiendo a la diferencia de fase e intensidad de las señales obtenidas. En estos casos podemos prescindir del servicio de geolocalización que nos proporciona el navegador web, utilizado en nuestro sistema, o continuar usándolo para realizar comparativas.
+\end{itemize}
+
+\subsubsection{Desacoplar procesos}
+
+El \emph{hardware} de acceso a la red y el servidor web pueden implementarse en sistemas separados, tales como un \emph{gateway} dedicado al acceso a la red y un servidor del portal cautivo y la gestión de AAA. Mediante el uso del \emph{software} mencionado anteriormente (\emph{iptables}, \emph{dnsmasq}…) puede obtenerse un mayor control sobre las conexiones y el ancho de banda utilizado, separándolo por ejemplo en grupos de usuarios, varias redes, filtrando por MAC, implementando redes privadas con VPN… todo ello sin tener que recurrir a CoovaChilli.
+
+\subsubsection{Unificar \emph{software}}
+Por el contrario, se puede seguir con un dispositivo \emph{hardware} único conectado a la red y centralizar toda la gestión en Node.js, haciendo que este sirva el portal cautivo y también dé de alta a los usuario en la red accediendo directamente a la base de datos e incluso ejecutando los órdenes o \emph{scripts} de \emph{iptables} directamente. Esto incrementaría la complejidad de la aplicación Node.js pero se obtendría a cambio una gestión centralizada del sistema al completo, ahorrando en elementos potencialmente superfluos como las bases de datos de usuarios intermedias que existen en la implementación actual.
+
+
