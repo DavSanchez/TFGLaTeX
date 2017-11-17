@@ -9,6 +9,7 @@
 
 \usepackage{geometry}
 \geometry{a4paper,
+twoside,
 left=30mm,
 right=25mm,
 top=25mm,
@@ -34,7 +35,6 @@ bottom=25mm}
 
 % Paquete para gestionar links (URL)
 \usepackage[hyphens]{url} % Para que las URLs se dividan (usar también /sloppy en el documento)
-%\usepackage[bookmarks=true]{hyperref}
 \usepackage{bookmark}
 
 \usepackage[toc,page,title]{appendix}
@@ -52,6 +52,7 @@ bottom=25mm}
 \renewcommand{\listingscaption}{Código} % Nombre del fragmento de código
 \usepackage{xcolor} % Gestión de color
 
+% Bibliografía
 \usepackage{csquotes}
 \usepackage[backend=biber,sorting=none,style=ieee,language=auto]{biblatex}
 \addbibresource{ReferenciasBib.bib}
@@ -63,6 +64,8 @@ bottom=25mm}
 
 % Comenzamos documento
 \begin{document}
+
+% Insertamos primeras páginas de TFG
 \pagenumbering{gobble}
 \thispagestyle{empty}
 \clearpage
@@ -75,30 +78,40 @@ bottom=25mm}
 \pagenumbering{arabic}
 \tableofcontents
 
-\pagebreak
+\cleardoublepage
 
+% Comienza el contenido del TFG
 \include{./1_Intro/1_Intro}
+\cleardoublepage
 \include{./2_SensadoCol/2_SensadoCol}
+\cleardoublepage
 \include{./3_Tecnologias/3_Tecnologias}
+\cleardoublepage
 \include{./4_AnalisisFuncional/4_AnalisisFuncional}
+\cleardoublepage
 \include{./5_AnalisisOrganico/5_AnalisisOrganico}
+\cleardoublepage
 \include{./6_EvalEmpirica/6_EvalEmpirica}
+\cleardoublepage
 \include{./7_Conclusiones/7_Conclusiones}
+\cleardoublepage
 \include{./X_Anexos/X_Anexos}
+\cleardoublepage
 
-% Referencias, para compilarlas compilamos primero ESTE documento en LaTeX,
-% luego, lo compilamos en BibTeX (pillará el documento .bib referenciado en bibliography)
+% Referencias, para crearlas compilamos primero ESTE documento en LaTeX,
+% luego, lo compilamos en BibTeX o BibTaTeX (pillará el documento .bib referenciado en bibliography)
 % finalmente, compilamos en LaTeX DOS VECES.
 
 \nocite{*}
 \printbibliography[title={Referencias},nottype=online, heading=bibintoc]%
 \printbibliography[title={Referencias Web}, type=online, heading=bibintoc]%
-
-\pagebreak
+\cleardoublepage
 
 \printnoidxglossary[type=acronym,title={Glosario},toctitle={Glosario}]
+\cleardoublepage
 
 \include{./X_PresupuestoPliego/X_PresupuestoPliego}
+\cleardoublepage
 
 % Termina el documento
 \end{document}
