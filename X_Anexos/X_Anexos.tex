@@ -17,7 +17,7 @@ Una vez revisado el análisis previo y funcional del sistema de sensado móvil c
 
 \sloppy
 
-En este Apéndice se asume que se dispone de conexión a Internet operativa a la que la Raspberry Pi 3 pueda conectarse (cableada o inalámbrica) y un ordenador de trabajo, no entrando en detalles sobre su configuración por entender que no es parte del TFG.
+En este Anexo se asume que se dispone de conexión a Internet operativa a la que la Raspberry Pi 3 pueda conectarse (cableada o inalámbrica) y un ordenador de trabajo, no entrando en detalles sobre su configuración por entender que no es parte del TFG.
 
 Para poner en marcha la Raspberry Pi 3 de forma sencilla es necesario disponer de la propia placa, una fuente de alimentación USB Micro (un adaptador de corriente como el de la mayoría de teléfonos móviles actuales), teclado y ratón, una tarjeta microSD de al menos 8 GB clase 4 y un monitor con entrada HDMI, para lo que puede servir una pantalla de televisión. También hace falta disponer de conexión a Internet, ya sea mediante red cableada o una red inalámbrica a la que la Raspberry Pi 3 pueda conectarse.
 
@@ -47,7 +47,7 @@ En este apartado no entramos en el detalle de la configuración de \emph{hostapd
 \begin{minipage}{.75\textwidth}
 \section{Descarga automática del código de la Nube}\label{ApendiceB}
 
-Hoy en día la tendencia es a alojar los proyectos de libre distribución y código abierto en la Nube. Nosotros hemos alojado nuestro proyecto en la nube \emph{GitHub}. En este apéndice proporcionamos la dirección Web de acceso a él y la instalación automática de todo el entorno.
+Hoy en día la tendencia es a alojar los proyectos de libre distribución y código abierto en la Nube. Nosotros hemos alojado nuestro proyecto en la nube \emph{GitHub}. En este anexo proporcionamos la dirección Web de acceso a él y la instalación automática de todo el entorno.
 \end{minipage}
 \end{center}
 \vspace{\stretch{3}} % \vfill % equivalent to \vspace{\fill}
@@ -55,11 +55,43 @@ Hoy en día la tendencia es a alojar los proyectos de libre distribución y cód
 
 Para implementar el servicio, en lugar de replicar el código manualmente, puede clonarse el repositorio online habilitado explícitamente para ello mediante la herramienta de control de versiones \emph{git}, situándose en el directorio donde se quiera almacenar los archivos y ejecutando la siguiente orden en el terminal: 
 
-\mint{bash}{git clone https://github.com/DavSanchez/CaptivePortal.git}
+\begin{listing}[H]
+  \begin{minted}
+  [
+  frame=lines,
+  framesep=2mm,
+  baselinestretch=1.2,
+  bgcolor=lightgray,
+  fontsize=\footnotesize,
+  breakanywhere,
+  breaklines=true,
+  breaksymbolleft={}
+  ]
+  {bash}
+  git clone https://github.com/DavSanchez/CaptivePortal.git
+  \end{minted}
+\end{listing}
 
 Tras esto, el servicio Web completo puede ponerse en marcha desde este mismo directorio mediante el orden node.
 
-\mint{bash}{node nodeserver.js}
+\begin{listing}[H]
+  \begin{minted}
+  [
+  frame=lines,
+  framesep=2mm,
+  baselinestretch=1.2,
+  bgcolor=lightgray,
+  fontsize=\footnotesize,
+  breakanywhere,
+  breaklines=true,
+  breaksymbolleft={}
+  ]
+  {bash}
+  node nodeserver.js
+  \end{minted}
+\end{listing}
+
+
 \cleardoublepage
 \vspace*{\stretch{2}}%{\fill}
 \begin{center}
@@ -67,7 +99,7 @@ Tras esto, el servicio Web completo puede ponerse en marcha desde este mismo dir
 
 \section{Reanudación automática del Servidor en caso de fallo}\label{ApendiceC}
 
-Proporcionando la orden de arranque del Apéndice \ref{ApendiceB} (\mintinline{bash}{node nodeserver.js}) es suficiente para que el sistema de sensado móvil colaborativo arranque y proporcione los servicios desarrollados. sin embargo, se puede dar el caso de fallos del servidor en cuyo caso debemos tolerarlos. En este apéndice se explica como hacerlo.
+Proporcionando la orden de arranque del Anexo \ref{ApendiceB} (\mintinline{bash}{node nodeserver.js}) es suficiente para que el sistema de sensado móvil colaborativo arranque y proporcione los servicios desarrollados. sin embargo, se puede dar el caso de fallos del servidor en cuyo caso debemos tolerarlos. En este anexo se explica como hacerlo.
 \end{minipage}
 \end{center}
 \vspace{\stretch{3}} % \vfill % equivalent to \vspace{\fill}
@@ -77,11 +109,41 @@ La orden ejecutada justo al final del apartado anterior basta para poner en marc
 
 PM2 es un gestor de procesos para Node.js que nos permite configurar el comportamiento del servicio Web implementado frente a cambios en los archivos locales (como una actualización) u otras situaciones. Puede instalarse a través del gestor de paquetes \emph{npm}:
 
-\mint{bash}{npm install pm2 -g}
+\begin{listing}[H]
+  \begin{minted}
+  [
+  frame=lines,
+  framesep=2mm,
+  baselinestretch=1.2,
+  bgcolor=lightgray,
+  fontsize=\footnotesize,
+  breakanywhere,
+  breaklines=true,
+  breaksymbolleft={}
+  ]
+  {bash}
+  npm install pm2 -g
+  \end{minted}
+\end{listing}
 
 Tras instalar esta herramienta ejecutaríamos una serie de órdenes con ella que nos permiten reanudar la aplicación Node.js de forma automática nada más encender nuestra Raspberry Pi 3, reiniciando el servicio si ocurre algún error o incluso si actualizamos el código de forma local o remota (editándolo en otra parte, subiéndolo a GitHub y recuperándolo con la orden \mintinline{bash}{git pull}): 
 
-\mint{bash}{pm2 startup}
+\begin{listing}[H]
+  \begin{minted}
+  [
+  frame=lines,
+  framesep=2mm,
+  baselinestretch=1.2,
+  bgcolor=lightgray,
+  fontsize=\footnotesize,
+  breakanywhere,
+  breaklines=true,
+  breaksymbolleft={}
+  ]
+  {bash}
+  pm2 startup
+  \end{minted}
+\end{listing}
 
 Esta orden detecta el sistema en el que nos encontramos y nos recomienda el orden a ejecutar para generar un \emph{startup script}, que es ejecutado nada más encender el dispositivo. Una salida de ejemplo de este orden es la siguiente:
 
@@ -106,7 +168,22 @@ breaksymbolleft={}
 
 Tras este proceso, solo queda configurar los parámetros a usar por PM2, ejecutar las aplicaciones Node.js deseadas y guardar el entorno con la siguiente orden:
 
-\mint{bash}{pm2 save}
+\begin{listing}[H]
+  \begin{minted}
+  [
+  frame=lines,
+  framesep=2mm,
+  baselinestretch=1.2,
+  bgcolor=lightgray,
+  fontsize=\footnotesize,
+  breakanywhere,
+  breaklines=true,
+  breaksymbolleft={}
+  ]
+  {bash}
+  pm2 save
+  \end{minted}
+\end{listing}
 
 Este paso asegura que la aplicación Node.js vuelve a ejecutarse tras un reinicio del sistema, ya sea un reinicio programado o el ocurrido tras un corte accidental.
 
@@ -152,8 +229,23 @@ Si nuestro entorno requiriese de más aplicaciones Node.js ejecutadas simultáne
 
 Una vez terminada la configuración de nuestro entorno, lo ejecutamos mediante PM2 (no mediante node) y guardamos el entorno tal y como se nos queda para que se ejecute de la siguiente forma cada vez que se inicie nuestro sistema.
 
-\mint{bash}{pm2 start captiveportalserver.config.js}
-\mint{bash}{pm2 save}
+\begin{listing}[H]
+  \begin{minted}
+  [
+  frame=lines,
+  framesep=2mm,
+  baselinestretch=1.2,
+  bgcolor=lightgray,
+  fontsize=\footnotesize,
+  breakanywhere,
+  breaklines=true,
+  breaksymbolleft={}
+  ]
+  {bash}
+pm2 start captiveportalserver.config.js
+pm2 save
+  \end{minted}
+\end{listing}
 
 Por último, con la orden \mintinline{bash}{pm2 monit} puede accederse a una vista de monitorización que nos permite ver una lista de las aplicaciones activas y su consumo en memoria, la salida en consola de cada una de ellas, el número de veces que se han reiniciado (Figura \ref{pm2monit}).
 
@@ -171,7 +263,7 @@ Por último, con la orden \mintinline{bash}{pm2 monit} puede accederse a una vis
 \begin{minipage}{.75\textwidth}
 \section{Ciclo de Vida del TFG}\label{ApendiceD}
 
-En este apéndice se presenta una visión rápida del ciclo de vida del TFG. El objetivo es mostrar cómo ha ido evolucionando la implantación del sistema de sensado.
+En este anexo se presenta una visión rápida del ciclo de vida del TFG. El objetivo es mostrar cómo ha ido evolucionando la implantación del sistema de sensado.
 \end{minipage}
 \end{center}
 \vspace{\stretch{3}} % \vfill % equivalent to \vspace{\fill}
@@ -203,7 +295,7 @@ Junto a CoovaChilli se evaluó otra solución de control de acceso a la red disp
 \begin{minipage}{.75\textwidth}
 \section{Problemas Acontecidos durante el Desarrollo de la Solución}\label{ApendiceE}
 
-En este apéndice se presentan algunas dificultades ocurridas durante el desarrollo del TFG que limitaron el diseño del sistema final y alargaron en el tiempo desarrollos que a priori no tenían dificultad.
+En este anexo se detallan algunas dificultades ocurridas durante el desarrollo del TFG que limitaron el diseño del sistema final y alargaron en el tiempo desarrollos que a priori no tenían dificultad.
 \end{minipage}
 \end{center}
 \vspace{\stretch{3}} % \vfill % equivalent to \vspace{\fill}

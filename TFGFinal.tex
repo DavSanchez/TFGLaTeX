@@ -45,17 +45,19 @@ bottom=25mm}
 
 % Paquete para gestionar links (URL)
 \usepackage[hyphens]{url} % Para que las URLs se dividan (usar también /sloppy en el documento)
+\usepackage{hyperref}
 \usepackage{bookmark}
 
-\usepackage[page,title]{appendix}
-\renewcommand{\appendixname}{Ap\'{e}ndice}
-\renewcommand{\appendixtocname}{Ap\'{e}ndices}
-\renewcommand{\appendixpagename}{Ap\'{e}ndices}
+\usepackage[toc,page,title]{appendix}
 
 \usepackage{etoolbox}
 \makeatletter
 \appto{\appendices}{\def\Hy@chapapp{Appendix}}
 \makeatother
+
+\renewcommand{\appendixname}{Anexo}%{Ap\'{e}ndice}
+\renewcommand{\appendixtocname}{Anexos}%{Ap\'{e}ndices}
+\renewcommand{\appendixpagename}{Anexos}%{Ap\'{e}ndices}
 
 % Paquete para adjuntar código
 \usepackage[section]{minted} % Fragmentos de código
@@ -68,6 +70,7 @@ bottom=25mm}
 \addbibresource{ReferenciasBib.bib}
 \addbibresource{ReferenciasWeb.bib}
 
+% Glosarios
 \usepackage[acronym,toc,nonumberlist,nogroupskip]{glossaries}
 \makenoidxglossaries
 \loadglsentries{./X_Glosario/X_Glosario}

@@ -1,0 +1,26 @@
+function setAlert(info) {
+    var newDiv = document.createElement("div");
+    switch (info) {
+        case "success":
+            newDiv.className = "alert alert-success";
+            newDiv.role = "alert";
+            newDiv.innerHTML = "<strong>¡Perfecto!</strong> Tu fragmento de audio se ha subido con éxito.";
+            break;
+        case "error":
+            newDiv.className = "alert alert-danger";
+            newDiv.role = "alert";
+            newDiv.innerHTML = "<strong>¡Vaya!</strong> Ha habido un error... Aún no tienes internet. <strong>Trata de conectarte de nuevo.</strong>";
+            break;
+        case "errorLogged":
+            newDiv.className = "alert alert-danger";
+            newDiv.role = "alert";
+            newDiv.innerHTML = "<strong>¡Vaya!</strong> Ha habido un error enviando el fichero... Volveremos a intentarlo más tarde.";
+            break;
+        case "successOneTime":
+            newDiv.className = "alert alert-success";
+            newDiv.role = "alert";
+            newDiv.innerHTML = "<strong>¡Perfecto!</strong> Tu fragmento de audio se ha subido con éxito. <strong>Ya puedes cerrar esta pestaña en tu navegador y disfrutar de tus 30 minutos de internet.</strong>";
+            break;
+    }
+    alertsArea.appendChild(newDiv);
+}

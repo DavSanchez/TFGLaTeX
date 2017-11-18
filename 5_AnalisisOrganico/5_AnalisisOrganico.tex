@@ -4,7 +4,7 @@
 \begin{minipage}{.75\textwidth}
 \section{Análisis orgánico de la implantación del \emph{software}}
 
-Una vez revisado el análisis previo y funcional del sistema de sensado móvil colaborativo mediante una visión \emph{top-down}, en este capítulo presentamos  el análisis orgánico de la implantación mediante una visión \emph{bottom-up}. Esto es, primero se configura el nivel inferior y el \emph{Control de Red}, tras lo cual se va ascendiendo en el modelo hasta llegar a la implantación del portal cautivo, en el nivel de \emph{Usuarios} y el nivel más alto del sistema. La descripción de la instalación del hardware se presenta en el apéndice \ref{ApendiceA}.
+Una vez revisado el análisis previo y funcional del sistema de sensado móvil colaborativo mediante una visión \emph{top-down}, en este capítulo presentamos  el análisis orgánico de la implantación mediante una visión \emph{bottom-up}. Esto es, primero se configura el nivel inferior y el \emph{Control de Red}, tras lo cual se va ascendiendo en el modelo hasta llegar a la implantación del portal cautivo, en el nivel de \emph{Usuarios} y el nivel más alto del sistema. La descripción de la instalación del hardware se presenta en el anexo \ref{ApendiceA}.
 \end{minipage}
 \end{center}
 \vspace{\stretch{3}} % \vfill % equivalent to \vspace{\fill}
@@ -13,7 +13,7 @@ Una vez revisado el análisis previo y funcional del sistema de sensado móvil c
 \sloppy
 
 \subsection{Módulos de Control de Red y de Acceso}
-Una vez instalado Raspbian y arrancada con éxito la Raspberry Pi 3 (explicado en el Apéndice \ref{ApendiceA}), es necesario seguir configurando el ecosistema e instalando el \emph{software} necesario, idealmente mediante el gestor de paquetes y manejador de dependencias \emph{apt-get} y trabajando en todo momento desde el terminal \emph{bash}. Esto prepara el \emph{software} de los módulos \emph{Control de Red} y \emph{Control de Acceso}. Se detalla el procedimiento llevado a cabo en el mismo orden en el que se implementó en la práctica para que sea reproducible de forma sencilla la instalación de un nuevo sistema.
+Una vez instalado Raspbian y arrancada con éxito la Raspberry Pi 3 (explicado en el Anexo \ref{ApendiceA}), es necesario seguir configurando el ecosistema e instalando el \emph{software} necesario, idealmente mediante el gestor de paquetes y manejador de dependencias \emph{apt-get} y trabajando en todo momento desde el terminal \emph{bash}. Esto prepara el \emph{software} de los módulos \emph{Control de Red} y \emph{Control de Acceso}. Se detalla el procedimiento llevado a cabo en el mismo orden en el que se implementó en la práctica para que sea reproducible de forma sencilla la instalación de un nuevo sistema.
 
 \subsubsection{Ajustes e instalaciones preliminares}
 Una de las primeras configuraciones consiste en modificar el archivo \verb+/etc/network/interfaces+ para introducir los detalles de nuestra red inalámbrica. Este paso prepara el submódulo \emph{Configuración de Interfaces Red} perteneciente al módulo de \emph{Control de Red}. En este TFG se ha utilizado la siguiente configuración de red para la interfaz inalámbrica \emph{wlan0}, que recordamos es la interfaz inalámbrica a la que se conectan eventualmente los usuarios del servicio.
@@ -49,17 +49,61 @@ Una vez configurada la interfaz inalámbrica pueden instalarse los paquetes nece
 
 Los más relevantes para nuestro sistema son los paquetes \emph{freeradius} y \emph{mysql-server}, pero aquí se incluyen todos los instalados en la configuración de nuestro servicio:
 
-\mint[breaklines, breakanywhere, breaksymbolleft={}]{bash}{sudo apt-get install -y --force-yes debconf-utils}
+\begin{listing}[H]
+    \begin{minted}
+    [
+    frame=lines,
+    framesep=2mm,
+    baselinestretch=1.2,
+    bgcolor=lightgray,
+    fontsize=\footnotesize,
+    breakanywhere,
+    breaklines=true,
+    breaksymbolleft={}
+    ]
+    {bash}
+sudo apt-get install -y --force-yes debconf-utils
+\end{minted}
+\end{listing}
 
 Con este primer paquete puede establecerse una contraseña para el usuario \emph{root} de la base de datos MySQL con las siguientes órdenes, a ejecutar después de que acabe el anterior, y sustituyendo la palabra CONTRASEÑA de las órdenes por la contraseña escogida. De esta forma, \emph{mysql-server} no pide una contraseña de \emph{root} en el momento de su instalación. Si no que se establece una contraseña diferente, la utilizada por defecto en la instalación de \emph{mysql-server} para Raspbian es \emph{raspbian}..
 
-\mint[breaklines, breakanywhere, breaksymbolleft={}]{bash}{echo 'mysql-server mysql-server/root_password password CONTRASEÑA' | debconf-set-selections}
-\mint[breaklines, breakanywhere, breaksymbolleft={}]{bash}{echo 'mysql-server mysql-server/root_password_again password CONTRASEÑA' | debconf-set-selections}
+\begin{listing}[H]
+    \begin{minted}
+    [
+    frame=lines,
+    framesep=2mm,
+    baselinestretch=1.2,
+    bgcolor=lightgray,
+    fontsize=\footnotesize,
+    breakanywhere,
+    breaklines=true,
+    breaksymbolleft={}
+    ]
+    {bash}
+echo 'mysql-server mysql-server/root_password password CONTRASEÑA' | debconf-set-selections
+echo 'mysql-server mysql-server/root_password_again password CONTRASEÑA' | debconf-set-selections
+\end{minted}
+\end{listing}
 
 Tras esto, ya pueden instalarse el resto de paquetes necesarios que habíamos comentado al principio.
 
-\mint[breaklines, breakanywhere, breaksymbolleft={}]{bash}{sudo apt-get install -y --force-yes debhelper libssl-dev libcurl4-gnutls-dev mysql-server freeradius freeradius-mysql gcc make libnl1 libnl-dev pkg-config iptables}
-
+\begin{listing}[H]
+    \begin{minted}
+    [
+    frame=lines,
+    framesep=2mm,
+    baselinestretch=1.2,
+    bgcolor=lightgray,
+    fontsize=\footnotesize,
+    breakanywhere,
+    breaklines=true,
+    breaksymbolleft={}
+    ]
+    {bash}
+sudo apt-get install -y --force-yes debhelper libssl-dev libcurl4-gnutls-dev mysql-server freeradius freeradius-mysql gcc make libnl1 libnl-dev pkg-config iptables
+\end{minted}
+\end{listing}
 La herramienta \emph{apt-get} instala también todos los paquetes de dependencias adicionales necesarias para el funcionamiento de los paquetes declarados.
 
 Nótese que en este punto ya se ha empezado a instalar \emph{software} correspondiente al módulo de \emph{Control de Acceso}, como \emph{FreeRADIUS} y el servidor de bases de datos \emph{MySQL} con el que este va a funcionar. En el siguiente apartado se procede a su configuración.
@@ -70,7 +114,22 @@ Durante el paso anterior se instaló el servidor de base de datos MySQL y el ser
 
 Primero se crea la base de datos con la orden \verb+mysql+, utilizando el usuario root y la contraseña especificada anteriormente.
 
-\mint[breaklines, breakanywhere, breaksymbolleft={}]{bash}{echo 'create database radius' | mysql -u root -p CONTRASEÑA}
+\begin{listing}[H]
+    \begin{minted}
+    [
+    frame=lines,
+    framesep=2mm,
+    baselinestretch=1.2,
+    bgcolor=lightgray,
+    fontsize=\footnotesize,
+    breakanywhere,
+    breaklines=true,
+    breaksymbolleft={}
+    ]
+    {bash}
+echo 'create database radius' | mysql -u root -p CONTRASEÑA
+\end{minted}
+\end{listing}
 
 Esto pone en marcha la interfaz de línea de órdenes de MySQL, con el usuario y contraseña detallados en las opciones, y le introduce el comando escrito entre comillas.
 
@@ -105,8 +164,23 @@ Tras editar estos archivos, solo queda detener temporalmente la ejecución de Fr
 
 Para activar la autenticación SQL hay que editar el archivo \verb+/etc/freeradius/sites-available/default+ y quitar los comentarios de todas las líneas que contengan \verb+sql+. Una vez hecho esto comprobamos la configuración y reanudamos el servicio.
 
-\mint[breaklines, breakanywhere, breaksymbolleft={}]{bash}{freeradius -C}
-\mint[breaklines, breakanywhere, breaksymbolleft={}]{bash}{service freeradius start}
+\begin{listing}[H]
+    \begin{minted}
+    [
+    frame=lines,
+    framesep=2mm,
+    baselinestretch=1.2,
+    bgcolor=lightgray,
+    fontsize=\footnotesize,
+    breakanywhere,
+    breaklines=true,
+    breaksymbolleft={}
+    ]
+    {bash}
+freeradius -C
+service freeradius start
+\end{minted}
+\end{listing}
 
 En este punto FreeRADIUS aún no ha terminado del todo su configuración, pero para ello es necesario que acaben las instalaciones de los demás componentes.
 
@@ -116,22 +190,82 @@ Llegados a este punto podemos instalar y configurar el núcleo de funcionamiento
 
 Como sucedió con el paso de FreeRADIUS, deben realizarse unas instalaciones previas de paquetes y dependencias auxiliares antes de comenzar la propia instalación de CoovaChilli y los demás elementos de \emph{software}, entre los que se encuentra \emph{git}.
 
-\mint[breaklines, breakanywhere, breaksymbolleft={}]{bash}{apt-get install -y --force-yes git libjson-c-dev haserl gengetopt devscripts libtool bash-completion autoconf automake}
+\begin{listing}[H]
+    \begin{minted}
+    [
+    frame=lines,
+    framesep=2mm,
+    baselinestretch=1.2,
+    bgcolor=lightgray,
+    fontsize=\footnotesize,
+    breakanywhere,
+    breaklines=true,
+    breaksymbolleft={}
+    ]
+    {bash}
+apt-get install -y --force-yes git libjson-c-dev haserl gengetopt devscripts libtool bash-completion autoconf automake
+\end{minted}
+\end{listing}
 
 Tras esto, hay que descargar el código fuente de CoovaChilli en un directorio y compilarlo en un paquete instalable en Debian, que puede lograrse con una utilidad del sistema operativo en unas pocas líneas. Este último proceso de compilación puede llevar tiempo y si no está todo previamente instalado y configurado puede fallar.
 
-\mint[breaklines, breakanywhere, breaksymbolleft={}]{bash}{cd /usr/src}
-\mint[breaklines, breakanywhere, breaksymbolleft={}]{bash}{git clone https://github.com/coova/coova-chilli.git}
+\begin{listing}[H]
+    \begin{minted}
+    [
+    frame=lines,
+    framesep=2mm,
+    baselinestretch=1.2,
+    bgcolor=lightgray,
+    fontsize=\footnotesize,
+    breakanywhere,
+    breaklines=true,
+    breaksymbolleft={}
+    ]
+    {bash}
+cd /usr/src
+git clone https://github.com/coova/coova-chilli.git
+\end{minted}
+\end{listing}
 
 Tras acabar el proceso de descarga, comenzamos el proceso de compilación situándonos en la raíz del código fuente recién descargado con la línea anterior.
 
-\mint[breaklines, breakanywhere, breaksymbolleft={}]{bash}{cd /usr/src/coova-chilli}
-\mint[breaklines, breakanywhere, breaksymbolleft={}]{bash}{dpkg-buildpackage -us -uc}
+\begin{listing}[H]
+    \begin{minted}
+    [
+    frame=lines,
+    framesep=2mm,
+    baselinestretch=1.2,
+    bgcolor=lightgray,
+    fontsize=\footnotesize,
+    breakanywhere,
+    breaklines=true,
+    breaksymbolleft={}
+    ]
+    {bash}
+cd /usr/src/coova-chilli
+dpkg-buildpackage -us -uc
+\end{minted}
+\end{listing}
 
 En este punto comienza la compilación del código fuente. Al finalizar, tendríamos un archivo de nombre similar a \verb+coova-chilli_1.3.0_armhf.deb+ en el directorio \verb+/usr/src/+ y podríamos proceder a instalarlo situándonos en dicho directorio y utilizando el gestor de paquetes \emph{dpkg}.
 
-\mint[breaklines, breakanywhere, breaksymbolleft={}]{bash}{cd /usr/src}
-\mint[breaklines, breakanywhere, breaksymbolleft={}]{bash}{dpkg -i coova-chilli_1.3.0_armhf.deb}
+\begin{listing}[H]
+    \begin{minted}
+    [
+    frame=lines,
+    framesep=2mm,
+    baselinestretch=1.2,
+    bgcolor=lightgray,
+    fontsize=\footnotesize,
+    breakanywhere,
+    breaklines=true,
+    breaksymbolleft={}
+    ]
+    {bash}
+cd /usr/src
+dpkg -i coova-chilli_1.3.0_armhf.deb
+\end{minted}
+\end{listing}
 
 \paragraph{Configuración Inicial de CoovaChilli} \label{CoovaConfig} ~\\
 
@@ -139,7 +273,22 @@ Llegados a este punto el programa CoovaChilli está instalado y podemos proceder
 
 En primer lugar debemos modificar el \emph{script} que CoovaChilli ejecuta al ponerse en marcha la interfaz TUN (ubicado en \verb+/etc/chilli/up.sh+) introduciendo una regla de la herramienta \emph{iptables} para permitir el reenvío de los paquetes IP desde la interfaz de red cableada \emph{eth0}, que se almacena en una variable interna de la configuración de CoovaChilli llamada \verb+HS_WANIF+.
 
-\mint[breaklines, breakanywhere, breaksymbolleft={}]{bash}{iptables -I POSTROUTING -t nat -o $HS_WANIF -j MASQUERADE}
+\begin{listing}[H]
+    \begin{minted}
+    [
+    frame=lines,
+    framesep=2mm,
+    baselinestretch=1.2,
+    bgcolor=lightgray,
+    fontsize=\footnotesize,
+    breakanywhere,
+    breaklines=true,
+    breaksymbolleft={}
+    ]
+    {bash}
+    iptables -I POSTROUTING -t nat -o $HS_WANIF -j MASQUERADE
+    \end{minted}
+    \end{listing}
 
 También debemos activar el \emph{flag} que permite activar CoovaChilli en el archivo \verb+/etc/default/chilli/+ cambiando el valor de la variable \verb+START_CHILLI+ de 0 a 1.
 
@@ -202,13 +351,43 @@ make install
 
 Tras esto actualizamos la ruta de \emph{Haserl} para CoovaChilli en el archivo \verb+/etc/chilli/wwwsh+ buscando la línea \verb+haserl=+ y modificándola a \verb+haserl=/usr/local/bin/haserl+. Tras esto, solo queda poner en marcha CoovaChilli con la siguiente orden.
 
-\mint[breaklines, breakanywhere, breaksymbolleft={}]{bash}{service chilli start}
+\begin{listing}[H]
+    \begin{minted}
+    [
+    frame=lines,
+    framesep=2mm,
+    baselinestretch=1.2,
+    bgcolor=lightgray,
+    fontsize=\footnotesize,
+    breakanywhere,
+    breaklines=true,
+    breaksymbolleft={}
+    ]
+    {bash}
+service chilli start
+\end{minted}
+\end{listing}
 
 \subsubsection{Instalación y configuración de Hostapd} \label{HostapdInstallConfig}
 
 En este momento se prepara la herramienta \emph{hostapd} para poner en marcha la interfaz WiFi como Punto de Acceso IEEE 802.11n, comenzando por su instalación y continuando con su configuración.
 
-\mint[breaklines, breakanywhere, breaksymbolleft={}]{bash}{apt-get install -y --force-yes hostapd}
+\begin{listing}[H]
+    \begin{minted}
+    [
+    frame=lines,
+    framesep=2mm,
+    baselinestretch=1.2,
+    bgcolor=lightgray,
+    fontsize=\footnotesize,
+    breakanywhere,
+    breaklines=true,
+    breaksymbolleft={}
+    ]
+    {bash}
+apt-get install -y --force-yes hostapd
+\end{minted}
+\end{listing}
 
 Cuando termine la instalación se edita el archivo de configuración \verb+/etc/default/hostapd+ añadiendo la ruta del archivo de configuración que contiene los atributos deseados para nuestro punto de acceso, que está ubicado en \verb+/etc/hostapd/hostapd.conf+. Para ello buscamos la línea que contenga \verb+DAEMON_CONF=+, nos aseguraremos de que está sin comentar y le especificaremos la ruta entre comillas, de manera que quede de la siguiente forma: \verb+DAEMON_CONF="/etc/hostapd/hostapd.conf"+.
 
@@ -247,7 +426,22 @@ ht_capab=[HT40][SHORT-GI-20][DSSS_CCK-40]
 
 En este punto reiniciamos hostapd para que utilice los ajustes deseados. Al ejecutar este orden ya sería visible la red WiFi de la Raspberry Pi 3 (Figura \ref{redesVisibles}) desde otros dispositivos con el SSID indicado:
 
-\mint[breaklines, breakanywhere, breaksymbolleft={}]{bash}{service hostapd start}
+\begin{listing}[H]
+    \begin{minted}
+    [
+    frame=lines,
+    framesep=2mm,
+    baselinestretch=1.2,
+    bgcolor=lightgray,
+    fontsize=\footnotesize,
+    breakanywhere,
+    breaklines=true,
+    breaksymbolleft={}
+    ]
+    {bash}
+    service hostapd start
+    \end{minted}
+    \end{listing}
 
 \begin{figure}[!t]
 \begin{center}
@@ -264,7 +458,22 @@ Para facilitar la administración del servicio, incluyendo la gestión del servi
 
 En primer lugar, instalamos el servidor Web y las herramientas necesarias para utilizar daloRADIUS, que son sobre todo librerías de soporte PHP.
 
-\mint[breaklines, breakanywhere, breaksymbolleft={}]{bash}{apt-get install -y --force-yes php5-mysql php-pear php5-gd php-db php5-fpm libgd2-xpm-dev libpcrecpp0 libxpm4 nginx php5-xcache}
+\begin{listing}[H]
+    \begin{minted}
+    [
+    frame=lines,
+    framesep=2mm,
+    baselinestretch=1.2,
+    bgcolor=lightgray,
+    fontsize=\footnotesize,
+    breakanywhere,
+    breaklines=true,
+    breaksymbolleft={}
+    ]
+    {bash}
+    apt-get install -y --force-yes php5-mysql php-pear php5-gd php-db php5-fpm libgd2-xpm-dev libpcrecpp0 libxpm4 nginx php5-xcache
+    \end{minted}
+\end{listing}
 
 Cuando acabe esta instalación el programa \emph{NGINX} queda instalado y podríamos alojar el contenido Web que deseamos servir en el directorio \verb+/usr/share/nginx/html/+. En nuestro caso, descargamos los contenidos de daloRADIUS, los descomprimimos allí y renombramos el directorio generado para acceder a él al teclear la futura URL desde el navegador.
 
@@ -289,7 +498,7 @@ mv /usr/share/nginx/html/daloradius-0.9-9 /usr/share/nginx/html/daloradius
 \label{daloRADIUS}
 \end{listing}
 
-Aunque no los usamos en este TFG, conviene remarcar que daloRADIUS también incluye portales cautivos de ejemplo para ser usados con \emph{CoovaChilli} en el árbol de directorios que hemos descomprimido y renombrado, implementados usando PHP y JavaScript. Tras nuestros cambios, estos portales cautivos quedan ubicados en la ruta berb+/usr/share/nginx/html/daloradius/contrib/chilli/+.
+Aunque no los usamos en este TFG, conviene remarcar que daloRADIUS también incluye portales cautivos de ejemplo para ser usados con \emph{CoovaChilli} en el árbol de directorios que hemos descomprimido y renombrado, implementados usando PHP y JavaScript. Tras nuestros cambios, estos portales cautivos quedan ubicados en la ruta verb+/usr/share/nginx/html/daloradius/contrib/chilli/+.
 
 La descarga de daloRADIUS contiene archivos específicos que lo habilitan para ser usado con \emph{FreeRADIUS} y \emph{MySQL}. Para utilizarlos debemos copiar dichos archivos existentes en el árbol de directorios de \emph{daloRADIUS} y colocarlos en los directorios de \emph{FreeRADIUS} indicados en las siguientes órdenes, reemplazando las originales. Por seguridad conviene detener el servicio \emph{FreeRADIUS} antes de modificar archivos y hacer copia de seguridad de los archivos que quedan reemplazados, renombrándolos o cambiando las extensiones.
 
@@ -343,8 +552,23 @@ mysql -u root -p CONTRASEÑA < /tmp/grant.sql
 
 Además, actualizamos el archivo de daloRADIUS que contiene el usuario y contraseña de la base de datos para que tenga el usuario y contraseña del servidor RADIUS. Este archivo está en \verb+/usr/share/nginx/html/daloradius/library/daloradius.conf.php+ y ha de tener los siguientes valores en los campos correspondientes. Recordamos que esta contraseña es la del servidor RADIUS, indicada por CONTRASEÑA-RADIUS, (por defecto \emph{radpass} si no la cambiamos).
 
-\mint[breaklines, breakanywhere, breaksymbolleft={}]{bash}{$configValues['CONFIG_DB_USER'] = 'radius';}
-\mint[breaklines, breakanywhere, breaksymbolleft={}]{bash}{$configValues['CONFIG_DB_PASS'] = 'CONTRASEÑA-RADIUS';}
+\begin{listing}[H]
+    \begin{minted}
+    [
+    frame=lines,
+    framesep=2mm,
+    baselinestretch=1.2,
+    bgcolor=lightgray,
+    fontsize=\footnotesize,
+    breakanywhere,
+    breaklines=true,
+    breaksymbolleft={}
+    ]
+    {bash}
+$configValues['CONFIG_DB_USER'] = 'radius';
+$configValues['CONFIG_DB_PASS'] = 'CONTRASEÑA-RADIUS';
+\end{minted}
+\end{listing}
 
 \paragraph{Configurando NGINX para servir daloRADIUS} \label{NGINXdaloRADIUS} ~\\
 
@@ -383,9 +607,24 @@ server {
 
 Llegados a este punto solo queda comprobar que la configuración de NGINX es la correcta y reiniciar tanto el servidor Web como \emph{hostapd}.
 
-\mint[breaklines, breakanywhere, breaksymbolleft={}]{bash}{nginx -t}
-\mint[breaklines, breakanywhere, breaksymbolleft={}]{bash}{service nginx restart}
-\mint[breaklines, breakanywhere, breaksymbolleft={}]{bash}{service hostapd restart}
+\begin{listing}[H]
+    \begin{minted}
+    [
+    frame=lines,
+    framesep=2mm,
+    baselinestretch=1.2,
+    bgcolor=lightgray,
+    fontsize=\footnotesize,
+    breakanywhere,
+    breaklines=true,
+    breaksymbolleft={}
+    ]
+    {bash}
+nginx -t
+service nginx restart
+service hostapd restart
+\end{minted}
+\end{listing}
 
 Tras esto podemos acceder a \emph{daloRADIUS} desde el navegador para realizar las gestiones deseadas utilizando la IP proporcionada a la interfaz cableada. Por ejemplo, si la IP de dicha interfaz es 192.168.1.30 se puede acceder a \emph{daloRADIUS} accediendo a la URL \verb+http://192.168.1.30/daloradius/+.
 
@@ -465,8 +704,23 @@ A diferencia de los dos módulos anteriores, cuya implantación se basa únicame
 \subsubsection{Configuración previa y estructura del módulo} \label{userModuleConfig}
 Dado que el módulo de usuarios basa su funcionamiento en Node.js y npm debemos instalar estos dos componentes, pues habitualmente la versión de los mismos incluida por defecto en los sistemas operativos Linux es muy antigua. Los pasos necesarios para descargar e instalar ambas utilidades varían según el sistema operativo. En nuestro caso, Node.js no está incluido por defecto en los repositorios por lo que en principio no puede instalarse con un sencillo comando de \emph{apt-get}. Podemos añadir un repositorio de su última versión para su fácil instalación y actualización con un único paso previo desde el terminal, tras el cual podremos instalarlo siguiendo el procedimiento habitual.
 
-\mint[breaklines, breakanywhere, breaksymbolleft={}]{bash}{curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -}
-\mint[breaklines, breakanywhere, breaksymbolleft={}]{bash}{sudo apt-get install -y nodejs}
+\begin{listing}[H]
+    \begin{minted}
+    [
+    frame=lines,
+    framesep=2mm,
+    baselinestretch=1.2,
+    bgcolor=lightgray,
+    fontsize=\footnotesize,
+    breakanywhere,
+    breaklines=true,
+    breaksymbolleft={}
+    ]
+    {bash}
+curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+sudo apt-get install -y nodejs
+    \end{minted}
+\end{listing}
 
 Este procedimiento instala tanto Node.js como el gestor de paquetes npm, permitiendo su ejecución desde terminal con las órdenes \emph{node} y \emph{npm} respectivamente.
 
@@ -920,27 +1174,27 @@ breaksymbolleft={}
 ]
 {javascript}
 app.post('/upload', function (req, res) {
-    // create an incoming form object
-    var form = new formidable.IncomingForm();
-    // store all uploads in the /uploads directory
-    form.uploadDir = path.join(__dirname, '/uploads');
-    // every time a file has been uploaded successfully,
-    // rename it to it's original name
-    form.on('file', function (field, file) {
-        fs.rename(file.path, path.join(form.uploadDir, file.name), function () { });
+    
+        var form = new formidable.IncomingForm();
+    
+        form.uploadDir = path.join(__dirname, '/uploads');
+    
+        form.on('file', function (field, file) {
+            fs.rename(file.path, path.join(form.uploadDir, file.name), function () { });
+        });
+    
+        form.on('error', function (err) {
+            console.log('An error has occured: \n' + err);
+        });
+    
+        form.on('end', function () {
+            console.log("Upload successful.");
+            setCreds();
+            res.end('success');
+        });
+    
+        form.parse(req);
     });
-    // log any errors that occur
-    form.on('error', function (err) {
-        console.log('An error has occured: \n' + err);
-    });
-    // once all the files have been uploaded, send a response to the client
-    form.on('end', function () {
-        console.log("Upload successful.");
-        setCreds();
-        res.end('success');
-    });
-    // parse the incoming request containing the form data
-    form.parse(req);
 });
 \end{minted}
 \caption{Procesado de ficheros de audio procedentes del cliente.}
@@ -1028,7 +1282,7 @@ breaksymbolleft={}
 ]
 {javascript}
 app.post('/userconnected', function (req, res) {
-    if (req.body.connected != 1) { // Antes era (!req.body.state)
+    if (req.body.connected != 1) {
         if (req.body.oneTimePass == true) {
             userControllerOneTime.userInactiveOneTime(req.body.id);
 
@@ -1089,7 +1343,22 @@ Existen varios servicios y proveedores de certificados autorizados con diferente
 
 Para generar nuestra clave y certificado SSL puede utilizarse la herramienta OpenSSL, disponible en sistemas macOS y Linux. Con un solo orden pueden generarse los dos archivos necesarios.
 
-\mint[breaklines, breakanywhere, breaksymbolleft={}]{bash}{openssl req -x509 -sha256 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365}
+\begin{listing}[H]
+    \begin{minted}
+    [
+    frame=lines,
+    framesep=2mm,
+    baselinestretch=1.2,
+    bgcolor=lightgray,
+    fontsize=\footnotesize,
+    breakanywhere,
+    breaklines=true,
+    breaksymbolleft={}
+    ]
+    {bash}
+openssl req -x509 -sha256 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365
+    \end{minted}
+\end{listing}
 
 Tras una serie de preguntas, entre las que se encuentra la \emph{passphrase} utilizada en el servidor, se generan los dos archivos necesarios: \emph{key.pem} y \emph{cert.pem}. Pueden ubicarse estos archivos en un directorio aparte y luego referenciarse en las configuraciones pertinentes. Para que la Aplicación Web Node.js haga uso de estos archivos, como ya se explicó anteriormente, hay que declarar sus rutas junto a la \emph{passphrase} en el objeto options que luego se utiliza en la función createServer(). Se vuelve a adjuntar el código utilizado por comodidad.
 
@@ -1124,9 +1393,24 @@ También hay que habilitar el uso de SSL en el objeto \emph{chilliController}, d
 
 Por último, el propio \emph{software} CoovaChilli debe tener habilitado SSL en su configuración y referenciar el certificado y clave en la ruta donde se encuentren. Para ello se edita el archivo \verb+/etc/chilli/config+ tal y como se vio en apartados anteriores, definiendo los siguientes atributos.
 
-\mint[breaklines, breakanywhere, breaksymbolleft={}]{bash}{HS_REDIRSSL=on}
-\mint[breaklines, breakanywhere, breaksymbolleft={}]{bash}{HS_SSLKEYFILE=/etc/chilli/sslkey/cert.pem}
-\mint[breaklines, breakanywhere, breaksymbolleft={}]{bash}{HS_SSLCERTFILE=/etc/chilli/sslkey/cert.pem}
+\begin{listing}[H]
+    \begin{minted}
+    [
+    frame=lines,
+    framesep=2mm,
+    baselinestretch=1.2,
+    bgcolor=lightgray,
+    fontsize=\footnotesize,
+    breakanywhere,
+    breaklines=true,
+    breaksymbolleft={}
+    ]
+    {bash}
+HS_REDIRSSL=on
+HS_SSLKEYFILE=/etc/chilli/sslkey/cert.pem
+HS_SSLCERTFILE=/etc/chilli/sslkey/cert.pem
+    \end{minted}
+\end{listing}
 
 \subsubsection{Submódulos de Aplicación Web} \label{webAppSubmodule}
 
@@ -1467,7 +1751,7 @@ breaksymbolleft={}
 {javascript}
 agreeBtn.onclick = e => {
     let mediaOptions = {
-        audio: {                           // Ajustes de sonido
+        audio: {
             tag: 'audio',
             type: 'audio/ogg',
             ext: '.ogg',
@@ -1485,7 +1769,7 @@ agreeBtn.onclick = e => {
             chunks.push(e.data);
             if (recorder.state == 'inactive') {
                 if (userCreds.id >= 0) {
-                    loggedUserSaveAndSend(); // guarda y envía
+                    loggedUserSaveAndSend();
                 } else if (userCreds.oneTimePass === false) {
                     saveAndSend();
                 } else {

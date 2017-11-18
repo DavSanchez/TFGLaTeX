@@ -486,7 +486,7 @@ breaksymbolleft={}
 
 \subsection{El entorno node.js para programación de back-end }
 
-El JavaScript junto a HTML y CSS son los tres pilares básicos de la programación \emph{front-end} (cliente). Los servidores (\emph{back-end}), suelen estar programados en otros lenguajes como \emph{Hypertext Preprocessor} (PHP), Java \cite{JavaServer} o Python \cite{Python}... Poco a poco el Javascript también se ha venido usando para programar los \emph{back-ends} debido a la aparición de Node.js.  Esto se debe a la iniciativa de intentar unificar todo el desarrollo Web en un único lenguaje de programación introduciendo el  paradigma \emph{JavaScript en todas partes}.
+JavaScript junto a HTML y CSS son los tres pilares básicos de la programación \emph{front-end} (cliente). Los servidores (\emph{back-end}), suelen estar programados en otros lenguajes como \emph{Hypertext Preprocessor} (PHP), Java \cite{JavaServer} o Python \cite{Python}... Poco a poco JavaScript se ha convertido en una opción para programar los \emph{back-ends} debido a la aparición de Node.js.  Esto se debe a la iniciativa de intentar unificar todo el desarrollo Web en un único lenguaje de programación introduciendo el  paradigma \emph{JavaScript en todas partes}.
 
 El Node.js tiene una arquitectura dirigida por eventos capaz de manejar la entrada-salida asíncrona, en un esfuerzo por aumentar la escalabilidad y la tasa de transmisión en aplicaciones Web con gran cantidad de operaciones de este tipo o aplicaciones Web en tiempo real. Su funcionalidad se basa en bibliotecas JavaScript conectadas entre ellas y al sistema operativo por medio de \emph{bindings} en C++. Utiliza una combinación del motor JavaScript V8 de Google \cite{V8}, un bucle de eventos y una API de entrada-salida de bajo nivel. El motor V8 fue desarrollado para Google Chrome, escrito en el lenguaje C++. Se encarga de compilar el código JavaScript a código máquina nativo en lugar de interpretarlo en tiempo real. El bucle de eventos se implementa en un único hilo de ejecución que atiende llamadas de entrada-salida no bloqueantes, permitiendo un número elevado de conexiones concurrentes sin incurrir en los costes de recursos del cambio de contexto entre hilos. Mediante el patrón de diseño software \emph{observador}, cada función que realice una operación de entrada-salida debe usar un \emph{callback}, una función pasada como parámetro que se ejecuta al terminar dicha operación.
 
@@ -646,15 +646,15 @@ El \emph{front-end} implica la producción de contenido, apariencia y comportami
 
 Las herramientas básicas del desarrollo front-end la forman un conjunto de tres tecnologías. HTML, CSS y JavaScript.
 
-\subsubsection{El HTML y  el CCS}
+\subsubsection{HTML y  el CCS}
 
 La última versión de HTML es conocida como HTML5 y fue publicada en octubre de 2014. Esta versión contiene nuevas formas de manejar elementos, sobre todo en el ámbito de la multimedia (como el audio y el vídeo), y nuevos descriptores y posibilidades de metadatos con los que se busca conseguir una mayor interoperabilidad entre sistemas y una mayor semántica de la Web. Dado que introduce varias API y marcado para aplicaciones Web complejas y también ha sido diseñado teniendo en mente dispositivos de bajo consumo, su uso también está planteado para aplicaciones móviles multiplataforma.
 
 El CSS define el aspecto o la presentación de la página Web. Un documento CSS consiste en listar unas reglas de visualización —color, tipografía, fondo, bordes— para cada elemento de marcado usado después en HTML. De esta forma, CSS trata de separar el contenido y la presentación del mismo, de forma que si se quiere cambiar el diseño gráfico de un sitio Web no haya que modificar todos y cada uno de los documentos HTML existentes, sino un número mucho más reducido de documentos CSS que estén referidos en estos.
 
-Al mismo tiempo, la variedad de módulos existentes actualmente trata de dar un mayor dinamismo y responsividad a las páginas Web, incluyendo animaciones, diseño en múltiples columnas que se adaptan a los tamaños de pantalla...
+Al mismo tiempo, la variedad de módulos existentes actualmente trata de dar un mayor dinamismo y responsividad a las páginas Web, incluyendo animaciones o diseño en múltiples columnas que se adaptan a los tamaños de pantalla.
 
-\subsubsection{El javascript: bibliotecas, API y complementos}
+\subsubsection{JavaScript: bibliotecas, API y complementos}
 JavaScript es un lenguaje de programación interpretado de alto nivel que define el comportamiento de una aplicación o página Web (interactividad y ejecución de programas online). Todos los navegadores modernos soportan una implementación parcial o completa de la especificación ECMAScript \cite{ECMAScript2016}.
 
 El \emph{Document Object Module} (\acrshort{DOM}) es la especificación de la jerarquía de los elementos usados por HTML, que puede entenderse como un diagrama de árbol en el que cada objeto representa una parte del documento. JavaScript manipula el DOM pudiendo acceder a cada elemento y realizando cambios en él que luego se verían reflejados en la visualización del sitio Web, a efectos creando HTML dinámico en el que pueden alterarse los elementos y atributos, cambiar el estilo CSS, reaccionar a eventos de la página o crear eventos nuevos. En la Figura \ref{DOMModel} se muestra un ejemplo gráfico del DOM.
@@ -677,7 +677,7 @@ WebRTC es una tecnología que permite a las aplicaciones Web capturar y transmit
 
 Es un estándar actualmente en desarrollo por la \emph{World Wide Web Consortium} (\acrshort{W3C}) y el IETF. Para transferir los datos multimedia se utiliza el protocolo \emph{Realtime Transport Protocol }(\acrshort{RTP}).
 
-El \emph{getUserMedia()} es el método principal mediante el que se solicitan al usuario los permisos necesarios para usar un dispositivo de entrada multimedia (como la cámara o el micrófono). Produce una interfaz \emph{MediaStream} consistente en las pistas de los tipos de multimedia solicitados. Generalmente se usa accediendo a la interfaz \emph{MediaDevices} con la siguiente orden \mint{javascript}|navigator.mediaDevices.getUserMedia(constraints).then(...)| siendo \emph{constraints} el parámetro que indica el tipo de multimedia que se solicita y then la función que contendría los callbacks a ejecutar en caso de éxito o error según la \emph{Promise API}.
+El \emph{getUserMedia()} es el método principal mediante el que se solicitan al usuario los permisos necesarios para usar un dispositivo de entrada multimedia (como la cámara o el micrófono). Produce una interfaz \emph{MediaStream} consistente en las pistas de los tipos de multimedia solicitados. Generalmente se usa accediendo a la interfaz \emph{MediaDevices} con la siguiente orden \mintinline{javascript}{navigator.mediaDevices.getUserMedia(constraints).then(...)} siendo \emph{constraints} el parámetro que indica el tipo de multimedia que se solicita y then la función que contendría los callbacks a ejecutar en caso de éxito o error según la \emph{Promise API}.
 
 La API \emph{MediaStream Recording} está muy relacionada captura los datos generados por el objeto \emph{MediaStream} para su análisis, procesado o guardado en disco. Se basa en una única interfaz, \emph{MediaRecorder}, que se encarga de obtener los datos del \emph{MediaStream} mediante una serie de eventos. El proceso de grabación es muy sencillo:
 
