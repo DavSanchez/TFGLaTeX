@@ -41,7 +41,7 @@ Aunque su implantación queda fuera del ámbito de este TFG, la Raspberry Pi cue
 No entramos en la configuración del hardware de la WiFi de la Raspberry Pi 3 porque ya viene instalada por defecto en Raspbian.
 
 En este apartado no entramos en el detalle de la configuración de \emph{hostapd} porque en el capítulo 5 presentamos toda la instalación del software necesario por orden de dependencias entre ellos, lo cual nos obligaría a explicar previamente aplicaciones que pertenecen a otros módulos.
-\clearpage
+\cleardoublepage
 \vspace*{\stretch{2}}%{\fill}
 \begin{center}
 \begin{minipage}{.75\textwidth}
@@ -60,7 +60,7 @@ Para implementar el servicio, en lugar de replicar el código manualmente, puede
 Tras esto, el servicio Web completo puede ponerse en marcha desde este mismo directorio mediante el orden node.
 
 \mint{bash}{node nodeserver.js}
-\clearpage
+\cleardoublepage
 \vspace*{\stretch{2}}%{\fill}
 \begin{center}
 \begin{minipage}{.75\textwidth}
@@ -165,7 +165,7 @@ Por último, con la orden \mintinline{bash}{pm2 monit} puede accederse a una vis
 %\source{https://en.wikipedia.org/wiki/RADIUS}
 \label{pm2monit}
 \end{figure}
-\clearpage
+\cleardoublepage
 \vspace*{\stretch{2}}%{\fill}
 \begin{center}
 \begin{minipage}{.75\textwidth}
@@ -197,7 +197,7 @@ Finalmente se decidió no optar por esta solución debido a que la distribución
 
 Junto a CoovaChilli se evaluó otra solución de control de acceso a la red disponible para Linux: \emph{PacketFence}. Este programa de código abierto es también muy completo, ofreciendo facilidades de monitorización, análisis de ficheros transmitidos, gestión centralizada tanto cableada como inalámbrica (802.1X) y utilidades de portal cautivo. Lamentablemente, cuando se estudió su uso \emph{PacketFence} no garantizaba compatibilidad total para la Raspberry Pi, por lo que también fue descartado.
 
-\clearpage
+\cleardoublepage
 \vspace*{\stretch{2}}%{\fill}
 \begin{center}
 \begin{minipage}{.75\textwidth}
@@ -215,7 +215,7 @@ Aunque no presenta problema a la hora de ser probado en local, las API de geoloc
 
 Dado que OpenSSL genera certificados auto-firmados, y por tanto no reconocidos por una autoridad de certificación, los navegadores no los aceptan de primeras para proteger al usuario, por lo que a efectos de hacer las pruebas hubo que añadir las excepciones de la aplicación web y la interfaz JSON de \emph{CoovaChilli} manualmente.
 
-\clearpage
+\cleardoublepage
 \vspace*{\stretch{2}}%{\fill}
 \begin{center}
 \begin{minipage}{.75\textwidth}

@@ -15,8 +15,17 @@ right=25mm,
 top=25mm,
 bottom=25mm}
 
+%\widowpenalty=300
+%\clubpenalty=300
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead{} % Elimina todos los headers
+\fancyfoot{} % Elimina todos los footers\fancyfoot[LE,RO]{\thepage} % Numeración alternada en pares/impares
+\renewcommand{\headrulewidth}{0pt}
 % Interlineado
 \linespread{1.25}
+\usepackage{emptypage} % Quita los números de todas las páginas en blanco
 
 % Paquetes que gestionan el español y otros caracteres especiales
 \usepackage[spanish]{babel}
@@ -37,7 +46,7 @@ bottom=25mm}
 \usepackage[hyphens]{url} % Para que las URLs se dividan (usar también /sloppy en el documento)
 \usepackage{bookmark}
 
-\usepackage[toc,page,title]{appendix}
+\usepackage[page,title]{appendix}
 \renewcommand{\appendixname}{Ap\'{e}ndice}
 \renewcommand{\appendixtocname}{Ap\'{e}ndices}
 \renewcommand{\appendixpagename}{Ap\'{e}ndices}
@@ -72,15 +81,23 @@ bottom=25mm}
 \includepdf[pages={2-4},pagecommand={},fitpaper=true]{Portada.pdf}
 \clearpage
 
-\clearpage\mbox{}\clearpage
+\clearpage
+\vspace*{\stretch{2}}
+\begin{center}
+\begin{minipage}{.75\textwidth}
+\emph{Esta página se ha dejado en blanco intencionadamente.}
+\end{minipage}
+\end{center}
+\vspace{\stretch{3}}
+\clearpage
 
 % Construimos tabla de contenidos
-\pagenumbering{arabic}
 \tableofcontents
 
 \cleardoublepage
 
 % Comienza el contenido del TFG
+\pagenumbering{arabic}
 \include{./1_Intro/1_Intro}
 \cleardoublepage
 \include{./2_SensadoCol/2_SensadoCol}
@@ -111,7 +128,7 @@ bottom=25mm}
 \cleardoublepage
 
 \include{./X_PresupuestoPliego/X_PresupuestoPliego}
-\cleardoublepage
+%\cleardoublepage
 
 % Termina el documento
 \end{document}

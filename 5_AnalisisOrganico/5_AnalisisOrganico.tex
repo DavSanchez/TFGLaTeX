@@ -172,7 +172,7 @@ HS_UAMSECRET=
 
 Debido al funcionamiento de nuestro portal cautivo, que opera con la interfaz JSON de CoovaChilli, es necesario dejar en blanco el campo \verb+HS_UAMSECRET+, de lo contrario la aplicación Web no podría iniciar sesión en el servicio con las credenciales obtenidas.
 
-\paragraph{Instalación de Haserl} \label{HaserlInstall} ~\\
+\paragraph{Instalación de Haserl} \label{HaserlInstallTitle} ~\\
 
 Dado que algunas de las funciones de CoovaChilli necesitan del programa Haserl (como su pequeño portal cautivo por defecto implementado con \emph{Web Scripts}) hace falta instalarlo y añadir su ruta de instalación a la configuración de CoovaChilli. Para ello hacemos un procedimiento similar al usado en la instalación de CoovaChilli, salvo que en este caso compilamos el programa con la utilidad \emph{make}.
 
@@ -1250,7 +1250,7 @@ function disconnect(userCreds){
 % \label{usersControllerImports}
 \end{listing}
 
-La función \emph{liberateUser()} se analiza en el apartado \label{script.js} dedicado al archivo \emph{scripts.js}.
+La función \emph{liberateUser()} se analiza en el apartado \ref{script.js} dedicado al archivo \emph{scripts.js}.
 Además, asocia funciones locales a eventos del objeto \emph{chilliController} y se encarga de consultar el estado del mismo al ejecutarse por primera vez.
 
 \begin{listing}[H]
