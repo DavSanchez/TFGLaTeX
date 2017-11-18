@@ -49,15 +49,14 @@ bottom=25mm}
 \usepackage{bookmark}
 
 \usepackage[toc,page,title]{appendix}
+\renewcommand{\appendixname{Ap\'{e}ndice}
+\renewcommand{\appendixtocname}{Ap\'{e}ndices}
+\renewcommand{\appendixpagename}{Ap\'{e}ndices}
 
 \usepackage{etoolbox}
 \makeatletter
 \appto{\appendices}{\def\Hy@chapapp{Appendix}}
 \makeatother
-
-\renewcommand{\appendixname}{Anexo}%{Ap\'{e}ndice}
-\renewcommand{\appendixtocname}{Anexos}%{Ap\'{e}ndices}
-\renewcommand{\appendixpagename}{Anexos}%{Ap\'{e}ndices}
 
 % Paquete para adjuntar código
 \usepackage[section]{minted} % Fragmentos de código
