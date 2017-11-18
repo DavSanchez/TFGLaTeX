@@ -608,13 +608,11 @@ breaksymbolleft={}
 ]
 {javascript}
 function setUserActive(userId) {
-    console.log("Estableciendo usuario " + userId + " como ocupado.");
     userObj.users[userId].isActive = true;
     writeUsersFile(userObj);
 }
 
 function setUserInactive(userId) {
-    console.log("Estableciendo usuario " + userId + " como libre.");
     userObj.users[userId].isActive = false;
     writeUsersFile(userObj);
 }
@@ -638,7 +636,6 @@ breaksymbolleft={}
 ]
 {javascript}
 function writeUsersFile(userJSON){
-    console.log("Guardando estado de usuarios en archivo JSON.");
     fs.writeFileSync("./users/users.json", JSON.stringify(userJSON, null, 2));
 }
 \end{minted}
@@ -661,7 +658,6 @@ breaksymbolleft={}
 ]
 {javascript}
 function prepareToConnect(userId) {
-   console.log("Almacenando credenciales del usuario " + userId + " para el cliente.");
    return [userObj.users[userId].id, userObj.users[userId].username, userObj.users[userId].password, false, 0];
 \end{minted}
 \caption{Preparación de credenciales.}
@@ -689,7 +685,6 @@ exports.userInactive = function(id) {
 };
 
 exports.checkInactiveUser = function () {
-    console.log('Buscando usuarios inactivos...');
     var counter = 0;
     for (var i = 0; i<userObj.users.length; i++){
         if (!userObj.users[i].isActive){
@@ -707,7 +702,6 @@ exports.getInactiveUser = function() {
            return prepareToConnect(i);
        }
    }
-   console.log("Parece que no hay usuarios libres...");
    return ["", "", "", "", ""];
 };
 \end{minted}
@@ -824,13 +818,10 @@ breaksymbolleft={}
 ]
 {javascript}
 app.get('/serverstatus', function (req, res) {
-   console.log("Petición de estado del servidor recibida");
    if (userController.checkInactiveUser()) {
-       res.send("true");
-       console.log("El servidor parece estar bien.");
+       res.send("true"); // El servidor parece estar bien
    } else {
-       res.send("false");
-       console.log("El servidor parece estar lleno");
+       res.send("false"); // El servidor parece estar lleno
    }
 });
 \end{minted}
@@ -853,9 +844,7 @@ breaksymbolleft={}
 ]
 {javascript}
 app.get('/creds', function (req, res) {
-    console.log("Petición de credenciales recibida. Enviando...");
     var jsonCr = JSON.stringify(creds);
-    console.log("Datos enviados: %j", jsonCr);
     res.send(jsonCr);
 });
 \end{minted}
@@ -878,9 +867,7 @@ breaksymbolleft={}
 ]
 {javascript}
 app.post('/userlogoff', function (req, res) {
-    console.log("Datos recibidos UserLogoff: %j", req.body);
     if (req.body.oneTimePass === false) {
-        console.log('Recibida desconexión de usuario. Desconectando al usuario ' + req.body.id);
         userController.userInactive(req.body.id);
         res.end('success');
     }
@@ -905,13 +892,11 @@ breaksymbolleft={}
 ]
 {javascript}
 function setCreds() {
-    console.log('Estableciendo credenciales...');
     var data = userController.getInactiveUser();
     creds.id = data[0];
     creds.username = data[1];
     creds.password = data[2];
     creds.oneTimePass = data[3];
-    console.log("Credenciales establecidas: %j", creds);
 }
 \end{minted}
 \caption{Almacenando las credenciales.}
@@ -935,7 +920,6 @@ breaksymbolleft={}
 ]
 {javascript}
 app.post('/upload', function (req, res) {
-    console.log("Petición para subir audio recibida");
     // create an incoming form object
     var form = new formidable.IncomingForm();
     // store all uploads in the /uploads directory
@@ -951,7 +935,7 @@ app.post('/upload', function (req, res) {
     });
     // once all the files have been uploaded, send a response to the client
     form.on('end', function () {
-        console.log("Audio subido con éxito.");
+        console.log("Upload successful.");
         setCreds();
         res.end('success');
     });
@@ -976,7 +960,6 @@ breaksymbolleft={}
 ]
 {javascript}
 app.post('/loggedupload', function (req, res) {
-    console.log("Petición para subir audio recibida de un usuario ya conectado");
     var form = new formidable.IncomingForm();
     form.uploadDir = path.join(__dirname, '/uploads');
     form.on('file', function (field, file) {
@@ -986,7 +969,7 @@ app.post('/loggedupload', function (req, res) {
         console.log('An error has occured: \n' + err);
     });
     form.on('end', function () {
-        console.log("Audio subido con éxito.");
+        console.log("Upload successful.");
         res.end('success');
     });
     form.parse(req);
@@ -1009,7 +992,6 @@ breaksymbolleft={}
 ]
 {javascript}
 app.post('/onetimepassupload', function (req, res) {
-    console.log("Petición para subir audio recibida de un usuario que pide 30 minutos sin más.");
     var form = new formidable.IncomingForm();
     form.uploadDir = path.join(__dirname, '/uploads');
     form.on('file', function (field, file) {
@@ -1019,7 +1001,7 @@ app.post('/onetimepassupload', function (req, res) {
         console.log('An error has occured: \n' + err);
     });
     form.on('end', function () {
-        console.log("Audio subido con éxito.");
+        console.log("Upload successful.");
         setCredsOneTime();
         res.end('success');
     });
@@ -1046,24 +1028,18 @@ breaksymbolleft={}
 ]
 {javascript}
 app.post('/userconnected', function (req, res) {
-    console.log("Datos recibidos: %j", req.body);
     if (req.body.connected != 1) { // Antes era (!req.body.state)
-        console.log("El usuario no ha logrado conectarse.");
         if (req.body.oneTimePass == true) {
-            console.log("Liberando usuario de 30 minutos " + req.body.id + "...");
             userControllerOneTime.userInactiveOneTime(req.body.id);
 
         } else {
-            console.log("Liberando usuario normal... " + req.body.id + "...");
             userController.userInactive(req.body.id);
         }
         res.end('success');
     } else if (req.body.oneTimePass == true) {
-        console.log("CUENTA ATRÁS DEL USUARIO " + req.body.id + " ACTIVADA.");
         setTimeout(function () {
-            console.log('Marcando como libre en la base de datos al usuario  ' + req.body.id + ' con tiempo ya agotado...');
             userControllerOneTime.userInactiveOnetime(req.body.id);
-        }, 1920000); //Cuenta atrás de 30 minutos hasta que se libere al usuario.
+        }, 1920000);
         res.end('success');
     }
 });
@@ -1096,7 +1072,7 @@ const options = {
     passphrase: 'pruebassl'
 };
 
-https.createServer(options, app).listen(3000, function () { // DEFAULT PORT 443
+https.createServer(options, app).listen(3000, function () {
     console.log('HTTPS server listening on port 3000');
 });
 
@@ -1135,7 +1111,7 @@ const options = {
     passphrase: 'pruebassl'
 };
 
-https.createServer(options, app).listen(3000, function () { // DEFAULT PORT 443
+https.createServer(options, app).listen(3000, function () {
     console.log('HTTPS server listening on port 3000');
 });
 
@@ -1234,14 +1210,10 @@ breaksymbolleft={}
 chilliController.ssl = true;
 
 function connect(username, password){
-    console.log('Conectando...');
-    if (username == "" || password == "")
-        console.log('Algo va mal... ¿Usuarios completos? User: '+username+'. Pass: '+password+'.');
     chilliController.logon(username, password);
 }
 
 function disconnect(userCreds){
-   console.log('Disconnecting...');
    liberateUser(userCreds);
    chilliController.logoff();
 }
@@ -1351,33 +1323,26 @@ window.onload = function () {
 
 function prepareSite() {
     if (navigator.geolocation) {
-        console.log('Intentando obtener ubicación...');
         try {
             navigator.geolocation.watchPosition(showPositionTime, positionError, geoOptions);
         }
         catch (err) {
-            console.log("Error de ubicación: " + err);
             locationTime = 'LocError';
         }
     } else {
-        console.log('Geolocation not supported');
         locationTime = 'Geolocation is not supported by this browser';
     }
 }
 
 function checkServerStatus() {
-    console.log('Comprobando estado del servidor...');
     $.ajax({
         type: 'GET',
         url: '/serverstatus',
         dataType: 'text',
         success: function (data) {
-            console.log('Respuesta recibida: ' + data);
             if (data === "true") {
-                console.log('El servidor parece estar bien.');
                 serverStatus = true;
             } else {
-                console.log('Servidor parece lleno...');
                 serverStatus = false;
                 agreeBtn.disabled = true;
                 agreeBtn.textContent = "Servidor lleno";
@@ -1407,10 +1372,9 @@ breaksymbolleft={}
 ]
 {javascript}
 function showPositionTime(position) {
-    console.log('Obteniendo ubicación y marca de tiempo...');
     locationTime = 'Lat' + position.coords.latitude +
         'Lon' + position.coords.longitude +
-        'Time' + new Date(); // Esto añadiría también el Timestamp al nombre
+        'Time' + new Date();
 }
 
 var geoOptions = {
@@ -1418,7 +1382,7 @@ var geoOptions = {
 };
 
 function positionError(positionError) {
-    console.log('Error ' + positionError.code + ' en la geolocalización: ' + positionError.message);
+    console.log('Error ' + positionError.code + ' in geolocation: ' + positionError.message);
 }
 \end{minted}
 \caption{Funciones y opciones para geolocalización.}
@@ -1473,7 +1437,6 @@ breaksymbolleft={}
 ]
 {javascript}
 function liberateUser(creds) {
-    console.log('Liberando usuario...');
     $.ajax({
         type: 'POST',
         url: '/userlogoff',
@@ -1514,21 +1477,18 @@ agreeBtn.onclick = e => {
 
     media = mediaOptions.audio;
     navigator.mediaDevices.getUserMedia(media.gUM).then(_stream => {
-        stream = _stream;                          // Preparando la grabación 1
+        stream = _stream;
         id('gUMArea').style.display = 'none';
         id('preRecordArea').style.display = 'inherit';
-        recorder = new MediaRecorder(stream);      // Preparando la grabación 2
-        recorder.ondataavailable = e => {          // Preparando la grabación 3
-            chunks.push(e.data);                   // Preparando la grabación 4
+        recorder = new MediaRecorder(stream);
+        recorder.ondataavailable = e => {
+            chunks.push(e.data);
             if (recorder.state == 'inactive') {
                 if (userCreds.id >= 0) {
-                    console.log("Guardando audio y enviando para usuario ya conectado");
                     loggedUserSaveAndSend(); // guarda y envía
                 } else if (userCreds.oneTimePass === false) {
-                    console.log("Guardando audio y enviando para usuario primerizo");
-                    saveAndSend(); // guarda y envía
+                    saveAndSend();
                 } else {
-                    console.log("Guardando audio y enviando para usuario de 30 minutos");
                     saveAndSendOneTimePass();
                 }
             }
@@ -1557,32 +1517,30 @@ breaksymbolleft={}
 {javascript}
 recordBtn.onclick = e => {
     if (serverStatus === true) {
-        console.log('El servidor parece estar bien...');
         userCreds.oneTimePass = false;
         id('preRecordArea').style.display = 'none';
         id('agreedArea').style.display = 'inherit';
         setTimeout(startRecording, 100);
         setInterval(startRecording, 180000);
     } else {
-        console.log('Ha ocurrido un error en el servidor. ¿Podría estar completo?');
+        console.log('Error');
     }
 };
 
 recordBtn30min.onclick = e => {
     if (serverStatus === true) {
-        console.log('El servidor parece estar bien...');
         userCreds.oneTimePass = true;
         id('preRecordArea').style.display = 'none';
         id('agreedArea').style.display = 'inherit';
         setTimeout(startRecording, 100);
     } else {
-        console.log('Ha ocurrido un error en el servidor. ¿Podría estar completo?');
+        console.log('Error');
     }
 };
 
-function startRecording() {                    // Se ejecuta al pulsar el botón Start
-    chunks = [];                                 // Crea un array
-    recorder.start();                          // Empieza a grabar
+function startRecording() {
+    chunks = [];
+    recorder.start();
     setTimeout(stopRecording, 5000);
 }
 
@@ -1612,7 +1570,6 @@ function saveAndSend() {
     let blob = new Blob(chunks, { type: media.type });
     var fd = new FormData();
     fd.append('blob', blob, `${locationTime}${media.ext}`);
-    console.log('[Normal] Enviando audio al servidor...');
 
     $.ajax({
         url: '/upload',
@@ -1652,7 +1609,6 @@ function loggedUserSaveAndSend() {
     let blob = new Blob(chunks, { type: media.type });
     var fd = new FormData();
     fd.append('blob', blob, `${locationTime}${media.ext}`);
-    console.log('[Logged] Enviando audio al servidor...');
 
     $.ajax({
         url: '/loggedupload',
@@ -1691,7 +1647,6 @@ function saveAndSendOneTimePass() {
     let blob = new Blob(chunks, { type: media.type });
     var fd = new FormData();
     fd.append('blob', blob, `${locationTime}${media.ext}`);
-    console.log('[One-time] Enviando audio al servidor...');
 
     $.ajax({
         url: '/onetimepassupload',
@@ -1730,16 +1685,12 @@ breaksymbolleft={}
 ]
 {javascript}
 function receiveResponse() {
-    console.log('Pidiendo credenciales...');
     $.ajax({
         type: 'GET',
         url: '/creds',
         dataType: 'json',
         success: function (data) {
-            console.log('respuesta recibida: ' + data + '. Conectando...');
-            console.log("Datos recibidos: %j", data);
             userCreds = data;
-            console.log("Credenciales establecidas: %j", userCreds);
             getUserCredentials(userCreds);
         }
     });
@@ -1764,12 +1715,10 @@ breaksymbolleft={}
 ]
 {javascript}
 function getUserCredentials(data) {
-    console.log('Conectando con username: ' + data.username + ' y password: ' + data.password);
     connect(data.username, data.password);
 
     setTimeout(2500, function () {
         if (chilliController.clientState === 1) {
-            console.log("Estado de conexión a CoovaChilli: " + chilliController.clientState);
             userCreds.connected = chilliController.clientState;
             $.ajax({
                 type: 'POST',
@@ -1780,7 +1729,6 @@ function getUserCredentials(data) {
                 }
             });
         } else if (chilliController.clientState === 2) {
-            console.log("Estado de conexión a CoovaChilli: " + chilliController.clientState);
             setAlert("error");
         }
     });
