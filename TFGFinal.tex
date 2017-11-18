@@ -21,7 +21,8 @@ bottom=25mm}
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhead{} % Elimina todos los headers
-\fancyfoot{} % Elimina todos los footers\fancyfoot[LE,RO]{\thepage} % Numeración alternada en pares/impares
+\fancyfoot{} % Elimina todos los footers
+\fancyfoot[LE,RO]{\thepage} % Numeración alternada en pares/impares
 \renewcommand{\headrulewidth}{0pt}
 % Interlineado
 \linespread{1.25}
@@ -124,11 +125,10 @@ bottom=25mm}
 \printbibliography[title={Referencias Web}, type=online, heading=bibintoc]%
 \cleardoublepage
 
-\printnoidxglossary[type=acronym,title={Glosario},toctitle={Glosario}]
+\include{./X_PresupuestoPliego/X_PresupuestoPliego}
 \cleardoublepage
 
-\include{./X_PresupuestoPliego/X_PresupuestoPliego}
-%\cleardoublepage
+\printnoidxglossary[type=acronym,title={Glosario},toctitle={Glosario}]
 
 % Termina el documento
 \end{document}
