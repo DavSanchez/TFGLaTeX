@@ -1734,7 +1734,7 @@ function liberateUser(creds) {
 % \label{usersControllerImports}
 \end{listing}
 
-Después de esto se programan los comportamientos de los botones. El primer botón que aparece en la visualización de la página es el que se debe pulsar al estar de acuerdo con las condiciones que se expresan en la primera descripción, teniendo este el identificador \emph{agreeBtn}. Este botón intenta configurar la captura de audio en el dispositivo según las API WebRTC y \emph{MediaStream Recording}, configurando las opciones de la grabación (en nuestro caso declarando que se captura audio, utilizando el \emph{\acrshort{MIME} type} y la extensión de archivo correspondiente al formato \emph{Ogg} \cite{OggRFC1, OggRFC2}) y determinando qué hacer con los archivos de audio generados según el tipo de usuario o si este tiene credenciales ya asignadas.
+Después de esto se programan los comportamientos de los botones. El primer botón que aparece en la visualización de la página es el que se debe pulsar al estar de acuerdo con las condiciones que se expresan en la primera descripción, teniendo este el identificador \emph{agreeBtn}. Este botón intenta configurar la captura de audio en el dispositivo según las API WebRTC y \emph{MediaStream Recording}, configurando las opciones de la grabación (en nuestro caso declarando que se captura audio, utilizando el \emph{\acrshort{MIME} type} y la extensión de archivo correspondiente al formato \emph{Ogg} \cite{OggRFC1, OggRFC2}) y determinando qué hacer con los archivos de audio generados según el tipo de usuario o si este tiene credenciales ya asignadas. Si el usuario deniega permisos o el dispositivo no soporta la tecnología utilizada el botón se desactiva y es imposible seguir adelante.
 
 \begin{listing}[H]
 \begin{minted}
@@ -1777,7 +1777,10 @@ agreeBtn.onclick = e => {
             }
         };
         log('got media successfully');
-    }).catch(log);
+    }).catch(function(err){
+        agreeBtn.disabled = true;
+        agreeBtn.textContent = "Permiso denegado o incompatible";
+    });
 };
 \end{minted}
 \caption{Preparación para grabar y enviar el fragmento de audio.}
@@ -1974,7 +1977,7 @@ function receiveResponse() {
         dataType: 'json',
         success: function (data) {
             userCreds = data;
-            getUserCredentials(userCreds);
+            connectUser(userCreds);
         }
     });
 }
@@ -1997,7 +2000,7 @@ breaklines=true,
 breaksymbolleft={}
 ]
 {javascript}
-function getUserCredentials(data) {
+function connectUser(data) {
     connect(data.username, data.password);
 
     setTimeout(2500, function () {
