@@ -1,42 +1,137 @@
-\clearpage
+%\clearpage
 \vspace*{\stretch{2}}
 \begin{center}
 \begin{minipage}{.75\textwidth}
-\section*{Presupuesto y pliego de condiciones}
-\addcontentsline{toc}{section}{Presupuesto y pliego de condiciones}
+\section*{Presupuesto}
+\addcontentsline{toc}{section}{Presupuesto}
 
-En este apartado, se hace balance de los costes totales de este proyecto fin de carrera y las condiciones específicas actuales de su implementación. En el presupuesto se distinguen 3 partidas fundamentales de gasto: recursos materiales, costes de ingeniería y costes en bienes fungibles.
+En este apartado se hace balance de los costes totales de llevar a cabo este Trabajo Fin de Grado. En el presupuesto se distinguen 3 partidas fundamentales de gasto: recursos materiales, costes de ingeniería y costes en bienes fungibles.
 \end{minipage}
 \end{center}
 \vspace{\stretch{3}}
-\clearpage
+\clearpage
 
-\subsection{Presupuesto}
-Aquí va el presupuesto.
+\subsection*{Coste de recursos materiales}
+\addcontentsline{toc}{subsection}{Coste de recursos materiales}
 
-% \begin{table}[!ht]
-%     \begin{center}
-%     \begin{tabular}{ | l | c | }
-%     \hline
-%     \textbf{Tarea acometida} & \textbf{Tiempo invertido} \\
-%     \hline
-%     Documentación inicial & 10 horas \\ \hline
-%     Especificación & 10 horas \\ \hline
-%     Opciones consideradas & 10 horas \\ \hline
-%     Análisis software de servidor & 20 horas \\ \hline
-%     Diseño final & 20 horas \\ \hline
-%     Implementación final (WebApp + Server) & 160 horas \\ \hline
-%     Pruebas en Raspberry Pi 2 + Interfaz WiFi & 5 horas \\ \hline
-%     Configuración de Seguridad HTTPS & 5 horas \\ \hline
-%     Pruebas en Raspberry Pi 3 & 10 horas \\ \hline
-%     Correcciones y cambios & 20 horas \\ \hline
-%     Pruebas finales & 20 horas \\ \hline
-%     Elaboración de documentos finales & 10 horas \\ \hline
-%     \end{tabular}
-%     \end{center}
-%     \caption{Cronología aproximada de realización del TFG}
-%     \label{tablaTFG}
-%     \end{table}%
+Aquí se detallan los gastos dedicados a los recursos materiales utilizados para desarrollar este TFG. El total de gasto en recursos materiales es de $461.68$\euro. A continuación se detalla cada partida de gasto.
 
-\subsection{Pliego de Condiciones}
-Aquí va el pliego de condiciones.
+\subsubsection*{Recursos \emph{hardware}}
+\addcontentsline{toc}{subsubsection}{Recursos \emph{hardware}}
+
+Considerando una amortización lineal a 3 años de los equipos utilizados durante el tiempo de desarrollo del TFG, en la siguiente tabla se detalla el coste de cada elemento.
+
+ \begin{table}[!ht]
+     \begin{center}
+     \begin{tabular}{| l  r  r |}
+     \hline
+     \textbf{Elemento} & \textbf{Coste total (\euro)} & \textbf{Coste imputable (\euro)} \\
+     \hline
+     Ordenador MacBook Pro 15'' & $1500$ & $333.3$ \\ %\hline
+     Tablet Samsung Galaxy GT-P5210 & $150$ & $33.3$ \\ %\hline
+     Móvil Sony Xperia L & $350$ & $77.78$ \\ %\hline
+     Raspberry Pi 3 y accesorios & $89$ & $17.3$ \\ \hline
+\multicolumn{1}{| r }{\textbf{Total}} & & \textbf{$461.68$\euro} \\ \hline
+     \end{tabular}
+     \end{center}
+     %\caption{Coste total del \emph{hardware}}
+     \label{costeHard}
+     \end{table}%
+     
+\subsubsection*{Recursos \emph{software}}
+\addcontentsline{toc}{subsubsection}{Recursos \emph{software}}
+
+El coste total del \emph{software} son 0\euro, debido a que se ha usado software gratuito o herramientas incluidas con los equipos \emph{hardware} en todo momento. En la siguiente tabla se detalla el \emph{software} utilizado.
+
+
+\begin{table}[!ht]
+\begin{center}
+\begin{tabular}{| l  r  r |}
+\hline
+\textbf{Elemento} & \textbf{Coste total (\euro)} & \textbf{Coste imputable (\euro)} \\
+\hline
+VS Code (editor de código) & $0$ & $0$ \\ %\hline
+Node.js & $0$ & $0$ \\ %\hline
+CoovaChilli & $0$ & $0$ \\ %\hline
+FreeRADIUS & $0$ & $0$ \\ %\hline
+Wireshark (analizador de redes) & $0$ & $0$ \\ %\hline
+Sistemas Operativos & $0$ & $0$ \\ %\hline
+Navegadores web & $0$ & $0$ \\ %\hline
+Paquetes ofimáticos y \LaTeX & $0$ & $0$ \\ %\hline
+Otro \emph{software} & $0$ & $0$ \\ \hline
+\multicolumn{1}{| r }{\textbf{Total}} & & \textbf{$0$\euro} \\ \hline
+\end{tabular}
+\end{center}
+\label{costeSoft}
+\end{table}%
+
+\subsection*{Costes de recursos humanos}
+\addcontentsline{toc}{subsection}{Costes de recursos humanos}
+
+Este Trabajo Fin de Grado se ha realizado en un tiempo total de 8 meses a tiempo parcial. Durante este tiempo se han realizado las tareas de estudios previos, desarrollo, pruebas y documentación necesarias para su finalización.
+
+\begin{table}[!ht]
+\begin{center}
+\begin{tabular}{| l  l r  r |}
+\hline
+\textbf{Elemento} & \textbf{Meses} & \textbf{Coste mensual (\euro)} & \textbf{Coste final (\euro)} \\
+\hline
+Estudios previos & $2$ & $0$ & $0$ \\ %\hline
+Desarrollo y pruebas & $5$ & $0$ & $0$ \\ %\hline
+Documentación & $1$ & $0$ & $0$ \\ \hline
+\multicolumn{1}{| r }{\textbf{Total}} & $8$ & & \textbf{$0$\euro} \\ \hline
+\end{tabular}
+\end{center}
+\label{costeHumano}
+\end{table}%
+
+\subsection*{Costes de material fungible}
+\addcontentsline{toc}{subsection}{Costes de material fungible}
+
+El proceso de impresión, encuadernado y preparación de las tres copias de DVDs (que incluyen la imagen del sistema operativo utilizado, copias de la memoria, y la impresión de la carátula) se realizó íntegramente en una copistería, ascendiendo el coste total a $0$\euro.
+
+\subsection*{Presupuesto total}
+\addcontentsline{toc}{subsection}{Presupuesto total}
+
+En la siguiente tabla se resume el coste total del proyecto realizado.
+
+\begin{table}[!ht]
+\begin{center}
+\begin{tabular}{| l r |}
+\hline
+\textbf{Elemento} & {Coste total} \\
+\hline
+Recursos materiales & $0$ \\ %\hline
+Recursos humanos & $0$ \\ %\hline
+Material fungible & $0$ \\ %\hline
+\multicolumn{1}{| r }{Coste previo a impuestos} & $0$ \\ %\hline
+\multicolumn{1}{| r }{7\% IGIC} & $0$ \\ \hline
+\multicolumn{1}{| r }{\textbf{Total}} & \textbf{$0$\euro} \\ \hline
+\end{tabular}
+\end{center}
+\label{costeTotal}
+\end{table}%
+\pagebreak
+Don José David Sánchez López-Trejo declara que:
+
+El proyecto ``Aplicación Web de sensado colaborativo para obtener acceso gratuito a redes WiFi'', desarrollado como Trabajo Fin de Grado, asciende a un coste total de $0$\euro\,(Aquí va la cantidad en letritas :)).
+
+\indent Firmado: José David Sánchez López-Trejo \\~ \\~ \\~ \\~ \\~
+\begin{flushright}
+Las Palmas de Gran Canaria, a 19 de noviembre de 2017.
+\end{flushright}
+
+\cleardoublepage
+\vspace*{\stretch{2}}
+\begin{center}
+\begin{minipage}{.75\textwidth}
+\section*{Pliego de condiciones}
+\addcontentsline{toc}{section}{Pliego de condiciones}
+
+En este apartado se exponen de forma detallada las condiciones relativas a la implementación de este sistema.
+\end{minipage}
+\end{center}
+\vspace{\stretch{3}}
+\clearpage
+\subsection*{Condiciones generales}
+Aquí va el pliego de condiciones. (WTF!?)
