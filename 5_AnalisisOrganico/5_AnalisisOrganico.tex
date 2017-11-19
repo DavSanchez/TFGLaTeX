@@ -14,7 +14,7 @@ Una vez revisado el análisis previo y funcional del sistema de sensado móvil c
 Una vez instalado Raspbian y arrancada con éxito la Raspberry Pi 3 (explicado en el Apéndice \ref{ApendiceA}), es necesario seguir configurando el ecosistema e instalando el \emph{software} necesario, idealmente mediante el gestor de paquetes y manejador de dependencias \emph{apt-get} y trabajando en todo momento desde el terminal \emph{bash}. Esto prepara el \emph{software} de los módulos \emph{Control de Red} y \emph{Control de Acceso}. Se detalla el procedimiento llevado a cabo en el mismo orden en el que se implementó en la práctica para que sea reproducible de forma sencilla la instalación de un nuevo sistema.
 
 \subsubsection{Ajustes e instalaciones preliminares}
-Una de las primeras configuraciones consiste en modificar el archivo \verb+/etc/network/interfaces+ para introducir los detalles de nuestra red inalámbrica. Este paso prepara el submódulo \emph{Configuración de Interfaces Red} perteneciente al módulo de \emph{Control de Red}. En este TFG se ha utilizado la siguiente configuración de red para la interfaz inalámbrica \emph{wlan0}, que recordamos es la interfaz inalámbrica a la que se conectan eventualmente los usuarios del servicio.
+Una de las primeras configuraciones consiste en modificar el archivo \emph{/etc/network/interfaces} para introducir los detalles de nuestra red inalámbrica. Este paso prepara el submódulo \emph{Configuración de Interfaces Red} perteneciente al módulo de \emph{Control de Red}. En este TFG se ha utilizado la siguiente configuración de red para la interfaz inalámbrica \emph{wlan0}, que recordamos es la interfaz inalámbrica a la que se conectan eventualmente los usuarios del servicio.
 
 \begin{listing}[H]
 \begin{minted}
@@ -41,9 +41,9 @@ iface wlan0 inet static
 \label{InterfacesConf}
 \end{listing}
 
-La última línea, \verb+post-up echo 1 > /proc/sys/net/ipv4/ip_forward+, es la activación del \emph{flag} del \emph{kernel} que habilita el paso de datagramas IP tratados en la descripción del módulo de Control de Red. Si se prefiere utilizar esta orden de otra forma y así asegurarse de que el \emph{flag} queda activado también puede editarse el archivo \verb+/etc/sysctl.conf+, quitando el carácter de comentario (\verb+#+) en la línea \verb+net.ipv4.ip_forward=1+ y reiniciando el servicio de red mediante la siguiente orden: \mintinline{bash}{/etc/init.d/networking restart}.
+La última línea, \emph{post-up echo 1 > /proc/sys/net/ipv4/ip\_forward}, es la activación del \emph{flag} del \emph{kernel} que habilita el paso de datagramas IP tratados en la descripción del módulo de Control de Red. Si se prefiere utilizar esta orden de otra forma y así asegurarse de que el \emph{flag} queda activado también puede editarse el archivo \emph{/etc/sysctl.conf}, quitando el carácter de comentario (\emph{\#}) en la línea \emph{net.ipv4.ip\_forward=1} y reiniciando el servicio de red mediante la siguiente orden: \emph{/etc/init.d/networking restart}.
 
-Una vez configurada la interfaz inalámbrica pueden instalarse los paquetes necesarios para preparar los módulos. Se incluyen algunos paquetes previos necesarios para la instalación posterior de \emph{software}, como herramientas para transferencia de datos (\emph{libcurl}), utilidades de red manejadas por CoovaChilli (\emph{iptables}), compiladores (\emph{gcc}) y gestores de dependencias para los mismos (\emph{make}). Recordamos que esta instalación debe ser realizada por el superusuario, por lo que se debe entrar en \emph{root} ejecutando primero la orden \mintinline{bash}{sudo su} o por el contrario utilizar la orden previa \mintinline{bash}{sudo} para cada orden a introducir. Además, pueden instalarse todos los paquetes necesarios con una sola orden escribiendo todos los nombres seguidos después de la orden \mintinline{bash}{apt-get install} y forzando una respuesta afirmativa a todas las preguntas que nos realice el terminal al instalar los paquetes usando los modificadores \mintinline{bash}{-y --force-yes}.
+Una vez configurada la interfaz inalámbrica pueden instalarse los paquetes necesarios para preparar los módulos. Se incluyen algunos paquetes previos necesarios para la instalación posterior de \emph{software}, como herramientas para transferencia de datos (\emph{libcurl}), utilidades de red manejadas por CoovaChilli (\emph{iptables}), compiladores (\emph{gcc}) y gestores de dependencias para los mismos (\emph{make}). Recordamos que esta instalación debe ser realizada por el superusuario, por lo que se debe entrar en \emph{root} ejecutando primero la orden \emph{sudo su} o por el contrario utilizar la orden previa \emph{sudo} para cada orden a introducir. Además, pueden instalarse todos los paquetes necesarios con una sola orden escribiendo todos los nombres seguidos después de la orden \emph{apt-get install} y forzando una respuesta afirmativa a todas las preguntas que nos realice el terminal al instalar los paquetes usando los modificadores \emph{-y --force-yes}.
 
 Los más relevantes para nuestro sistema son los paquetes \emph{freeradius} y \emph{mysql-server}, pero aquí se incluyen todos los instalados en la configuración de nuestro servicio:
 
@@ -110,7 +110,7 @@ Nótese que en este punto ya se ha empezado a instalar \emph{software} correspon
 
 Durante el paso anterior se instaló el servidor de base de datos MySQL y el servidor RADIUS. A continuación se procede a crear la base de datos a usar por el programa FreeRADIUS utilizando para ello unos \emph{scripts} proporcionados en su propia instalación.
 
-Primero se crea la base de datos con la orden \verb+mysql+, utilizando el usuario root y la contraseña especificada anteriormente.
+Primero se crea la base de datos con la orden \emph{mysql}, utilizando el usuario root y la contraseña especificada anteriormente.
 
 \begin{listing}[H]
     \begin{minted}
@@ -154,13 +154,13 @@ mysql -u root -p CONTRASEÑA radius < /etc/freeradius/sql/mysql/nas.sql
 \label{RADIUSdatabaseScripts}
 \end{listing}
 
-Como opción antes de ejecutar estas órdenes, y para incrementar la seguridad, se puede modificar la contraseña por defecto de FreeRADIUS para operar en la base de datos (\emph{radpass}) en el archivo \verb+/etc/freeradius/sql/mysql/admin.sql+.
+Como opción antes de ejecutar estas órdenes, y para incrementar la seguridad, se puede modificar la contraseña por defecto de FreeRADIUS para operar en la base de datos (\emph{radpass}) en el archivo \emph{/etc/freeradius/sql/mysql/admin.sql}.
 
-El siguiente paso es habilitar el soporte de SQL en el archivo de configuración de FreeRADIUS y como opción activar los contadores diarios. Para ello se debe editar el archivo ubicado en \verb+/etc/freeradius/radiusd.conf+ y eliminando el carácter de comentario (\verb+#+) de las líneas \verb+$INCLUDE sql.conf+, \verb+$INCLUDE sql/mysql/counter.conf+ y opcionalmente de \verb+daily+.
+El siguiente paso es habilitar el soporte de SQL en el archivo de configuración de FreeRADIUS y como opción activar los contadores diarios. Para ello se debe editar el archivo ubicado en \emph{/etc/freeradius/radiusd.conf} y eliminando el carácter de comentario (\emph{\#}) de las líneas \emph{\$INCLUDE sql.conf}, \emph{\$INCLUDE sql/mysql/counter.conf} y opcionalmente de \emph{daily}.
 
-Tras editar estos archivos, solo queda detener temporalmente la ejecución de FreeRADIUS, activar la autenticación SQL, comprobar que la configuración es correcta y volver a iniciar el servicio: \mintinline{bash}{service freeradius stop}.
+Tras editar estos archivos, solo queda detener temporalmente la ejecución de FreeRADIUS, activar la autenticación SQL, comprobar que la configuración es correcta y volver a iniciar el servicio: \emph{service freeradius stop}.
 
-Para activar la autenticación SQL hay que editar el archivo \verb+/etc/freeradius/sites-available/default+ y quitar los comentarios de todas las líneas que contengan \verb+sql+. Una vez hecho esto comprobamos la configuración y reanudamos el servicio.
+Para activar la autenticación SQL hay que editar el archivo \emph{/etc/freeradius/sites-available/default} y quitar los comentarios de todas las líneas que contengan \emph{sql}. Una vez hecho esto comprobamos la configuración y reanudamos el servicio.
 
 \begin{listing}[H]
     \begin{minted}
@@ -245,7 +245,7 @@ dpkg-buildpackage -us -uc
 \end{minted}
 \end{listing}
 
-En este punto comienza la compilación del código fuente. Al finalizar, tendríamos un archivo de nombre similar a \verb+coova-chilli_1.3.0_armhf.deb+ en el directorio \verb+/usr/src/+ y podríamos proceder a instalarlo situándonos en dicho directorio y utilizando el gestor de paquetes \emph{dpkg}.
+En este punto comienza la compilación del código fuente. Al finalizar, tendríamos un archivo de nombre similar a \emph{coova-chilli\_1.3.0\_armhf.deb} en el directorio \emph{/usr/src/} y podríamos proceder a instalarlo situándonos en dicho directorio y utilizando el gestor de paquetes \emph{dpkg}.
 
 \begin{listing}[H]
     \begin{minted}
@@ -267,9 +267,9 @@ dpkg -i coova-chilli_1.3.0_armhf.deb
 
 \paragraph{Configuración Inicial de CoovaChilli} \label{CoovaConfig} ~\\
 
-Llegados a este punto el programa CoovaChilli está instalado y podemos proceder a su configuración. Esta configuración en su mayoría se basa, como se adelantó en la descripción del \emph{software} del anterior capítulo, en modificar el archivo \verb+/etc/chilli/defaults+ o hacer una copia de éste bajo el nombre \verb+config+ teniendo allí las modificaciones con respecto a \verb+defaults+. Sin embargo, hay dos pasos previos a la configuración de este archivo.
+Llegados a este punto el programa CoovaChilli está instalado y podemos proceder a su configuración. Esta configuración en su mayoría se basa, como se adelantó en la descripción del \emph{software} del anterior capítulo, en modificar el archivo \emph{/etc/chilli/defaults} o hacer una copia de éste bajo el nombre \emph{config} teniendo allí las modificaciones con respecto a \emph{defaults}. Sin embargo, hay dos pasos previos a la configuración de este archivo.
 
-En primer lugar debemos modificar el \emph{script} que CoovaChilli ejecuta al ponerse en marcha la interfaz TUN (ubicado en \verb+/etc/chilli/up.sh+) introduciendo una regla de la herramienta \emph{iptables} para permitir el reenvío de los paquetes IP desde la interfaz de red cableada \emph{eth0}, que se almacena en una variable interna de la configuración de CoovaChilli llamada \verb+HS_WANIF+.
+En primer lugar debemos modificar el \emph{script} que CoovaChilli ejecuta al ponerse en marcha la interfaz TUN (ubicado en \emph{/etc/chilli/up.sh}) introduciendo una regla de la herramienta \emph{iptables} para permitir el reenvío de los paquetes IP desde la interfaz de red cableada \emph{eth0}, que se almacena en una variable interna de la configuración de CoovaChilli llamada \emph{HS\_WANIF}.
 
 \begin{listing}[H]
     \begin{minted}
@@ -288,9 +288,9 @@ En primer lugar debemos modificar el \emph{script} que CoovaChilli ejecuta al po
     \end{minted}
     \end{listing}
 
-También debemos activar el \emph{flag} que permite activar CoovaChilli en el archivo \verb+/etc/default/chilli/+ cambiando el valor de la variable \verb+START_CHILLI+ de 0 a 1.
+También debemos activar el \emph{flag} que permite activar CoovaChilli en el archivo \emph{/etc/default/chilli/} cambiando el valor de la variable \emph{START\_CHILLI} de 0 a 1.
 
-Tras esto, se debe editar el archivo de configuración de CoovaChilli introduciendo los valores adecuados a nuestro sistema en los atributos relevantes en este momento en el archivo \verb+/etc/chilli/defaults+ o bien en su copia renombrada como \verb+/etc/chilli/config+, que al iniciar el sistema reemplaza los valores dados en defaults donde difieran. Dado que en este momento aún no se encuentra instalada la herramienta \emph{hostapd} (ver más adelante) aún no tenemos habilitado un SSID para nuestro sistema, por lo que en un paso posterior tras la instalación de \emph{hostapd} debemos volver a este archivo de configuración e introducir el nombre del SSID que hayamos establecido. En el caso de este TFG, el SSID utilizado es \emph{RasPiDav}.
+Tras esto, se debe editar el archivo de configuración de CoovaChilli introduciendo los valores adecuados a nuestro sistema en los atributos relevantes en este momento en el archivo \emph{/etc/chilli/defaults} o bien en su copia renombrada como \emph{/etc/chilli/config}, que al iniciar el sistema reemplaza los valores dados en defaults donde difieran. Dado que en este momento aún no se encuentra instalada la herramienta \emph{hostapd} (ver más adelante) aún no tenemos habilitado un SSID para nuestro sistema, por lo que en un paso posterior tras la instalación de \emph{hostapd} debemos volver a este archivo de configuración e introducir el nombre del SSID que hayamos establecido. En el caso de este TFG, el SSID utilizado es \emph{RasPiDav}.
 
 \begin{listing}[H]
 \begin{minted}
@@ -317,7 +317,7 @@ HS_UAMSECRET=
 \label{CoovaConf}
 \end{listing}
 
-Debido al funcionamiento de nuestro portal cautivo, que opera con la interfaz JSON de CoovaChilli, es necesario dejar en blanco el campo \verb+HS_UAMSECRET+, de lo contrario la aplicación Web no podría iniciar sesión en el servicio con las credenciales obtenidas.
+Debido al funcionamiento de nuestro portal cautivo, que opera con la interfaz JSON de CoovaChilli, es necesario dejar en blanco el campo \emph{HS\_UAMSECRET}, de lo contrario la aplicación Web no podría iniciar sesión en el servicio con las credenciales obtenidas.
 
 \paragraph{Instalación de Haserl} \label{HaserlInstallTitle} ~\\
 
@@ -347,7 +347,7 @@ make install
 \label{HaserlInstall}
 \end{listing}
 
-Tras esto actualizamos la ruta de \emph{Haserl} para CoovaChilli en el archivo \verb+/etc/chilli/wwwsh+ buscando la línea \verb+haserl=+ y modificándola a \verb+haserl=/usr/local/bin/haserl+. Tras esto, solo queda poner en marcha CoovaChilli con la siguiente orden.
+Tras esto actualizamos la ruta de \emph{Haserl} para CoovaChilli en el archivo \emph{/etc/chilli/wwwsh} buscando la línea \emph{haserl=} y modificándola a \emph{haserl=/usr/local/bin/haserl}. Tras esto, solo queda poner en marcha CoovaChilli con la siguiente orden.
 
 \begin{listing}[H]
     \begin{minted}
@@ -387,9 +387,9 @@ apt-get install -y --force-yes hostapd
 \end{minted}
 \end{listing}
 
-Cuando termine la instalación se edita el archivo de configuración \verb+/etc/default/hostapd+ añadiendo la ruta del archivo de configuración que contiene los atributos deseados para nuestro punto de acceso, que está ubicado en \verb+/etc/hostapd/hostapd.conf+. Para ello buscamos la línea que contenga \verb+DAEMON_CONF=+, nos aseguraremos de que está sin comentar y le especificaremos la ruta entre comillas, de manera que quede de la siguiente forma: \verb+DAEMON_CONF="/etc/hostapd/hostapd.conf"+.
+Cuando termine la instalación se edita el archivo de configuración \emph{/etc/default/hostapd} añadiendo la ruta del archivo de configuración que contiene los atributos deseados para nuestro punto de acceso, que está ubicado en \emph{/etc/hostapd/hostapd.conf}. Para ello buscamos la línea que contenga \emph{DAEMON\_CONF=}, nos aseguraremos de que está sin comentar y le especificaremos la ruta entre comillas, de manera que quede de la siguiente forma: \emph{DAEMON\_CONF=``/etc/hostapd/hostapd.conf"}.
 
-Ahora configuramos el mismo archivo cuya ruta hemos indicado en el ajuste anterior, indicando todos los atributos para nuestro punto de acceso incluyendo el driver a utilizar (\emph{nl80211}). Recordamos que la interfaz establecida ha de ser la misma que indicamos en el archivo de configuración \verb+defaults+ o \verb+config+ de CoovaChilli como \verb+HS_LANIF+, en nuestro caso \emph{wlan0}, que tiene la red estática ya configurada en el archivo interfaces al principio de la implantación. Además, el SSID también ha de ser el mismo que indicamos a CoovaChilli con la variable \verb+HS_SSID+.
+Ahora configuramos el mismo archivo cuya ruta hemos indicado en el ajuste anterior, indicando todos los atributos para nuestro punto de acceso incluyendo el driver a utilizar (\emph{nl80211}). Recordamos que la interfaz establecida ha de ser la misma que indicamos en el archivo de configuración \emph{defaults} o \emph{config} de CoovaChilli como \emph{HS\_LANIF}, en nuestro caso \emph{wlan0}, que tiene la red estática ya configurada en el archivo interfaces al principio de la implantación. Además, el SSID también ha de ser el mismo que indicamos a CoovaChilli con la variable \emph{HS\_SSID}.
 
 \begin{listing}[H]
 \begin{minted}
@@ -473,7 +473,7 @@ En primer lugar, instalamos el servidor Web y las herramientas necesarias para u
     \end{minted}
 \end{listing}
 
-Cuando acabe esta instalación el programa \emph{NGINX} queda instalado y podríamos alojar el contenido Web que deseamos servir en el directorio \verb+/usr/share/nginx/html/+. En nuestro caso, descargamos los contenidos de daloRADIUS, los descomprimimos allí y renombramos el directorio generado para acceder a él al teclear la futura URL desde el navegador.
+Cuando acabe esta instalación el programa \emph{NGINX} queda instalado y podríamos alojar el contenido Web que deseamos servir en el directorio \emph{/usr/share/nginx/html/}. En nuestro caso, descargamos los contenidos de daloRADIUS, los descomprimimos allí y renombramos el directorio generado para acceder a él al teclear la futura URL desde el navegador.
 
 \begin{listing}[H]
 \begin{minted}
@@ -496,7 +496,7 @@ mv /usr/share/nginx/html/daloradius-0.9-9 /usr/share/nginx/html/daloradius
 \label{daloRADIUS}
 \end{listing}
 
-Aunque no los usamos en este TFG, conviene remarcar que daloRADIUS también incluye portales cautivos de ejemplo para ser usados con \emph{CoovaChilli} en el árbol de directorios que hemos descomprimido y renombrado, implementados usando PHP y JavaScript. Tras nuestros cambios, estos portales cautivos quedan ubicados en la ruta verb+/usr/share/nginx/html/daloradius/contrib/chilli/+.
+Aunque no los usamos en este TFG, conviene remarcar que daloRADIUS también incluye portales cautivos de ejemplo para ser usados con \emph{CoovaChilli} en el árbol de directorios que hemos descomprimido y renombrado, implementados usando PHP y JavaScript. Tras nuestros cambios, estos portales cautivos quedan ubicados en la ruta \emph{/usr/share/nginx/html/daloradius/contrib/chilli/}.
 
 La descarga de daloRADIUS contiene archivos específicos que lo habilitan para ser usado con \emph{FreeRADIUS} y \emph{MySQL}. Para utilizarlos debemos copiar dichos archivos existentes en el árbol de directorios de \emph{daloRADIUS} y colocarlos en los directorios de \emph{FreeRADIUS} indicados en las siguientes órdenes, reemplazando las originales. Por seguridad conviene detener el servicio \emph{FreeRADIUS} antes de modificar archivos y hacer copia de seguridad de los archivos que quedan reemplazados, renombrándolos o cambiando las extensiones.
 
@@ -522,7 +522,7 @@ cp /usr/share/nginx/html/daloradius/contrib/configs/freeradius-2.1.8/cfg1/raddb/
 \label{RADIUSdatabases}
 \end{listing}
 
-Dado que el último archivo que hemos ubicado (\verb+/etc/freeradius/sql.conf+) procede de una instalación nueva de daloRADIUS contiene la contraseña utilizada por defecto en FreeRADIUS, por lo que debemos editarlo para que tenga la contraseña que indicamos en el paso correspondiente del apartado \ref{RADIUSConf}. Recordamos que, si no se cambió, la contraseña utilizada por defecto es \emph{radpass}.
+Dado que el último archivo que hemos ubicado (\emph{/etc/freeradius/sql.conf}) procede de una instalación nueva de daloRADIUS contiene la contraseña utilizada por defecto en FreeRADIUS, por lo que debemos editarlo para que tenga la contraseña que indicamos en el paso correspondiente del apartado \ref{RADIUSConf}. Recordamos que, si no se cambió, la contraseña utilizada por defecto es \emph{radpass}.
 
 Tras estos pasos podemos iniciar el servidor RADIUS de nuevo y utilizar el \emph{script} específico de \emph{daloRADIUS} incluido en la instalación para añadir la configuración de \emph{daloRADIUS} en MySQL, añadiendo también los permisos de usuario correspondientes para poder manejar el servidor. Recordamos que la palabra CONTRASEÑA en mayúscula en este caso hace referencia a la contraseña utilizada para el usuario \emph{root} del servidor MySQL.
 
@@ -548,7 +548,7 @@ mysql -u root -p CONTRASEÑA < /tmp/grant.sql
 \label{daloRADIUSdatabases}
 \end{listing}
 
-Además, actualizamos el archivo de daloRADIUS que contiene el usuario y contraseña de la base de datos para que tenga el usuario y contraseña del servidor RADIUS. Este archivo está en \verb+/usr/share/nginx/html/daloradius/library/daloradius.conf.php+ y ha de tener los siguientes valores en los campos correspondientes. Recordamos que esta contraseña es la del servidor RADIUS, indicada por CONTRASEÑA-RADIUS, (por defecto \emph{radpass} si no la cambiamos).
+Además, actualizamos el archivo de daloRADIUS que contiene el usuario y contraseña de la base de datos para que tenga el usuario y contraseña del servidor RADIUS. Este archivo está en \emph{/usr/share/nginx/html/daloradius/library/daloradius.conf.php} y ha de tener los siguientes valores en los campos correspondientes. Recordamos que esta contraseña es la del servidor RADIUS, indicada por CONTRASEÑA-RADIUS, (por defecto \emph{radpass} si no la cambiamos).
 
 \begin{listing}[H]
     \begin{minted}
@@ -570,7 +570,7 @@ $configValues['CONFIG_DB_PASS'] = 'CONTRASEÑA-RADIUS';
 
 \paragraph{Configurando NGINX para servir daloRADIUS} \label{NGINXdaloRADIUS} ~\\
 
-Tras preparar \emph{daloRADIUS} para su funcionamiento hemos de configurar el servidor NGINX para que nos sirva la página principal correcta al introducir la ruta adecuada en el navegador. Para esta configuración editamos el archivo \verb+/etc/nginx/sites-available/default+ añadiendo la siguiente directriz de servidor. Para acceder a la interfaz Web en el futuro utilizamos el puerto 80.
+Tras preparar \emph{daloRADIUS} para su funcionamiento hemos de configurar el servidor NGINX para que nos sirva la página principal correcta al introducir la ruta adecuada en el navegador. Para esta configuración editamos el archivo \emph{/etc/nginx/sites-available/default} añadiendo la siguiente directriz de servidor. Para acceder a la interfaz Web en el futuro utilizamos el puerto 80.
 
 \begin{listing}[H]
 \begin{minted}
@@ -624,7 +624,7 @@ service hostapd restart
 \end{minted}
 \end{listing}
 
-Tras esto podemos acceder a \emph{daloRADIUS} desde el navegador para realizar las gestiones deseadas utilizando la IP proporcionada a la interfaz cableada. Por ejemplo, si la IP de dicha interfaz es 192.168.1.30 se puede acceder a \emph{daloRADIUS} accediendo a la URL \verb+http://192.168.1.30/daloradius/+.
+Tras esto podemos acceder a \emph{daloRADIUS} desde el navegador para realizar las gestiones deseadas utilizando la IP proporcionada a la interfaz cableada. Por ejemplo, si la IP de dicha interfaz es 192.168.1.30 se puede acceder a \emph{daloRADIUS} accediendo a la URL \emph{http://192.168.1.30/daloradius/}.
 
 \paragraph{Utilizando daloRADIUS para añadir a los usuarios del servicio} \label{daloRADIUSusers} ~\\
 
@@ -961,7 +961,7 @@ exports.getInactiveUser = function() {
 % \label{usersControllerImports}
 \end{listing}
 
-Nótese el cambio en la implantación de las funciones. Mientras que las funciones internas pueden programarse utilizando primero la palabra reservada \emph{function}, el operador de asignación y tras este el nombre de la función y su comportamiento, Node.js requiere de una sintaxis diferente para externalizar funciones. Ha de utilizarse el formato \mintinline{javascript}{exports.nombreDeLaFuncion = function(...) {...}} para que otros archivos JavaScript de Node.js puedan utilizarlas, importando el archivo donde estas se encuentran de la misma forma que si fuese un módulo \emph{npm}.
+Nótese el cambio en la implantación de las funciones. Mientras que las funciones internas pueden programarse utilizando primero la palabra reservada \emph{function}, el operador de asignación y tras este el nombre de la función y su comportamiento, Node.js requiere de una sintaxis diferente para externalizar funciones. Ha de utilizarse el formato \mintinline[breaklines=true, breakbytokenanywhere=true]{javascript}{exports.nombreDeLaFuncion = function(...) {...}} para que otros archivos JavaScript de Node.js puedan utilizarlas, importando el archivo donde estas se encuentran de la misma forma que si fuese un módulo \emph{npm}.
 
 La primera función, \emph{userInactive}, simplemente llama a la función interna \emph{setUserInactive}, por lo que es el servidor quien decide cuándo un usuario se marca como inactivo por medio del controlador de usuarios. Las dos funciones siguientes tienen un comportamiento muy similar. Mientras que la primera de ellas solo se encarga de comprobar si la base de datos tiene al menos un usuario libre, recorriendola e incrementando coincidencias de usuarios libres por medio de un contador, la segunda de ellas tiene el cometido de retornar el primer usuario libre que encuentre en su recorrido de la base de datos, retornando un vector de cinco elementos nulos si no hay ningún usuario activo en la base de datos.
 
@@ -1031,7 +1031,7 @@ app.use(bodyParser.urlencoded({
 
 Estos usos corresponden al servicio de archivos HTML estáticos y a los analizadores sintácticos de los datos recibidos, a cuyos contenidos podremos acceder si están codificados con los tipos declarados aquí, JSON y URL-encoded.
 
-A continuación se procede a declarar los manejadores de las posibles rutas a las que llegan peticiones HTTP y el procedimiento a llevar a cabo cuando esto ocurra. Estas rutas se declaran mediante la sintaxis \mintinline{javascript}{app.method('/ruta/', function(req, res) {...})}, donde \emph{method} es el método HTTP con el que llega la petición (GET, POST, PUT…), \emph{req} el objeto petición y \emph{res} el objeto respuesta.
+A continuación se procede a declarar los manejadores de las posibles rutas a las que llegan peticiones HTTP y el procedimiento a llevar a cabo cuando esto ocurra. Estas rutas se declaran mediante la sintaxis \mintinline[breaklines=true, breakbytokenanywhere=true]{javascript}{app.method('/ruta/', function(req, res) {...})}, donde \emph{method} es el método HTTP con el que llega la petición (GET, POST, PUT…), \emph{req} el objeto petición y \emph{res} el objeto respuesta.
 
 \begin{listing}[H]
 \begin{minted}
@@ -1387,9 +1387,9 @@ https.createServer(options, app).listen(3000, function () {
 % \label{usersControllerImports}
 \end{listing}
 
-También hay que habilitar el uso de SSL en el objeto \emph{chilliController}, definiendo el atributo necesario en el archivo \emph{chilliController.js}, que analizaremos más adelante, con la declaración: \mintinline{javascript}{chilliController.ssl = true;}.
+También hay que habilitar el uso de SSL en el objeto \emph{chilliController}, definiendo el atributo necesario en el archivo \emph{chilliController.js}, que analizaremos más adelante, con la declaración: \mintinline[breaklines=true, breakbytokenanywhere=true]{javascript}{chilliController.ssl = true;}.
 
-Por último, el propio \emph{software} CoovaChilli debe tener habilitado SSL en su configuración y referenciar el certificado y clave en la ruta donde se encuentren. Para ello se edita el archivo \verb+/etc/chilli/config+ tal y como se vio en apartados anteriores, definiendo los siguientes atributos.
+Por último, el propio \emph{software} CoovaChilli debe tener habilitado SSL en su configuración y referenciar el certificado y clave en la ruta donde se encuentren. Para ello se edita el archivo \emph{/etc/chilli/config} tal y como se vio en apartados anteriores, definiendo los siguientes atributos.
 
 \begin{listing}[H]
     \begin{minted}
@@ -1579,7 +1579,7 @@ var userCreds = {
 % \label{usersControllerImports}
 \end{listing}
 
-La primera variable utiliza la función flecha (\emph{arrow function}) implementada en ECMAScript 6, y es equivalente a la sintaxis siguiente: \mintinline{javascript}{let id = function(val) { return document.getElementById(val) };}. Esta función es una forma abreviada de obtener los elementos del documento HTML, como puede verse en las cuatro siguientes variables: \emph{agreeBtn}, \emph{recordBtn}, \emph{recordBtn30min} y \emph{alertsArea} que corresponden a los elementos con ese identificador del documento HTML.
+La primera variable utiliza la función flecha (\emph{arrow function}) implementada en ECMAScript 6, y es equivalente a la sintaxis siguiente: \mintinline[breaklines=true, breakbytokenanywhere=true]{javascript}{let id = function(val) { return document.getElementById(val) };}. Esta función es una forma abreviada de obtener los elementos del documento HTML, como puede verse en las cuatro siguientes variables: \emph{agreeBtn}, \emph{recordBtn}, \emph{recordBtn30min} y \emph{alertsArea} que corresponden a los elementos con ese identificador del documento HTML.
 
 Las variables \emph{stream}, \emph{recorder}, \emph{chunks} y \emph{media} son utilizadas por las API WebRTC y \emph{MediaStream Recording} para su funcionalidad, que veríamos en acción al analizar los métodos del archivo. Las variables \emph{serverStatus}, \emph{locationTime} y \emph{userCreds} almacenan el estado del servidor en forma booleana, la latitud, longitud y marca de tiempo para usar en los nombres de los archivos de audio y las credenciales de usuario recibidas desde el servidor, respectivamente.
 

@@ -97,7 +97,7 @@ Tras esto, el servicio Web completo puede ponerse en marcha desde este mismo dir
 
 \section{Reanudación automática del Servidor en caso de fallo}\label{ApendiceC}
 
-Proporcionando la orden de arranque del Apéndice \ref{ApendiceB} (\mintinline{bash}{node nodeserver.js}) es suficiente para que el sistema de sensado móvil colaborativo arranque y proporcione los servicios desarrollados. sin embargo, se puede dar el caso de fallos del servidor en cuyo caso debemos tolerarlos. En este apéndice se explica como hacerlo.
+Proporcionando la orden de arranque del Apéndice \ref{ApendiceB} (\emph{node nodeserver.js}) es suficiente para que el sistema de sensado móvil colaborativo arranque y proporcione los servicios desarrollados. sin embargo, se puede dar el caso de fallos del servidor en cuyo caso debemos tolerarlos. En este apéndice se explica como hacerlo.
 \end{minipage}
 \end{center}
 \vspace{\stretch{3}} % \vfill % equivalent to \vspace{\fill}
@@ -124,7 +124,7 @@ PM2 es un gestor de procesos para Node.js que nos permite configurar el comporta
   \end{minted}
 \end{listing}
 
-Tras instalar esta herramienta ejecutaríamos una serie de órdenes con ella que nos permiten reanudar la aplicación Node.js de forma automática nada más encender nuestra Raspberry Pi 3, reiniciando el servicio si ocurre algún error o incluso si actualizamos el código de forma local o remota (editándolo en otra parte, subiéndolo a GitHub y recuperándolo con la orden \mintinline{bash}{git pull}): 
+Tras instalar esta herramienta ejecutaríamos una serie de órdenes con ella que nos permiten reanudar la aplicación Node.js de forma automática nada más encender nuestra Raspberry Pi 3, reiniciando el servicio si ocurre algún error o incluso si actualizamos el código de forma local o remota (editándolo en otra parte, subiéndolo a GitHub y recuperándolo con la orden \emph{git pull}): 
 
 \begin{listing}[H]
   \begin{minted}
@@ -185,7 +185,7 @@ Tras este proceso, solo queda configurar los parámetros a usar por PM2, ejecuta
 
 Este paso asegura que la aplicación Node.js vuelve a ejecutarse tras un reinicio del sistema, ya sea un reinicio programado o el ocurrido tras un corte accidental.
 
-Para conseguir lo anterior es necesario configurar el entorno de programación. Para ello se puede utilizar un archivo de configuración como el empleado en este TFG, ubicado en la raíz del repositorio de GitHub con el nombre \verb+captiveportalserver.config.js+. El contenido de este archivo es el siguiente:
+Para conseguir lo anterior es necesario configurar el entorno de programación. Para ello se puede utilizar un archivo de configuración como el empleado en este TFG, ubicado en la raíz del repositorio de GitHub con el nombre \emph{captiveportalserver.config.js}. El contenido de este archivo es el siguiente:
 
 \begin{listing}[H]
 \begin{minted}
@@ -245,7 +245,7 @@ pm2 save
   \end{minted}
 \end{listing}
 
-Por último, con la orden \mintinline{bash}{pm2 monit} puede accederse a una vista de monitorización que nos permite ver una lista de las aplicaciones activas y su consumo en memoria, la salida en consola de cada una de ellas, el número de veces que se han reiniciado (Figura \ref{pm2monit}).
+Por último, con la orden \emph{pm2 monit} puede accederse a una vista de monitorización que nos permite ver una lista de las aplicaciones activas y su consumo en memoria, la salida en consola de cada una de ellas, el número de veces que se han reiniciado (Figura \ref{pm2monit}).
 
 \begin{figure}[!t]
 \begin{center}

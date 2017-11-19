@@ -60,7 +60,7 @@ Como \emph{daemon} ha sido diseñado para operar en segundo plano como component
 \label{hostapd}
 \end{figure}
 
-El hostapd se configura por medio de un archivo de texto que lista todos los parámetros de configuración, alojado en el archivo \verb+/etc/hostapd/hostapd.conf+, que cuenta con los siguientes atributos relevantes y comúnmente utilizados, entre otros:
+El hostapd se configura por medio de un archivo de texto que lista todos los parámetros de configuración, alojado en el archivo \emph{/etc/hostapd/hostapd.conf}, que cuenta con los siguientes atributos relevantes y comúnmente utilizados, entre otros:
 \begin{itemize}
 \item Atributos de Interfaz Inalámbrica:
 \begin{itemize}
@@ -219,31 +219,31 @@ La interfaz de enlace ascendente se implementa utilizando drivers \emph{network 
 
 \subsubsection{Configuración}
 
-El archivo principal de CoovaChilli es  \verb+/usr/local/etc/chilli.conf+ el cual incluye otros tres: \verb+main.conf+, \verb+hs.conf+ y \verb+local.conf+. Los dos primeros son creados por los scripts del shell existentes en el archivo \verb+functions+ basándose en las configuraciones de otros archivos mencionados a continuación y obteniendo algunas configuraciones del servidor RADIUS y otras \acrshort{URL}. El archivo \verb+local.conf+ está reservado para configuraciones de lugares específicos.
-Las configuraciones por defecto que son establecidas en \verb+chilli.conf+ se encuentran en \verb+/usr/local/etc/chilli/defaults+. Los valores existentes en este último archivo pueden sobreescribirse durante la inicialización de chilli si existe otro archivo en \verb+/usr/local/etc/chilli/config+, que no es más que una copia del archivo defaults sobrescribiendo los valores de los atributos que se desea cambiar.
-Cada vez que se enciende el dispositivo en el que está instalado CoovaChilli, el script presente en \verb+/usr/local/etc/init.d/chilli+ se ejecuta tomando las configuraciones de los archivos \verb+defaults+ y \verb+config+ mencionados anteriormente, ejecutando también el script \verb+/usr/local/etc/chilli/functions+ para asistir en esta configuración y la de otros archivos relevantes para el funcionamiento del programa, creando de este modo los respectivos archivos \verb+main.conf+, \verb+hs.conf+ y \verb+local.conf+.
+El archivo principal de CoovaChilli es  \emph{/usr/local/etc/chilli.conf} el cual incluye otros tres: \emph{main.conf}, \emph{hs.conf} y \emph{local.conf}. Los dos primeros son creados por los scripts del shell existentes en el archivo \emph{functions} basándose en las configuraciones de otros archivos mencionados a continuación y obteniendo algunas configuraciones del servidor RADIUS y otras \acrshort{URL}. El archivo \emph{local.conf} está reservado para configuraciones de lugares específicos.
+Las configuraciones por defecto que son establecidas en \emph{chilli.conf} se encuentran en \emph{/usr/local/etc/chilli/defaults}. Los valores existentes en este último archivo pueden sobreescribirse durante la inicialización de chilli si existe otro archivo en \emph{/usr/local/etc/chilli/config}, que no es más que una copia del archivo defaults sobrescribiendo los valores de los atributos que se desea cambiar.
+Cada vez que se enciende el dispositivo en el que está instalado CoovaChilli, el script presente en \emph{/usr/local/etc/init.d/chilli} se ejecuta tomando las configuraciones de los archivos \emph{defaults} y \emph{config} mencionados anteriormente, ejecutando también el script \emph{/usr/local/etc/chilli/functions} para asistir en esta configuración y la de otros archivos relevantes para el funcionamiento del programa, creando de este modo los respectivos archivos \emph{main.conf}, \emph{hs.conf} y \emph{local.conf}.
 
-Adicionalmente, CoovaChilli implementa un servidor Web mínimo destinado a servir contenido en el directorio \verb+/etc/local/etc/chilli/www/+, lugar en el que puede ubicarse un servicio de portal cautivo sencillo. Por defecto, en este directorio se implementa un portal cautivo con pantalla de espera que redirige a un formulario ensamblado con plantillas HTML y archivos de Web scripts \emph{Common Gateway Interface} (\acrshort{CGI}) para contenido dinámico. Estos archivos (con la extensión .chi) son procesados con el software Haserl \cite{Haserl}, por lo que si se usa la configuración por defecto de CoovaChilli este programa ha de estar instalado.
+Adicionalmente, CoovaChilli implementa un servidor Web mínimo destinado a servir contenido en el directorio \emph{/etc/local/etc/chilli/www/}, lugar en el que puede ubicarse un servicio de portal cautivo sencillo. Por defecto, en este directorio se implementa un portal cautivo con pantalla de espera que redirige a un formulario ensamblado con plantillas HTML y archivos de Web scripts \emph{Common Gateway Interface} (\acrshort{CGI}) para contenido dinámico. Estos archivos (con la extensión .chi) son procesados con el software Haserl \cite{Haserl}, por lo que si se usa la configuración por defecto de CoovaChilli este programa ha de estar instalado.
 
-Aunque CoovaChilli cuenta con numerosas opciones, en este TFG se usa y modifica tan solo un subconjunto de ellas, asignándoles valores en los archivos \verb+defaults+ y \verb+config+:
+Aunque CoovaChilli cuenta con numerosas opciones, en este TFG se usa y modifica tan solo un subconjunto de ellas, asignándoles valores en los archivos \emph{defaults} y \emph{config}:
 
 \begin{itemize}
-\item \verb+HS_WANIF+: especifica la interfaz de red que cuenta con acceso a internet, habitualmente la interfaz Ethernet del dispositivo, \emph{eth0}.
-\item \verb+HS_LANIF+: interfaz a la que se conectan los clientes, habitualmente la interfaz WiFi del dispositivo, \emph{wlan0}.
-\item \verb+HS_NETWORK+: dirección IP de la red a la que se conectan los clientes, por ejemplo 192.160.10.0. Habitualmente esta dirección es la determinada al configurar una IP estática para \emph{wlan0} en el archivo \verb+/etc/network/interfaces+ del sistema operativo.
-\item \verb+HS_UAMLISTEN+: la IP del dispositivo de red al que se conectan los clientes. Por supuesto, debe pertenecer al rango IP de la red especificada en el atributo anterior, siguiendo el ejemplo dicha IP sería 192.168.10.1.
-\item \verb+HS_UAMALLOW+: redes y dominios en los que los usuarios no autenticados sí tienen permitida la navegación. Habitualmente solo se permite la red local desde la que también se serviría el portal cautivo (el mismo valor que el atributo \verb+HS\_NETWORK+), aunque para otros servicios de portal cautivo más avanzados podría permitirse el acceso a otros dominios, por ejemplo a la URL de la correspondiente API de Facebook para la autenticación por esta red social o al dominio de PayPal para realizar pagos de tarifas.
-\item \verb+HS_UAMSECRET+: clave secreta con la que se cifran las credenciales que se envíen desde el servidor Web del portal cautivo hacia CoovaChilli.
-\item \verb+HS_UAMFORMAT+: ubicación y puerto del servidor Web que proporcionaría el portal cautivo.
-\item \verb+HS_UAMHOMEPAGE+: ubicación y puerto a la que se redirigirían las peticiones Web de los clientes al conectarse a la red. Habitualmente, esto es una página de bienvenida que luego redirige hacia el contenido servido en la ubicación especificada en \verb+HS_UAMFORMAT+.
-\item \verb+HS_SSID+: SSID de la red.
+\item \emph{HS\_WANIF}: especifica la interfaz de red que cuenta con acceso a internet, habitualmente la interfaz Ethernet del dispositivo, \emph{eth0}.
+\item \emph{HS\_LANIF}: interfaz a la que se conectan los clientes, habitualmente la interfaz WiFi del dispositivo, \emph{wlan0}.
+\item \emph{HS\_NETWORK}: dirección IP de la red a la que se conectan los clientes, por ejemplo 192.160.10.0. Habitualmente esta dirección es la determinada al configurar una IP estática para \emph{wlan0} en el archivo \emph{/etc/network/interfaces} del sistema operativo.
+\item \emph{HS\_UAMLISTEN}: la IP del dispositivo de red al que se conectan los clientes. Por supuesto, debe pertenecer al rango IP de la red especificada en el atributo anterior, siguiendo el ejemplo dicha IP sería 192.168.10.1.
+\item \emph{HS\_UAMALLOW}: redes y dominios en los que los usuarios no autenticados sí tienen permitida la navegación. Habitualmente solo se permite la red local desde la que también se serviría el portal cautivo (el mismo valor que el atributo \emph{HS\_NETWORK}), aunque para otros servicios de portal cautivo más avanzados podría permitirse el acceso a otros dominios, por ejemplo a la URL de la correspondiente API de Facebook para la autenticación por esta red social o al dominio de PayPal para realizar pagos de tarifas.
+\item \emph{HS\_UAMSECRET}: clave secreta con la que se cifran las credenciales que se envíen desde el servidor Web del portal cautivo hacia CoovaChilli.
+\item \emph{HS\_UAMFORMAT}: ubicación y puerto del servidor Web que proporcionaría el portal cautivo.
+\item \emph{HS\_UAMHOMEPAGE}: ubicación y puerto a la que se redirigirían las peticiones Web de los clientes al conectarse a la red. Habitualmente, esto es una página de bienvenida que luego redirige hacia el contenido servido en la ubicación especificada en \emph{HS\_UAMFORMAT}.
+\item \emph{HS\_SSID}: SSID de la red.
 \end{itemize}
 
 \subsubsection{Interfaz \emph{JavaScript Object Notation}}
 
-\emph{JavaScript Object Notation} (JSON) es perfil de transmición de datos desde un servidor Web a un navegador. Tiene menos datos de cabecera que el \emph{Xtensible Markup Language} (\acrshort{XML}) habitualmente utilizado en \emph{Asynchronous JavaScript And XML}(\acrshort{AJAX}) y otros servicios y por ello se ha considerado una alternativa a este y ha alcanzado gran popularidad. CoovaChilli usa JSON para realizar el control de usuarios de forma que pueda utilizarse un portal cautivo de cualquier tipo e incluso en servidores distintos al incorporado en el programa a los que pueda acceder el cliente, previa habilitación del acceso al dominio correspondiente en el atributo \verb+HS_UAMALLOW+ del archivo de configuración. Un usuario puede autenticarse a través de ella, obtener el estado de su conexión o desconectarse del portal cautivo.
+\emph{JavaScript Object Notation} (JSON) es perfil de transmición de datos desde un servidor Web a un navegador. Tiene menos datos de cabecera que el \emph{Xtensible Markup Language} (\acrshort{XML}) habitualmente utilizado en \emph{Asynchronous JavaScript And XML}(\acrshort{AJAX}) y otros servicios y por ello se ha considerado una alternativa a este y ha alcanzado gran popularidad. CoovaChilli usa JSON para realizar el control de usuarios de forma que pueda utilizarse un portal cautivo de cualquier tipo e incluso en servidores distintos al incorporado en el programa a los que pueda acceder el cliente, previa habilitación del acceso al dominio correspondiente en el atributo \emph{HS\_UAMALLOW} del archivo de configuración. Un usuario puede autenticarse a través de ella, obtener el estado de su conexión o desconectarse del portal cautivo.
 
-Para comunicarse con la interfaz JSON de CoovaChilli se utiliza una biblioteca JavaScript, instalada por defecto en \verb+/usr/local/etc/chilli/www/ChilliLibrary.js+. Esta biblioteca crea el objeto global \emph{chilliController}, que ha de inicializarse con los valores necesarios según nuestra configuración. El portal cautivo que se implemente pasa a utilizar los métodos expuestos por el objeto \emph{chilliController} para comunicarse con CoovaChilli, enviándole peticiones HTTP GET a este y recibiendo respuestas en el formato JSON.
+Para comunicarse con la interfaz JSON de CoovaChilli se utiliza una biblioteca JavaScript, instalada por defecto en \emph{/usr/local/etc/chilli/www/ChilliLibrary.js}. Esta biblioteca crea el objeto global \emph{chilliController}, que ha de inicializarse con los valores necesarios según nuestra configuración. El portal cautivo que se implemente pasa a utilizar los métodos expuestos por el objeto \emph{chilliController} para comunicarse con CoovaChilli, enviándole peticiones HTTP GET a este y recibiendo respuestas en el formato JSON.
 
 El objeto \emph{chilliController} puede enviar los siguientes órdenes a CoovaChilli:
 
@@ -424,7 +424,7 @@ breaksymbolleft={}
 \label{JSONResponseNO}
 \end{listing}
 
-Para el logoff, cuando se llama al método de desconexión se realiza la petición a \url{http://192.168.182.1:3990/json/logoff?lang=en&callback=myfunc}. La respuesta JSON pasa a tener esta forma: \emph{myfunc ( { "version": "1.0", "clientState": 0 } )}. 
+Para el logoff, cuando se llama al método de desconexión se realiza la petición a \url{http://192.168.182.1:3990/json/logoff?lang=en&callback=myfunc}. La respuesta JSON pasa a tener esta forma: \emph{myfunc ( { ``version": ``1.0", ``clientState": 0 } )}. 
 
 Para el \emph{Refresh}, cuando se llama al método de actualización se realiza la petición a \emph{http://192.168.182.1:3990/json/status?lang=en}. La respuesta JSON en este caso se muestra en el bloque de código \ref{JSONRefresh1}.
 
@@ -574,9 +574,9 @@ El módulo \emph{formidable} de análisis sintáctico (\emph{parsing}) de datos 
 Para poder hacer uso del módulo primero ha de incluirse al archivo que ejecutamos con \emph{node} mediante la orden \emph{require(‘formidable’)}, como también sucedía con \emph{express} y con el resto de módulos. Su API funciona de la siguiente manera:
 
 \begin{itemize}
-\item Se crea un objeto formulario entrante y se asocia a una variable con la siguiente asignación \verb+var form = new formidable.IncomingForm()+. 
-\item Tras esto, pueden especificarse detalles como el directorio en el se suben los archivos con el siguiente código:  \verb+form.uploadDir = "/ruta/hacia/el/archivo";+. 
-\item Para realizar el parsing de una petición que incluya datos de tipo formulario se usa la siguiente función, donde \emph{request} es la petición entrante: \verb+form.parse(request);+.
+\item Se crea un objeto formulario entrante y se asocia a una variable con la siguiente asignación \emph{var form = new formidable.IncomingForm()}. 
+\item Tras esto, pueden especificarse detalles como el directorio en el se suben los archivos con el siguiente código:  \emph{form.uploadDir = ``/ruta/hacia/el/archivo";}. 
+\item Para realizar el parsing de una petición que incluya datos de tipo formulario se usa la siguiente función, donde \emph{request} es la petición entrante: \emph{form.parse(request);}.
 \end{itemize}
 
 Los eventos se manejan con la función \emph{on}, que incluye una \emph{string} con el nombre del evento como primer parámetro y una función \emph{callback} como segundo parámetro, a ejecutar cuando dicho evento ocurre. Ejemplos de eventos son ‘\emph{progress}’, ‘\emph{file}’, ‘\emph{error}’ y ‘\emph{end}’. Un ejemplo de manejo de eventos que gestionaría qué ocurre cuando se ha recibido una petición y todos los archivos ya han terminado de llegar al disco se muestra en el bloque de código \ref{ResponseEvent}.
@@ -676,7 +676,7 @@ WebRTC es una tecnología que permite a las aplicaciones Web capturar y transmit
 
 Es un estándar actualmente en desarrollo por la \emph{World Wide Web Consortium} (\acrshort{W3C}) y el IETF. Para transferir los datos multimedia se utiliza el protocolo \emph{Realtime Transport Protocol }(\acrshort{RTP}).
 
-El \emph{getUserMedia()} es el método principal mediante el que se solicitan al usuario los permisos necesarios para usar un dispositivo de entrada multimedia (como la cámara o el micrófono). Produce una interfaz \emph{MediaStream} consistente en las pistas de los tipos de multimedia solicitados. Generalmente se usa accediendo a la interfaz \emph{MediaDevices} con la siguiente orden \mintinline{javascript}{navigator.mediaDevices.getUserMedia(constraints).then(...)} siendo \emph{constraints} el parámetro que indica el tipo de multimedia que se solicita y then la función que contendría los callbacks a ejecutar en caso de éxito o error según la \emph{Promise API}.
+El \emph{getUserMedia()} es el método principal mediante el que se solicitan al usuario los permisos necesarios para usar un dispositivo de entrada multimedia (como la cámara o el micrófono). Produce una interfaz \emph{MediaStream} consistente en las pistas de los tipos de multimedia solicitados. Generalmente se usa accediendo a la interfaz \emph{MediaDevices} con la siguiente orden \mintinline[breaklines=true, breakbytokenanywhere=true]{javascript}{navigator.mediaDevices.getUserMedia(constraints).then(...)} siendo \emph{constraints} el parámetro que indica el tipo de multimedia que se solicita y then la función que contendría los callbacks a ejecutar en caso de éxito o error según la \emph{Promise API}.
 
 La API \emph{MediaStream Recording} está muy relacionada captura los datos generados por el objeto \emph{MediaStream} para su análisis, procesado o guardado en disco. Se basa en una única interfaz, \emph{MediaRecorder}, que se encarga de obtener los datos del \emph{MediaStream} mediante una serie de eventos. El proceso de grabación es muy sencillo:
 

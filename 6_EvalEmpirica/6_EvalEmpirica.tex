@@ -39,7 +39,7 @@ Dado que el proceso de desconexión automática implica cerrar la pestaña, lo q
 
 Tras realizar las pruebas de funcionamiento pertinentes se analizó el consumo total de memoria de los procesos implicados en la implantación del sistema. Utilizando la herramienta \emph{htop}, disponible en sistemas Linux y que monitoriza la memoria física, memoria virtual, memoria de intercambio \emph{swap} y consumo de CPU tanto en valor absoluto como en porcentajes entre otras muchas cosas, se monitorizaron las estadísticas concernientes a las instancias de Node.js, \emph{hostapd}, \emph{CoovaChilli} y la estructura en la que se apoya: \emph{freeRADIUS} y \emph{MySQL}.
 
-En la Figura \ref{htopGeneric} se muestra la ventana genérica al ejecutar el comando \verb+htop+ desde el terminal.
+En la Figura \ref{htopGeneric} se muestra la ventana genérica al ejecutar el comando \emph{htop} desde el terminal.
 
 \begin{figure}[!t]
 \begin{center}
@@ -61,7 +61,7 @@ En la Figura \ref{htopNode} se muestra el consumo de recursos de Node.js.
 
 En esta captura puede apreciarse cómo el proceso que controla la instancia de la utilidad PM2 (que a su vez es la que controla la ejecución de nuestra instancia de \emph{node}) es la que destaca en el uso de recursos, utilizando un porcentaje de memoria del 5.9\% y un 14.2\% de la CPU. Lo que supone un bajo consumo.
 
-En la Figura \ref{pm2monitNode} se muestra una cifra más inmediata del consumo total de nuestro proceso con la propia utilidad PM2, resaltada en azul en el campo superior izquierdo del monitor llamado con el comando \verb+pm2 monit+ (que se explica en el Anexo C). Que también se observa que es muy reducido.
+En la Figura \ref{pm2monitNode} se muestra una cifra más inmediata del consumo total de nuestro proceso con la propia utilidad PM2, resaltada en azul en el campo superior izquierdo del monitor llamado con el comando \emph{pm2 monit} (que se explica en el Anexo C). Que también se observa que es muy reducido.
 
 \begin{figure}[!t]
 \begin{center}
