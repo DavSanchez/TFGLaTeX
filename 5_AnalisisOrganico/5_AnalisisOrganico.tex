@@ -1599,7 +1599,7 @@ breaklines=true,
 breaksymbolleft={}
 ]
 {javascript}
-window.onload = function () {
+window.onload = () => {
     prepareSite();
     checkServerStatus();
     setInterval(checkServerStatus(), 500000);
@@ -1691,11 +1691,10 @@ breaklines=true,
 breaksymbolleft={}
 ]
 {javascript}
-window.onbeforeunload = function (e) {
-    if (userCreds.id >= 0) {
+window.onbeforeunload = e => {
+    if (userCreds.id >= 0 && userCreds.oneTimePass == false) {
         disconnect(userCreds);
         userCreds.id = -1;
-        //log('Disconnecting...');
     }
     var dialogText = "Disconnecting...";
     e.returnValue = dialogText;
