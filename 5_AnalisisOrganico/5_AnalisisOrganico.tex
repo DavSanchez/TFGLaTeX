@@ -387,7 +387,7 @@ apt-get install -y --force-yes hostapd
 \end{minted}
 \end{listing}
 
-Cuando termine la instalación se edita el archivo de configuración \emph{/etc/default/hostapd} añadiendo la ruta del archivo de configuración que contiene los atributos deseados para nuestro punto de acceso, que está ubicado en \emph{/etc/hostapd/hostapd.conf}. Para ello buscamos la línea que contenga \emph{DAEMON\_CONF=}, nos aseguraremos de que está sin comentar y le especificaremos la ruta entre comillas, de manera que quede de la siguiente forma: \emph{DAEMON\_CONF=``/etc/hostapd/hostapd.conf"}.
+Cuando termine la instalación se edita el archivo de configuración \emph{/etc/default/hostapd} añadiendo la ruta del archivo de configuración que contiene los atributos deseados para nuestro punto de acceso, que está ubicado en \emph{/etc/hostapd/hostapd.conf}. Para ello buscamos la línea que contenga \emph{DAEMON\_CONF=}, nos aseguraremos de que está sin comentar y le especificaremos la ruta entre comillas, de manera que quede de la siguiente forma: \emph{DAEMON\_CONF=``/etc/hostapd/hostapd.conf''}.
 
 Ahora configuramos el mismo archivo cuya ruta hemos indicado en el ajuste anterior, indicando todos los atributos para nuestro punto de acceso incluyendo el driver a utilizar (\emph{nl80211}). Recordamos que la interfaz establecida ha de ser la misma que indicamos en el archivo de configuración \emph{defaults} o \emph{config} de CoovaChilli como \emph{HS\_LANIF}, en nuestro caso \emph{wlan0}, que tiene la red estática ya configurada en el archivo interfaces al principio de la implantación. Además, el SSID también ha de ser el mismo que indicamos a CoovaChilli con la variable \emph{HS\_SSID}.
 
