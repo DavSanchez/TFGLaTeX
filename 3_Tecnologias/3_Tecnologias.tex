@@ -342,7 +342,7 @@ CoovaChilli ha implementado los siguientes manejadores de eventos:
 
 Como se ha mencionado anteriormente, los órdenes se envían a CoovaChilli mediante peticiones HTTP. El parámetro GET \emph{lang} se usa en \emph{logon} para pasar el idioma preferido. El campo \emph{version} se utiliza para controlar las diferentes versiones del protocolo JSON de CoovaChilli. Si un parámetro para hacer \emph{callbacks} existe, CoovaChilli pone el texto de salida JSON entre paréntesis y lo adjunta con la función de \emph{callback}. La salida sería como una llamada a una función con el objeto JSON pasado como parámetro.
 
-Para el logon, siguiendo el ejemplo del bloque de código que configuró el objeto chilliController en apartados anteriores, cuando se llama al método \emph{logon()} del Controlador el objeto genera un desafío CHAP aleatorio (string hexadecimal) y realiza la petición \emph{http://192.168.182.1:3990/json/logon?username=XXXX&chapchallenge=YYYY&chappassword=0123456789abcdef&lang=EN}.
+Para el logon, siguiendo el ejemplo del bloque de código que configuró el objeto chilliController en apartados anteriores, cuando se llama al método \emph{logon()} del Controlador el objeto genera un desafío CHAP aleatorio (string hexadecimal) y realiza la petición \emph{http://192.168.182.1:3990/json/logon?username=XXXX\&chapchallenge=YYYY\&chappassword=0123456789abcdef\&lang=EN}.
 CoovaChilli responde con un objeto en formato JSON del bloque de código \ref{JSONResponseYES}:
 
 \begin{listing}[H]
@@ -424,7 +424,7 @@ breaksymbolleft={}
 \label{JSONResponseNO}
 \end{listing}
 
-Para el logoff, cuando se llama al método de desconexión se realiza la petición a \emph{http://192.168.182.1:3990/json/logoff?lang=en&callback=myfunc}. La respuesta JSON pasa a tener esta forma: \emph{myfunc ( { ``version'': ``1.0'', ``clientState'': 0 } )}. 
+Para el logoff, cuando se llama al método de desconexión se realiza la petición a \emph{http://192.168.182.1:3990/json/logoff?lang=en\&callback=myfunc}. La respuesta JSON pasa a tener esta forma: \emph{myfunc ( { ``version'': ``1.0'', ``clientState'': 0 } )}. 
 
 Para el \emph{Refresh}, cuando se llama al método de actualización se realiza la petición a \emph{http://192.168.182.1:3990/json/status?lang=en}. La respuesta JSON en este caso se muestra en el bloque de código \ref{JSONRefresh1}.
 
