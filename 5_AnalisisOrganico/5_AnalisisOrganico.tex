@@ -445,7 +445,7 @@ En este punto reiniciamos hostapd para que utilice los ajustes deseados. Al ejec
 \begin{center}
 \includegraphics[width=0.75\linewidth]{./5_AnalisisOrganico/Img/redesVisibles.png}
 \end{center}
-\caption{Ventana que muestra todas las redes WiFi disponibles y entre ellas la que hemos configurado (en este caso RasPiDavAP, recuadrada en rojo).}
+\caption{Ventana que muestra todas las redes WiFi disponibles y entre ellas la que hemos configurado (en este caso RasPiDavAP, recuadrada en rojo)}
 % \source{http://coova.github.io/CoovaChilli/}
 \label{redesVisibles}
 \end{figure}
@@ -518,7 +518,7 @@ cp /usr/share/nginx/html/daloradius/contrib/configs/freeradius-2.1.8/cfg1/raddb/
 cp /usr/share/nginx/html/daloradius/contrib/configs/freeradius-2.1.8/cfg1/raddb/sites-available/default /etc/freeradius/sites-available/default
 cp /usr/share/nginx/html/daloradius/contrib/configs/freeradius-2.1.8/cfg1/raddb/modules/sql.conf /etc/freeradius/sql.conf
 \end{minted}
-\caption{Configuración de daloRADIUS para trabajar con FreeRADIUS.}
+\caption{Configuración de daloRADIUS para trabajar con FreeRADIUS}
 \label{RADIUSdatabases}
 \end{listing}
 
@@ -544,7 +544,7 @@ echo "GRANT ALL ON radius.* to 'radius'@'localhost';" > /tmp/grant.sql
 echo "GRANT ALL ON radius.* to 'radius'@'127.0.0.1';" >> /tmp/grant.sql
 mysql -u root -p CONTRASEÑA < /tmp/grant.sql
 \end{minted}
-\caption{Creando bases de datos para daloRADIUS.}
+\caption{Creando bases de datos para daloRADIUS}
 \label{daloRADIUSdatabases}
 \end{listing}
 
@@ -599,7 +599,7 @@ server {
            }
 }
 \end{minted}
-\caption{Directriz de servidor de NGINX para daloRADIUS.}
+\caption{Directriz de servidor de NGINX para daloRADIUS}
 \label{directiveNGINX}
 \end{listing}
 
@@ -634,7 +634,7 @@ Una vez terminada nuestra instalación solo queda añadir usuarios al servidor R
 \begin{center}
 \includegraphics[width=0.75\linewidth]{./5_AnalisisOrganico/Img/daloLogin.png}
 \end{center}
-\caption{Vista de la página de entrada a daloRADIUS.}
+\caption{Vista de la página de entrada a daloRADIUS}
 % \source{http://coova.github.io/CoovaChilli/}
 \label{daloLogin}
 \end{figure}
@@ -645,7 +645,7 @@ El usuario \emph{administrator} está ya escrito en el campo \emph{Username}. La
 \begin{center}
 \includegraphics[width=0.75\linewidth]{./5_AnalisisOrganico/Img/daloMain.png}
 \end{center}
-\caption{Vista principal de daloRADIUS.}
+\caption{Vista principal de daloRADIUS}
 % \source{http://coova.github.io/CoovaChilli/}
 \label{daloMain}
 \end{figure}
@@ -656,7 +656,7 @@ Aquí hacemos clic en la pestaña \emph{Management} del menú superior y tras el
 \begin{center}
 \includegraphics[width=0.75\linewidth]{./5_AnalisisOrganico/Img/daloNewUser.png}
 \end{center}
-\caption{Vista de la página de manejo de usuarios en daloRADIUS.}
+\caption{Vista de la página de manejo de usuarios en daloRADIUS}
 % \source{http://coova.github.io/CoovaChilli/}
 \label{daloNewUser}
 \end{figure}
@@ -669,7 +669,7 @@ Además de registrar usuarios es posible asignarlos en grupos y modificar alguno
 \begin{center}
 \includegraphics[width=0.75\linewidth]{./5_AnalisisOrganico/Img/daloAttributes.png}
 \end{center}
-\caption{Vista de la página de Attributes de daloRADIUS.}
+\caption{Vista de la página de Attributes de daloRADIUS}
 % \source{http://coova.github.io/CoovaChilli/}
 \label{daloAttributes}
 \end{figure}
@@ -680,7 +680,7 @@ Para añadir usuarios en bloque, daloRADIUS ofrece un modo de añadir conjuntos 
 \begin{center}
 \includegraphics[width=0.75\linewidth]{./5_AnalisisOrganico/Img/daloBatchUsers.png}
 \end{center}
-\caption{Vista de la página de entrada a daloRADIUS por lotes.}
+\caption{Vista de la página de entrada a daloRADIUS por lotes}
 % \source{http://coova.github.io/CoovaChilli/}
 \label{daloBatchUsers}
 \end{figure}
@@ -691,7 +691,7 @@ Para implantar dos tipos de usuarios, el caso de este TFG, donde hay un conjunto
 \begin{center}
 \includegraphics[width=0.75\linewidth]{./5_AnalisisOrganico/Img/daloBatchUsersMan.png}
 \end{center}
-\caption{Vista de la página de RADUIS Session-timeout de daloRADIUS.}
+\caption{Vista de la página de RADUIS Session-timeout de daloRADIUS}
 % \source{http://coova.github.io/CoovaChilli/}
 \label{daloBatchUsersMan}
 \end{figure}
@@ -728,7 +728,7 @@ Se ha implementado el módulo de usuarios completo en un único directorio. En l
 \begin{center}
 \includegraphics[width=0.75\linewidth]{./5_AnalisisOrganico/Img/repoGitHub.png}
 \end{center}
-\caption{Imagen de la estructura del directorio en el que se incluye el código programado para el módulo Usuario.}
+\caption{Imagen de la estructura del directorio en el que se incluye el código programado para el módulo Usuario}
 % \source{http://coova.github.io/CoovaChilli/}
 \label{repoGitHub}
 \end{figure}
@@ -748,7 +748,7 @@ El funcionamiento de dicho módulo y las interrelaciones existentes entre sus su
 \begin{center}
 \includegraphics[width=0.75\linewidth]{./5_AnalisisOrganico/Img/diagramUML.png}
 \end{center}
-\caption{Diagrama de secuencia de los componentes del módulo de Usuario.}
+\caption{Diagrama de secuencia de los componentes del módulo de Usuario}
 % \source{http://coova.github.io/CoovaChilli/}
 \label{diagramUML}
 \end{figure}
@@ -764,7 +764,7 @@ Como ya adelantamos, en cuanto a estructura de directorios, el submódulo de con
 \begin{center}
 \includegraphics[width=0.75\linewidth]{./5_AnalisisOrganico/Img/usersDir.png}
 \end{center}
-\caption{Vista del directorio con los archivos del submódulo Control de Usuarios.}
+\caption{Vista del directorio con los archivos del submódulo Control de Usuarios}
 % \source{http://coova.github.io/CoovaChilli/}
 \label{usersDir}
 \end{figure}
@@ -812,7 +812,7 @@ breaksymbolleft={}
   ]
 }
 \end{minted}
-\caption{Atributos de los usuarios en las bases de datos.}
+\caption{Atributos de los usuarios en las bases de datos}
 \label{usersJSONstructure}
 \end{listing}
 
@@ -869,7 +869,7 @@ function setUserInactive(userId) {
     writeUsersFile(userObj);
 }
 \end{minted}
-\caption{Funciones internas de userController.js.}
+\caption{Funciones internas de userController.js}
 % \label{usersControllerImports}
 \end{listing}
 
@@ -891,7 +891,7 @@ function writeUsersFile(userJSON){
     fs.writeFileSync("./users/users.json", JSON.stringify(userJSON, null, 2));
 }
 \end{minted}
-\caption{Escritura del objeto userObj en fichero JSON.}
+\caption{Escritura del objeto userObj en fichero JSON}
 % \label{usersControllerImports}
 \end{listing}
 
@@ -912,7 +912,7 @@ breaksymbolleft={}
 function prepareToConnect(userId) {
    return [userObj.users[userId].id, userObj.users[userId].username, userObj.users[userId].password, false, 0];
 \end{minted}
-\caption{Preparación de credenciales.}
+\caption{Preparación de credenciales}
 % \label{usersControllerImports}
 \end{listing}
 
@@ -999,7 +999,7 @@ var creds = {
    connected: 0
 };
 \end{minted}
-\caption{Inicialización de variables del servidor node.}
+\caption{Inicialización de variables del servidor node}
 % \label{usersControllerImports}
 \end{listing}
 
@@ -1025,7 +1025,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 \end{minted}
-\caption{Configurando las opciones del servidor Express.}
+\caption{Configurando las opciones del servidor Express}
 % \label{usersControllerImports}
 \end{listing}
 
@@ -1049,7 +1049,7 @@ app.get('/', function(req, res){
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 \end{minted}
-\caption{Ruta raíz del portal cautivo.}
+\caption{Ruta raíz del portal cautivo}
 % \label{usersControllerImports}
 \end{listing}
 
@@ -1077,7 +1077,7 @@ app.get('/serverstatus', function (req, res) {
    }
 });
 \end{minted}
-\caption{Ruta de comprobación de servidor.}
+\caption{Ruta de comprobación de servidor}
 % \label{usersControllerImports}
 \end{listing}
 
@@ -1100,7 +1100,7 @@ app.get('/creds', function (req, res) {
     res.send(jsonCr);
 });
 \end{minted}
-\caption{Obtención de credenciales.}
+\caption{Obtención de credenciales}
 % \label{usersControllerImports}
 \end{listing}
 
@@ -1125,7 +1125,7 @@ app.post('/userlogoff', function (req, res) {
     }
 });
 \end{minted}
-\caption{Desconexión de usuario.}
+\caption{Desconexión de usuario}
 % \label{usersControllerImports}
 \end{listing}
 
@@ -1151,7 +1151,7 @@ function setCreds() {
     creds.oneTimePass = data[3];
 }
 \end{minted}
-\caption{Almacenando las credenciales.}
+\caption{Almacenando las credenciales}
 % \label{usersControllerImports}
 \end{listing}
 
@@ -1195,7 +1195,7 @@ app.post('/upload', function (req, res) {
     });
 });
 \end{minted}
-\caption{Procesado de ficheros de audio procedentes del cliente.}
+\caption{Procesado de ficheros de audio procedentes del cliente}
 % \label{usersControllerImports}
 \end{listing}
 
@@ -1227,7 +1227,7 @@ app.post('/loggedupload', function (req, res) {
     form.parse(req);
 });
 \end{minted}
-\caption{Procesado de ficheros de audio procedentes del cliente ya conectado.}
+\caption{Procesado de ficheros de audio procedentes del cliente ya conectado}
 % \label{usersControllerImports}
 \end{listing}
 
@@ -1260,7 +1260,7 @@ app.post('/onetimepassupload', function (req, res) {
     form.parse(req);
 });
 \end{minted}
-\caption{Procesado de ficheros de audio procedentes de un cliente de 30 minutos.}
+\caption{Procesado de ficheros de audio procedentes de un cliente de 30 minutos}
 % \label{usersControllerImports}
 \end{listing}
 
@@ -1296,7 +1296,7 @@ app.post('/userconnected', function (req, res) {
     }
 });
 \end{minted}
-\caption{Comprobando si el usuario logró conectarse.}
+\caption{Comprobando si el usuario logró conectarse}
 % \label{usersControllerImports}
 \end{listing}
 
@@ -1329,7 +1329,7 @@ https.createServer(options, app).listen(3000, function () {
 });
 
 \end{minted}
-\caption{Preparando el servidor web con HTTPS.}
+\caption{Preparando el servidor web con HTTPS}
 % \label{usersControllerImports}
 \end{listing}
 
@@ -1383,7 +1383,7 @@ https.createServer(options, app).listen(3000, function () {
 });
 
 \end{minted}
-\caption{Preparando el servidor web con HTTPS.}
+\caption{Preparando el servidor web con HTTPS}
 % \label{usersControllerImports}
 \end{listing}
 
@@ -1422,7 +1422,7 @@ El archivo HTML es el elemento principal del submódulo, enviado al navegador co
 \begin{center}
 \includegraphics[width=0.75\linewidth]{./5_AnalisisOrganico/Img/flujoBotones.png}
 \end{center}
-\caption{Organigrama que indica cómo cambian los botones.}
+\caption{Organigrama que indica cómo cambian los botones}
 % \source{http://coova.github.io/CoovaChilli/}
 \label{flujoBotones}
 \end{figure}
@@ -1433,7 +1433,7 @@ Usando Bootstrap se logra un diseño responsivo. Esto es, la apariencia de la p�
 \begin{center}
 \includegraphics[width=0.75\linewidth]{./5_AnalisisOrganico/Img/responsiveDesign.png}
 \end{center}
-\caption{Diseño responsivo de la página Web principal.}
+\caption{Diseño responsivo de la página Web principal}
 % \source{http://coova.github.io/CoovaChilli/}
 \label{responsiveDesign}
 \end{figure}
@@ -1467,7 +1467,7 @@ breaksymbolleft={}
 </body>
 </html>
 \end{minted}
-\caption{scripts importados en el documento HTML.}
+\caption{scripts importados en el documento HTML}
 % \label{usersControllerImports}
 \end{listing}
 
@@ -1500,7 +1500,7 @@ function disconnect(userCreds){
    chilliController.logoff();
 }
 \end{minted}
-\caption{Habilitación de SSL, conexión y desconexión.}
+\caption{Habilitación de SSL, conexión y desconexión}
 % \label{usersControllerImports}
 \end{listing}
 
@@ -1633,7 +1633,7 @@ function checkServerStatus() {
     });
 }
 \end{minted}
-\caption{Preparando el portal cautivo según llega el usuario.}
+\caption{Preparando el portal cautivo según llega el usuario}
 % \label{usersControllerImports}
 \end{listing}
 
@@ -1667,7 +1667,7 @@ function positionError(positionError) {
     console.log('Error ' + positionError.code + ' in geolocation: ' + positionError.message);
 }
 \end{minted}
-\caption{Funciones y opciones para geolocalización.}
+\caption{Funciones y opciones para geolocalización}
 % \label{usersControllerImports}
 \end{listing}
 
@@ -1699,7 +1699,7 @@ window.onbeforeunload = e => {
     return dialogText;
 };
 \end{minted}
-\caption{Desconectando al usuario que abandona la página.}
+\caption{Desconectando al usuario que abandona la página}
 % \label{usersControllerImports}
 \end{listing}
 
@@ -1728,7 +1728,7 @@ function liberateUser(creds) {
     });
 }
 \end{minted}
-\caption{Marcando usuario como desconectado en el servidor node.}
+\caption{Marcando usuario como desconectado en el servidor node}
 % \label{usersControllerImports}
 \end{listing}
 
@@ -1781,7 +1781,7 @@ agreeBtn.onclick = e => {
     });
 };
 \end{minted}
-\caption{Preparación para grabar y enviar el fragmento de audio.}
+\caption{Preparación para grabar y enviar el fragmento de audio}
 % \label{usersControllerImports}
 \end{listing}
 
@@ -1832,7 +1832,7 @@ function stopRecording() {
     recorder.stop();
 }
 \end{minted}
-\caption{Grabando al ser autorizado por el usuario.}
+\caption{Grabando al ser autorizado por el usuario}
 % \label{usersControllerImports}
 \end{listing}
 
@@ -1873,7 +1873,7 @@ function saveAndSend() {
     });
 }
 \end{minted}
-\caption{Guardando y enviando el fragmento de audio (usuario recién llegado).}
+\caption{Guardando y enviando el fragmento de audio (usuario recién llegado)}
 % \label{usersControllerImports}
 \end{listing}
 
@@ -1911,7 +1911,7 @@ function loggedUserSaveAndSend() {
     });
 }
 \end{minted}
-\caption{Guardando y enviando el fragmento de audio (usuario ya conectado).}
+\caption{Guardando y enviando el fragmento de audio (usuario ya conectado)}
 % \label{usersControllerImports}
 \end{listing}
 
@@ -1950,7 +1950,7 @@ function saveAndSendOneTimePass() {
     });
 }
 \end{minted}
-\caption{Guardando y enviando el fragmento de audio (usuario de 30 minutos).}
+\caption{Guardando y enviando el fragmento de audio (usuario de 30 minutos)}
 % \label{usersControllerImports}
 \end{listing}
 
@@ -1980,7 +1980,7 @@ function receiveResponse() {
     });
 }
 \end{minted}
-\caption{Recibiendo credenciales del servidor.}
+\caption{Recibiendo credenciales del servidor}
 % \label{usersControllerImports}
 \end{listing}
 
@@ -2018,7 +2018,7 @@ function connectUser(data) {
     });
 }
 \end{minted}
-\caption{Intentando la conexión y comprobando el resultado.}
+\caption{Intentando la conexión y comprobando el resultado}
 % \label{usersControllerImports}
 \end{listing}
 
@@ -2063,6 +2063,6 @@ function setAlert(info) {
     alertsArea.appendChild(newDiv);
 }
 \end{minted}
-\caption{Sistema de alertas para informar al usuario.}
+\caption{Sistema de alertas para informar al usuario}
 % \label{usersControllerImports}
 \end{listing}
