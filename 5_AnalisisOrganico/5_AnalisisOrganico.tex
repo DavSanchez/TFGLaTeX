@@ -1560,6 +1560,7 @@ let id = val => document.getElementById(val),
     recordBtn = id('recordBtn'),
     recordBtn30min = id('recordBtn30min'),
     alertsArea = id('alertsArea'),
+    failedRecordTries,
     stream,
     recorder,
     chunks,
@@ -1580,6 +1581,8 @@ var userCreds = {
 \end{listing}
 
 La primera variable utiliza la función flecha (\emph{arrow function}) implementada en ECMAScript 6, y es equivalente a la sintaxis siguiente: \emph{let id = function(val) \{ return document.getElementById(val) \};}. Esta función es una forma abreviada de obtener los elementos del documento HTML, como puede verse en las cuatro siguientes variables: \emph{agreeBtn}, \emph{recordBtn}, \emph{recordBtn30min} y \emph{alertsArea} que corresponden a los elementos con ese identificador del documento HTML.
+
+La variable \emph{failedRecordTries} llevará una cuenta de los intentos fallidos de grabación. Si este valor es igual o mayor a tres intentos el sistema se desconectará y el usuario deberá iniciar el proceso de nuevo.
 
 Las variables \emph{stream}, \emph{recorder}, \emph{chunks} y \emph{media} son utilizadas por las API WebRTC y \emph{MediaStream Recording} para su funcionalidad, que veríamos en acción al analizar los métodos del archivo. Las variables \emph{serverStatus}, \emph{locationTime} y \emph{userCreds} almacenan el estado del servidor en forma booleana, la latitud, longitud y marca de tiempo para usar en los nombres de los archivos de audio y las credenciales de usuario recibidas desde el servidor, respectivamente.
 
@@ -1604,6 +1607,7 @@ window.onload = () => {
 };
 
 function prepareSite() {
+    failedRecordTries = 0;
     if (navigator.geolocation) {
         try {
             navigator.geolocation.watchPosition(showPositionTime, positionError, geoOptions);
@@ -1637,7 +1641,7 @@ function checkServerStatus() {
 % \label{usersControllerImports}
 \end{listing}
 
-La función \emph{prepareSite()} simplemente intenta activar la geolocalización del dispositivo a lo largo del tiempo mediante la función \emph{watchPosition()}, lo que implica que nada más cargar la página aparece la petición de permisos de ubicación, que el usuario puede aceptar o negar sin que eso perturbe el resto de la experiencia de usuario. Obviamente, si el usuario niega los permisos el servicio no contaría con los datos de ubicación de los archivos de audio procedentes de esta instancia de la Aplicación Web, pero en principio se ha diseñado teniéndolo en cuenta.
+La función \emph{prepareSite()} simplemente inicializa el contador de intentos fallidos e intenta activar la geolocalización del dispositivo a lo largo del tiempo mediante la función \emph{watchPosition()}, lo que implica que nada más cargar la página aparece la petición de permisos de ubicación, que el usuario puede aceptar o negar sin que eso perturbe el resto de la experiencia de usuario. Obviamente, si el usuario niega los permisos el servicio no contaría con los datos de ubicación de los archivos de audio procedentes de esta instancia de la Aplicación Web, pero en principio se ha diseñado teniéndolo en cuenta.
 
 La función \emph{watchPosition()} cuenta con dos funciones \emph{callback} (en orden, manejadores de éxito y error) como dos primeros parámetros y un tercer parámetro de opciones, que en este caso simplemente activa la alta precisión de los datos entregados a la aplicación Web. Aquí se ven las implantaciones de estos tres parámetros.
 
@@ -1732,7 +1736,7 @@ function liberateUser(creds) {
 % \label{usersControllerImports}
 \end{listing}
 
-Después de esto se programan los comportamientos de los botones. El primer botón que aparece en la visualización de la página es el que se debe pulsar al estar de acuerdo con las condiciones que se expresan en la primera descripción, teniendo este el identificador \emph{agreeBtn}. Este botón intenta configurar la captura de audio en el dispositivo según las API WebRTC y \emph{MediaStream Recording}, configurando las opciones de la grabación (en nuestro caso declarando que se captura audio, utilizando el \emph{\acrshort{MIME} type} y la extensión de archivo correspondiente al formato \emph{Ogg} \cite{OggRFC1, OggRFC2}) y determinando qué hacer con los archivos de audio generados según el tipo de usuario o si este tiene credenciales ya asignadas. Si el usuario deniega permisos o el dispositivo no soporta la tecnología utilizada el botón se desactiva y es imposible seguir adelante.
+Después de esto se programan los comportamientos de los botones. El primer botón que aparece en la visualización de la página es el que se debe pulsar al estar de acuerdo con las condiciones que se expresan en la primera descripción, teniendo este el identificador \emph{agreeBtn}. Este botón intenta configurar la captura de audio en el dispositivo según las API WebRTC y \emph{MediaStream Recording}, configurando las opciones de la grabación (en nuestro caso declarando que se captura audio, utilizando el \emph{\acrshort{MIME} type} y la extensión de archivo correspondiente al formato \emph{Ogg} \cite{OggRFC1, OggRFC2}) y determinando qué hacer con los archivos de audio generados según el tipo de usuario o si este tiene credenciales ya asignadas. Si el usuario deniega permisos o el dispositivo no soporta la tecnología utilizada el botón se desactiva y es imposible seguir adelante. Si hay un error, el sistema llama a la función \emph{errorHandler()} por medio de las acciones del manejador de eventos \emph{recorder.onerror}.
 
 \begin{listing}[H]
 \begin{minted}
@@ -1774,7 +1778,10 @@ agreeBtn.onclick = e => {
                 }
             }
         };
-        log('got media successfully');
+        recorder.onerror = e => {
+            let error = e.error;
+            errorHandler();
+        };
     }).catch(function(err){
         agreeBtn.disabled = true;
         agreeBtn.textContent = "Permiso denegado o incompatible";
@@ -1868,7 +1875,7 @@ function saveAndSend() {
         },
         error: function (data) {
             console.log('[Normal] upload error ' + data);
-            setAlert("error");
+            errorHandler();
         }
     });
 }
@@ -1906,7 +1913,7 @@ function loggedUserSaveAndSend() {
         },
         error: function (data) {
             console.log('[Logged] upload error ' + data);
-            setAlert("errorLogged");
+            errorHandler();
         }
     });
 }
@@ -1954,7 +1961,7 @@ function saveAndSendOneTimePass() {
 % \label{usersControllerImports}
 \end{listing}
 
-Nótese que en la segunda función, \emph{loggedUserSaveAndSend()}, aparte de variar la ruta, no se llama a la función \emph{receiveResponse()} al finalizar la transacción con éxito. En el caso de la primera función, el servidor habría guardado en su variable \emph{creds} las credenciales a utilizar, por lo que la \emph{Aplicación Web} realiza otra petición AJAX para obtenerlas.
+Nótese que en la segunda función, \emph{loggedUserSaveAndSend()}, aparte de variar la ruta, no se llama a la función \emph{receiveResponse()} al finalizar la transacción con éxito. En el caso de la primera función, el servidor habría guardado en su variable \emph{creds} las credenciales a utilizar, por lo que la \emph{Aplicación Web} realiza otra petición AJAX para obtenerlas. Además, la tercera función, \emph{saveAndSendOneTimePass}, no llama al manejador de errores si falla el envío, sino que directamente avisa al usuario de el error para que intente el proceso de conexión de nuevo.
 
 \begin{listing}[H]
 \begin{minted}
@@ -2022,7 +2029,36 @@ function connectUser(data) {
 % \label{usersControllerImports}
 \end{listing}
 
-Por último, la \emph{Aplicación Web} tiene un campo de alertas que notifican al usuario de la recepción de archivos de audio o errores durante las mismas mediante la función \emph{setAlert()}, llamada por otras funciones de este archivo ya expuestas anteriormente.
+Si hay un error en el envío del audio o en el proceso de grabación se llama a una función encargada de llevar una cuenta de los errores y desconectar al usuario en caso de que los procesos fallen hasta tres veces.
+
+\begin{listing}[H]
+\begin{minted}
+[
+frame=lines,
+framesep=2mm,
+baselinestretch=1.2,
+bgcolor=lightgray,
+fontsize=\footnotesize,
+breaklines=true,
+breaksymbolleft={}
+]
+{javascript}
+function errorHandler() {
+    if (failedRecordTries < 3) {
+        failedRecordTries++;
+        setAlert("errorLogged");
+    } else {
+        failedRecordTries = 0;
+        setAlert("error");
+        disconnect(userCreds);
+    }
+}
+\end{minted}
+\caption{Gestionando los errores en el sistema}
+% \label{usersControllerImports}
+\end{listing}
+
+Por último, la \emph{Aplicación Web} tiene un campo de alertas que notifican al usuario de la recepción de archivos de audio o errores durante las mismas mediante la función \emph{setAlert()}, llamada por \emph{errorHandler()} otras funciones de este archivo ya expuestas anteriormente.
 
 \begin{listing}[H]
 \begin{minted}
