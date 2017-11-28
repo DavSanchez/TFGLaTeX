@@ -920,6 +920,10 @@ El objetivo de esta última función interna es retornar un vector de cinco elem
 
 A continuación se detallan las funciones externas, que recordamos sirven de interfaz entre el \emph{Control de Usuarios} y el \emph{Servidor}, este las llama para obtener credenciales, pedir el estado de la base de datos y actualizar valores de la misma.
 
+Nótese el cambio en la implantación de las funciones. Mientras que las funciones internas pueden programarse utilizando primero la palabra reservada \emph{function}, el operador de asignación y tras este el nombre de la función y su comportamiento, Node.js requiere de una sintaxis diferente para externalizar funciones. Ha de utilizarse el formato \emph{exports.nombreDeLaFuncion = function(...) \{...\}} para que otros archivos JavaScript de Node.js puedan utilizarlas, importando el archivo donde estas se encuentran de la misma forma que si fuese un módulo \emph{npm}.
+
+La primera función, \emph{userInactive}, simplemente llama a la función interna \emph{setUserInactive}, por lo que es el servidor quien decide cuándo un usuario se marca como inactivo por medio del controlador de usuarios. Las dos funciones siguientes tienen un comportamiento muy similar. Mientras que la primera de ellas solo se encarga de comprobar si la base de datos tiene al menos un usuario libre, recorriendola e incrementando coincidencias de usuarios libres por medio de un contador, la segunda de ellas tiene el cometido de retornar el primer usuario libre que encuentre en su recorrido de la base de datos, retornando un vector de cinco elementos nulos si no hay ningún usuario activo.
+
 \begin{listing}[H]
 \begin{minted}
 [
@@ -960,10 +964,6 @@ exports.getInactiveUser = function() {
 \caption{Funciones externas de userController.js}
 % \label{usersControllerImports}
 \end{listing}
-
-Nótese el cambio en la implantación de las funciones. Mientras que las funciones internas pueden programarse utilizando primero la palabra reservada \emph{function}, el operador de asignación y tras este el nombre de la función y su comportamiento, Node.js requiere de una sintaxis diferente para externalizar funciones. Ha de utilizarse el formato \emph{exports.nombreDeLaFuncion = function(...) \{...\}} para que otros archivos JavaScript de Node.js puedan utilizarlas, importando el archivo donde estas se encuentran de la misma forma que si fuese un módulo \emph{npm}.
-
-La primera función, \emph{userInactive}, simplemente llama a la función interna \emph{setUserInactive}, por lo que es el servidor quien decide cuándo un usuario se marca como inactivo por medio del controlador de usuarios. Las dos funciones siguientes tienen un comportamiento muy similar. Mientras que la primera de ellas solo se encarga de comprobar si la base de datos tiene al menos un usuario libre, recorriendola e incrementando coincidencias de usuarios libres por medio de un contador, la segunda de ellas tiene el cometido de retornar el primer usuario libre que encuentre en su recorrido de la base de datos, retornando un vector de cinco elementos nulos si no hay ningún usuario activo.
 
 \subsubsection{Submódulo Servidor.} \label{serverSubmodule}
 

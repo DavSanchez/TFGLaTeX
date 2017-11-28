@@ -15,8 +15,9 @@ right=25mm,
 top=25mm,
 bottom=25mm}
 
-%\widowpenalty=300
-%\clubpenalty=300
+%\widowpenalty=1000
+%\clubpenalty=1000
+\usepackage[all]{nowidow} %Intenta evitar las líneas sueltas en páginas
 
 \usepackage{fancyhdr}
 \pagestyle{fancy}
@@ -83,8 +84,12 @@ bottom=25mm}
 \pagenumbering{gobble}
 \thispagestyle{empty}
 \clearpage
-\includepdf[pages={2-4},pagecommand={},fitpaper=true]{Portada.pdf}
-\clearpage
+\includepdf[pages={2},pagecommand={},fitpaper=true]{Portada.pdf}
+\cleardoublepage
+\includepdf[pages={3},pagecommand={},fitpaper=true]{Portada.pdf}
+\cleardoublepage
+\includepdf[pages={4},pagecommand={},fitpaper=true]{Portada.pdf}
+\cleardoublepage
 
 \clearpage
 \vspace*{\stretch{2}}
@@ -94,11 +99,10 @@ bottom=25mm}
 \end{minipage}
 \end{center}
 \vspace{\stretch{3}}
-\clearpage
+\cleardoublepage
 
 % Construimos tabla de contenidos
 \tableofcontents
-
 \cleardoublepage
 
 % Comienza el contenido del TFG

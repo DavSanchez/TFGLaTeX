@@ -198,13 +198,7 @@ La configuración de \emph{eth0} depende de la red que proporciona el acceso a I
 
 Esta configuración incluye el paso necesario de habilitar el \emph{flag} del \emph{kernel} Linux del sistema operativo Raspbian para que permita el proceso de reenvío de paquetes IP, o IP forwarding, desde la interfaz cableada a la inalámbrica y viceversa. Sin este paso la instalación de CoovaChilli, que basa su funcionalidad de paso de paquetes entre interfaces mediante el uso de órdenes \emph{iptables} de Linux \cite{TUNTAP2}, no podría funcionar.
 
-Como también se adelantó en el anterior capítulo, \emph{Hostapd} es un servicio que se ejecuta en segundo plano, configurando y permitiendo el uso de la interfaz inalámbrica wlan0 como punto de acceso WiFi (IEEE 802.11n), haciendo posible que los clientes se conecten a nuestro servicio.
-
-El submódulo \emph{Raspberry Pi}, con el sistema operativo Raspbian, proporciona las interfaces de red necesarias, los gestores de paquetes y compiladores para instalar todo el ecosistema \emph{software} y las opciones de configuración de red que hacen posible la implementación total del servicio.
-
-Para un mayor entendimiento global de todo el sistema instalado, configurado y desarrollado, en la Figura \ref{modulosTotal} se presenta un diagrama que engloba los tres módulos, incluyendo sus submódulos, y las interrelaciones existentes entre los mismos.
-
-\begin{figure}[!t]
+\begin{figure}[!ht]
 \begin{center}
 \includegraphics[width=0.75\linewidth]{./4_AnalisisFuncional/Img/modulosTotal.png}
 \end{center}
@@ -212,3 +206,9 @@ Para un mayor entendimiento global de todo el sistema instalado, configurado y d
 %\source{http://coova.github.io/CoovaChilli/}
 \label{modulosTotal}
 \end{figure}
+
+Como también se adelantó en el anterior capítulo, \emph{Hostapd} es un servicio que se ejecuta en segundo plano, configurando y permitiendo el uso de la interfaz inalámbrica \emph{wlan0} como punto de acceso WiFi 802.11n para que los clientes se conecten a nuestro servicio.
+
+El submódulo \emph{Raspberry Pi}, con el sistema operativo Raspbian, proporciona las interfaces de red necesarias, \emph{software} y dependencias para instalar todo el ecosistema y las opciones de configuración de red que hacen posible la implementación total del servicio.
+
+Para una mayor entendimiento global de todo el sistema instalado, configurado y desarrollado, en la Figura \ref{modulosTotal} se presenta un diagrama que engloba los tres módulos, incluyendo sus submódulos, y las interrelaciones existentes entre los mismos.
