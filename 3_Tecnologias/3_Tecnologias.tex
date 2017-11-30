@@ -253,10 +253,6 @@ El objeto \emph{chilliController} puede enviar los siguientes órdenes a CoovaCh
 \item \emph{status}: proporciona los datos de contabilidad más recientes. Es llamado mediante el método \emph{refresh()}.
 \end{itemize}
 
-
-Cuando un cliente es autorizado, el objeto \emph{chilliController} consulta periódicamente la información de contabilidad, enviando órdenes de \emph{status} para actualizar los datos (orden \emph{autorefresh}).
-CoovaChilli facilita una plantilla de código en su página Web que puede alojarse en el HTML de un portal cautivo que utilice esta interfaz (Bloque de código \ref{JSONTemplate}).
-
 \begin{listing}[H]
 \begin{minted}
 [
@@ -270,35 +266,32 @@ breaksymbolleft={}
 ]
 {html}
 <script src="http://my.host.com/ChilliLibrary.js"></script>
-<script>
-// The included script creates a global chilliController object
-// If you use non standard configuration, define your configuration 
-  chilliController.host = "10.0.0.1";  // Default is 192.168.182.1
-  chilliController.port  = 4003     ; //  Default is 3990
-  chilliController.interval = 60    ; // Default is 30 seconds
-  
-// then define event handler functions
+<script> 
+  chilliController.host = "10.0.0.1";
+  chilliController.port  = 4003;
+  chilliController.interval = 60;
+
   chilliController.onError  = handleErrors;
   chilliController.onUpdate = updateUI ;
 
-// when the reply is ready, this handler function is called
   function updateUI( cmd ) {
     alert ( 'You called the method' + cmd +
       '\n Your current state is =' + chilliController.clientState ) ;
   }
   
-// If an error occurs, this handler will be called instead
   function handleErrors ( code ) {
     alert ( 'The last contact with the Controller failed. Error code =' + code );
   }
-//  finally, get current state
+
   chilliController.refresh();
 </script>
-
 \end{minted}
 \caption{Plantilla de código de CoovaChilli para el manejo de la interfaz JSON}
 \label{JSONTemplate}
 \end{listing}
+
+Cuando un cliente es autorizado, el objeto \emph{chilliController} consulta periódicamente la información de contabilidad, enviando órdenes de \emph{status} para actualizar los datos (orden \emph{autorefresh}).
+CoovaChilli facilita una plantilla de código en su página Web que puede alojarse en el HTML de un portal cautivo que utilice esta interfaz (Bloque de código \ref{JSONTemplate}).
 
 El \emph{chilliController} es un objeto global creado por el script incluido al principio. Por defecto, está configurado para contactar con CoovaChilli en 192.168.182.1:3990 cada 30 segundos. Si deseamos valores diferentes, pueden modificarse antes de llamar a cualquier método tal y como se ve en el bloque de código. Tras configurar el objeto \emph{chilliController} se debe llamar al método \emph{refresh()} para determinar el estado actual del cliente.
 

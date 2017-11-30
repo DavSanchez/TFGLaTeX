@@ -777,6 +777,10 @@ Dado que cuatro los archivos constituyen dos pares muy similares se analizan en 
 
 Estos archivos alojan una base de datos muy sencilla en forma de un array de usuarios con cuatro atributos cada uno, estructurada de la manera mostrada en el bloque de código \ref{usersJSONstructure}.
 
+El atributo \emph{id} se utiliza a efectos de programación, para llevar un control de los usuarios sin utilizar cadenas de caracteres; el \emph{username} y \emph{password} son obviamente las credenciales de cada usuario y el atributo booleano \emph{isActive} actúa como un \emph{flag} que marca los usuarios activos en ese momento en el sistema.
+
+Los valores username y password deben corresponder con usuarios y contraseñas ya existentes en el servidor RADIUS, introducidas a través de daloRADIUS o ordens SQL en la base de datos tal y como se vio en apartados anteriores.
+
 \begin{listing}[H]
 \begin{minted}
 [
@@ -815,10 +819,6 @@ breaksymbolleft={}
 \caption{Atributos de los usuarios en las bases de datos}
 \label{usersJSONstructure}
 \end{listing}
-
-El atributo \emph{id} se utiliza a efectos de programación, para llevar un control de los usuarios sin utilizar cadenas de caracteres; el \emph{username} y \emph{password} son obviamente las credenciales de cada usuario y el atributo booleano \emph{isActive} actúa como un \emph{flag} que marca los usuarios activos en ese momento en el sistema.
-
-Los valores username y password deben corresponder con usuarios y contraseñas ya existentes en el servidor RADIUS, introducidas a través de daloRADIUS o ordens SQL en la base de datos tal y como se vio en apartados anteriores.
 
 \subparagraph{\emph{userController.js} y \emph{userControllerOneTime.js}} \label{usersControllers} ~\\
 
@@ -922,8 +922,6 @@ A continuación se detallan las funciones externas, que recordamos sirven de int
 
 Nótese el cambio en la implantación de las funciones. Mientras que las funciones internas pueden programarse utilizando primero la palabra reservada \emph{function}, el operador de asignación y tras este el nombre de la función y su comportamiento, Node.js requiere de una sintaxis diferente para externalizar funciones. Ha de utilizarse el formato \emph{exports.nombreDeLaFuncion = function(...) \{...\}} para que otros archivos JavaScript de Node.js puedan utilizarlas, importando el archivo donde estas se encuentran de la misma forma que si fuese un módulo \emph{npm}.
 
-La primera función, \emph{userInactive}, simplemente llama a la función interna \emph{setUserInactive}, por lo que es el servidor quien decide cuándo un usuario se marca como inactivo por medio del controlador de usuarios. Las dos funciones siguientes tienen un comportamiento muy similar. Mientras que la primera de ellas solo se encarga de comprobar si la base de datos tiene al menos un usuario libre, recorriendola e incrementando coincidencias de usuarios libres por medio de un contador, la segunda de ellas tiene el cometido de retornar el primer usuario libre que encuentre en su recorrido de la base de datos, retornando un vector de cinco elementos nulos si no hay ningún usuario activo.
-
 \begin{listing}[H]
 \begin{minted}
 [
@@ -952,7 +950,7 @@ exports.checkInactiveUser = function () {
 
 exports.getInactiveUser = function() {
    userObj = JSON.parse(fs.readFileSync('./users/users.json', 'utf8'));
-   for (var i =0; i<userObj.users.length; i++){
+   for (var i = 0; i<userObj.users.length; i++){
        if (!userObj.users[i].isActive){
            setUserActive(i);
            return prepareToConnect(i);
@@ -964,6 +962,8 @@ exports.getInactiveUser = function() {
 \caption{Funciones externas de userController.js}
 % \label{usersControllerImports}
 \end{listing}
+
+La primera función, \emph{userInactive}, simplemente llama a la función interna \emph{setUserInactive}, por lo que es el servidor quien decide cuándo un usuario se marca como inactivo por medio del controlador de usuarios. Las dos funciones siguientes tienen un comportamiento muy similar. Mientras que la primera de ellas solo se encarga de comprobar si la base de datos tiene al menos un usuario libre, recorriendola e incrementando coincidencias de usuarios libres por medio de un contador, la segunda de ellas tiene el cometido de retornar el primer usuario libre que encuentre en su recorrido de la base de datos, retornando un vector de cinco elementos nulos si no hay ningún usuario activo.
 
 \subsubsection{Submódulo Servidor.} \label{serverSubmodule}
 
@@ -1172,25 +1172,19 @@ breaksymbolleft={}
 ]
 {javascript}
 app.post('/upload', function (req, res) {
-    
         var form = new formidable.IncomingForm();
-    
         form.uploadDir = path.join(__dirname, '/uploads');
-    
         form.on('file', function (field, file) {
             fs.rename(file.path, path.join(form.uploadDir, file.name), function () { });
         });
-    
         form.on('error', function (err) {
             console.log('An error has occured: \n' + err);
         });
-    
         form.on('end', function () {
             console.log("Upload successful.");
             setCreds();
             res.end('success');
         });
-    
         form.parse(req);
     });
 });
@@ -1265,7 +1259,10 @@ app.post('/onetimepassupload', function (req, res) {
 \end{listing}
 
 Estos tres manejadores de ruta son prácticamente idénticos en cuanto a que gestionan la llegada de archivos de audio al sistema, la única diferencia que existe entre ellos radica que la ruta \emph{/loggedupload} se utiliza cuando el archivo de audio proviene de una instancia de la \emph{Aplicación Web} cuyo usuario ya está conectado al servicio —esto es, tiene acceso a Internet—, por lo que no hace falta buscar unas credenciales inactivas nuevas para que le sean proporcionadas. Por ello, en el \emph{callback} asociado al evento de finalización de la transacción de archivos, el primer manejador de ruta (\emph{/upload}) llama a la función \emph{setCreds()} para preparar las credenciales que son enviadas con las peticiones a las rutas vistas anteriormente. La ruta \emph{/onetimepassupload} se encarga de los archivos de audio procedentes de los usuarios que han optado por la conexión de 30 minutos.
+
 Nótese también la diferencia entre la ruta de la petición HTTP de la primera ruta (\emph{upload}) y la ruta del directorio de destino en el sistema de archivos (\emph{uploads}), que puede llevar a conclusión debido a la similitud de los nombres.
+
+Este último manejador de ruta se encarga de comprobar si el usuario se ha conectado correctamente en cada caso, liberando el usuario de la base de datos si la conexión no ha podido realizarse y estableciendo una cuenta atrás de 32 minutos para el caso de los usuarios que hayan escogido la opción de 30 m, tras la cual se libera el usuario utilizado.
 
 \begin{listing}[H]
 \begin{minted}
@@ -1299,8 +1296,6 @@ app.post('/userconnected', function (req, res) {
 \caption{Comprobando si el usuario logró conectarse}
 % \label{usersControllerImports}
 \end{listing}
-
-Este último manejador de ruta se encarga de comprobar si el usuario se ha conectado correctamente en cada caso, liberando el usuario de la base de datos si la conexión no ha podido realizarse y estableciendo una cuenta atrás de 32 minutos para el caso de los usuarios que hayan escogido la opción de 30 m, tras la cual se libera el usuario utilizado.
 
 Tras implementar todos los manejadores, solo queda implementar la función que pone en marcha el servidor al llamar al archivo \emph{nodeserver.js} mediante el comando \emph{node}, que como ya habíamos visto se consigue en escasas líneas de código. La única diferencia radica en que en este TFG se utiliza la opción segura HTTPS, dado que los navegadores ya no aceptan que un servicio Web tome los datos de audio y ubicación del dispositivo si el contexto no es seguro. Los pasos para obtener un certificado y clave \acrshort{SSL} necesarios para implementar HTTPS se detallan a continuación.
 
@@ -1438,7 +1433,9 @@ Usando Bootstrap se logra un diseño responsivo. Esto es, la apariencia de la p�
 \label{responsiveDesign}
 \end{figure}
 
-El comportamiento de la aplicación Web aparte de su contenido visual vienen determinados por los \emph{scripts} incluidos en el archivo HTML justo antes de cerrar la etiqueta \emph{body}, que son analizados a continuación. Los archivos se encuentran en el directorio \emph{js} de nuestro árbol de directorios.
+El comportamiento de la aplicación Web aparte de su contenido visual vienen determinados por los \emph{scripts} incluidos en el archivo HTML justo antes de cerrar la etiqueta \emph{body}, que son analizados en el bloque de código \ref{HTMLScripts}. Los archivos se encuentran en el directorio \emph{js} de nuestro árbol de directorios.
+
+Los dos primeros \emph{scripts} incluidos son los \emph{frameworks} jQuery y Bootstrap, utilizados para facilitar la programación de peticiones AJAX y gestionar la interfaz de usuario, respectivamente, también se incluyó en la cabecera un archivo CSS de Bootstrap para funcionar junto al archivo JavaScript. Además, el \emph{framework} Bootstrap por sí mismo requiere de jQuery para funcionar correctamente.
 
 \begin{listing}[H]
 \begin{minted}
@@ -1455,10 +1452,10 @@ breaksymbolleft={}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-// ...
+<!-- ... -->
 </head>
 <body>
-// ...
+<!-- ... -->
 <script src="js/jquery-3.2.1.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/ChilliLibrary.js"></script>
@@ -1468,10 +1465,8 @@ breaksymbolleft={}
 </html>
 \end{minted}
 \caption{scripts importados en el documento HTML}
-% \label{usersControllerImports}
+\label{HTMLScripts}
 \end{listing}
-
-Los dos primeros \emph{scripts} incluidos son los \emph{frameworks} jQuery y Bootstrap, utilizados para facilitar la programación de peticiones AJAX y gestionar la interfaz de usuario, respectivamente, también se incluyó en la cabecera un archivo CSS de Bootstrap para funcionar junto al archivo JavaScript. Además, el \emph{framework} Bootstrap por sí mismo requiere de jQuery para funcionar correctamente.
 
 El archivo \emph{ChilliLibrary.js}, como ya se adelantó en el capítulo 2, se encarga de crear un objeto global denominado \emph{chilliController} en nuestra \emph{Aplicación Web}, mediante el cual podemos comunicarnos con CoovaChilli, gestionar el inicio y cierre de sesiones y consultar la información de contabilidad.
 
@@ -1490,11 +1485,9 @@ breaksymbolleft={}
 ]
 {javascript}
 chilliController.ssl = true;
-
 function connect(username, password){
     chilliController.logon(username, password);
 }
-
 function disconnect(userCreds){
    liberateUser(userCreds);
    chilliController.logoff();
@@ -1507,37 +1500,34 @@ function disconnect(userCreds){
 La función \emph{liberateUser()} se analiza en el apartado \ref{script.js} dedicado al archivo \emph{scripts.js}.
 Además, asocia funciones locales a eventos del objeto \emph{chilliController} y se encarga de consultar el estado del mismo al ejecutarse por primera vez.
 
-\begin{listing}[H]
-\begin{minted}
-[
-frame=lines,
-framesep=2mm,
-baselinestretch=1.2,
-bgcolor=lightgray,
-fontsize=\footnotesize,
-breaklines=true,
-breaksymbolleft={}
-]
-{javascript}
-chilliController.onError  = handleErrors;
-chilliController.onUpdate = updateUI
-// when the reply is ready, this handler function is called
-function updateUI( cmd ) {
-    console.log('You called the method ' + cmd +
-        '\n Your current state is = ' + chilliController.clientState);
-}
-// If an error occurs, this handler will be called instead
-function handleErrors ( code ) {
-    console.log( 'The last contact with the Controller failed. Error code = ' + code );
-}
-//  finally, get current state
-chilliController.refresh();
-\end{minted}
-\caption{Funciones adicionales de chilliController.js}
-% \label{usersControllerImports}
-\end{listing}
+%\begin{listing}[H]
+%\begin{minted}
+%[
+%frame=lines,
+%framesep=2mm,
+%baselinestretch=1.2,
+%bgcolor=lightgray,
+%fontsize=\footnotesize,
+%breaklines=true,
+%breaksymbolleft={}
+%]
+%{javascript}
+%chilliController.onError  = handleErrors;
+%chilliController.onUpdate = updateUI
+%function updateUI( cmd ) {
+%    console.log('You called the method ' + cmd +
+%        '\n Your current state is = ' + chilliController.clientState);
+%}
+%function handleErrors ( code ) {
+%    console.log( 'The last contact with the Controller failed. Error code = ' + code );
+%}
+%chilliController.refresh();
+%\end{minted}
+%\caption{Funciones adicionales de chilliController.js}
+%% \label{usersControllerImports}
+%\end{listing}
 
-\paragraph{El archivo \emph{script.js}} \label{script.js} ~\\
+\paragraph{El fichero \emph{script.js}} \label{script.js} ~\\
 
 La funcionalidad de la Aplicación Web viene determinada en gran medida por este archivo JavaScript, que hace uso de los siguientes variables y métodos.
 
@@ -1555,18 +1545,9 @@ breaksymbolleft={}
 {javascript}
 'use strict';
 
-let id = val => document.getElementById(val),
-    agreeBtn = id('agreeBtn'),
-    recordBtn = id('recordBtn'),
-    recordBtn30min = id('recordBtn30min'),
-    alertsArea = id('alertsArea'),
-    failedRecordTries,
-    stream,
-    recorder,
-    chunks,
-    media,
-    serverStatus,
-    locationTime;
+let id = val => document.getElementById(val);
+let agreeBtn = id('agreeBtn'), recordBtn = id('recordBtn'), recordBtn30min = id('recordBtn30min'), alertsArea = id('alertsArea');
+let failedRecordTries, stream, recorder, chunks, media, serverStatus, locationTime;
 
 var userCreds = {
     id: -1,
@@ -1845,6 +1826,8 @@ function stopRecording() {
 
 Como también puede verse en el último condicional de la función \emph{agreeBtn.onclick}, la anterior al último bloque de código, la función que se llamaría al final de cada grabación depende de si el usuario del servicio tiene unas credenciales asignadas o no en la variable \emph{userCreds} de su instancia de la aplicación Web o si, por el contrario, solo optó por conectarse durante 30 minutos. Estas tres funciones son muy similares en cuanto a que preparan el archivo para su envío al servidor mediante AJAX y lo renombran según los datos de ubicación y tiempo obtenidos y las opciones de audio, pero las rutas son diferentes y solo se intenta obtener credenciales en el caso de que no existan ya unas asignadas.
 
+Nótese que en la segunda función, \emph{loggedUserSaveAndSend()}, aparte de variar la ruta, no se llama a la función \emph{receiveResponse()} al finalizar la transacción con éxito. En el caso de la primera función, el servidor habría guardado en su variable \emph{creds} las credenciales a utilizar, por lo que la \emph{Aplicación Web} realiza otra petición AJAX para obtenerlas. Además, la tercera función, \emph{saveAndSendOneTimePass}, no llama al manejador de errores si falla el envío, sino que directamente avisa al usuario de el error para que intente el proceso de conexión de nuevo.
+
 \begin{listing}[H]
 \begin{minted}
 [
@@ -1861,7 +1844,6 @@ function saveAndSend() {
     let blob = new Blob(chunks, { type: media.type });
     var fd = new FormData();
     fd.append('blob', blob, `${locationTime}${media.ext}`);
-
     $.ajax({
         url: '/upload',
         type: 'POST',
@@ -1869,12 +1851,10 @@ function saveAndSend() {
         processData: false,
         contentType: false,
         success: function (data) {
-            console.log('[Normal] upload successful! ' + data);
             receiveResponse();
             setAlert("success");
         },
         error: function (data) {
-            console.log('[Normal] upload error ' + data);
             errorHandler();
         }
     });
@@ -1900,7 +1880,6 @@ function loggedUserSaveAndSend() {
     let blob = new Blob(chunks, { type: media.type });
     var fd = new FormData();
     fd.append('blob', blob, `${locationTime}${media.ext}`);
-
     $.ajax({
         url: '/loggedupload',
         type: 'POST',
@@ -1908,11 +1887,9 @@ function loggedUserSaveAndSend() {
         processData: false,
         contentType: false,
         success: function (data) {
-            console.log('[Logged] upload successful! ' + data);
             setAlert("success");
         },
         error: function (data) {
-            console.log('[Logged] upload error ' + data);
             errorHandler();
         }
     });
@@ -1938,7 +1915,6 @@ function saveAndSendOneTimePass() {
     let blob = new Blob(chunks, { type: media.type });
     var fd = new FormData();
     fd.append('blob', blob, `${locationTime}${media.ext}`);
-
     $.ajax({
         url: '/onetimepassupload',
         type: 'POST',
@@ -1946,12 +1922,10 @@ function saveAndSendOneTimePass() {
         processData: false,
         contentType: false,
         success: function (data) {
-            console.log('[One-time] upload successful! ' + data);
             receiveResponse();
             setAlert("successOneTime");
         },
         error: function (data) {
-            console.log('[One-time] upload error ' + data);
             setAlert("error");
         }
     });
@@ -1961,7 +1935,7 @@ function saveAndSendOneTimePass() {
 % \label{usersControllerImports}
 \end{listing}
 
-Nótese que en la segunda función, \emph{loggedUserSaveAndSend()}, aparte de variar la ruta, no se llama a la función \emph{receiveResponse()} al finalizar la transacción con éxito. En el caso de la primera función, el servidor habría guardado en su variable \emph{creds} las credenciales a utilizar, por lo que la \emph{Aplicación Web} realiza otra petición AJAX para obtenerlas. Además, la tercera función, \emph{saveAndSendOneTimePass}, no llama al manejador de errores si falla el envío, sino que directamente avisa al usuario de el error para que intente el proceso de conexión de nuevo.
+Al tener éxito en esta petición las credenciales quedan almacenadas en la variable local \emph{userCreds}, por lo que solo queda conectarse con ellas por medio la función \emph{connect()} del objeto \emph{chilliController}, esperar un tiempo para que se realice la conexión y notificar al servidor del resultado del intento.
 
 \begin{listing}[H]
 \begin{minted}
@@ -1990,8 +1964,6 @@ function receiveResponse() {
 \caption{Recibiendo credenciales del servidor}
 % \label{usersControllerImports}
 \end{listing}
-
-Al tener éxito en esta petición las credenciales quedan almacenadas en la variable local \emph{userCreds}, por lo que solo queda conectarse con ellas por medio la función \emph{connect()} del objeto \emph{chilliController}, esperar un tiempo para que se realice la conexión y notificar al servidor del resultado del intento.
 
 \begin{listing}[H]
 \begin{minted}
@@ -2058,7 +2030,16 @@ function errorHandler() {
 % \label{usersControllerImports}
 \end{listing}
 
-Por último, la \emph{Aplicación Web} tiene un campo de alertas que notifican al usuario de la recepción de archivos de audio o errores durante las mismas mediante la función \emph{setAlert()}, llamada por \emph{errorHandler()} otras funciones de este archivo ya expuestas anteriormente.
+Por último, la \emph{Aplicación Web} tiene un campo de alertas que notifican al usuario de la recepción de archivos de audio o errores durante las mismas mediante la función \emph{setAlert()}, llamada por \emph{errorHandler()} otras funciones de este archivo ya expuestas anteriormente. Las alertas siguen la estética del resto de la aplicación web, puede verse un ejemplo de alerta por fichero enviado en la Figura \ref{alertaBootsOK} y su mecanismo de funcionamiento en el bloque de código \ref{Alertas}.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=0.5\linewidth]{./5_AnalisisOrganico/Img/alertaBoots.png}
+\end{center}
+\caption{Alerta de la Aplicación Web al subir un fichero de audio con éxito}
+% \source{http://coova.github.io/CoovaChilli/}
+\label{alertaBootsOK}
+\end{figure}
 
 \begin{listing}[H]
 \begin{minted}
@@ -2100,5 +2081,5 @@ function setAlert(info) {
 }
 \end{minted}
 \caption{Sistema de alertas para informar al usuario}
-% \label{usersControllerImports}
+\label{Alertas}
 \end{listing}
