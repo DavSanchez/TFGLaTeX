@@ -691,7 +691,7 @@ Para implantar dos tipos de usuarios, el caso de este TFG, donde hay un conjunto
 \begin{center}
 \includegraphics[width=0.75\linewidth]{./5_AnalisisOrganico/Img/daloBatchUsersMan.png}
 \end{center}
-\caption{Vista de la página de RADUIS Session-timeout de daloRADIUS}
+\caption{Vista de la página de RADIUS Session-timeout de daloRADIUS}
 % \source{http://coova.github.io/CoovaChilli/}
 \label{daloBatchUsersMan}
 \end{figure}
@@ -728,7 +728,7 @@ Se ha implementado el módulo de usuarios completo en un único directorio. En l
 \begin{center}
 \includegraphics[width=0.75\linewidth]{./5_AnalisisOrganico/Img/repoGitHub.png}
 \end{center}
-\caption{Imagen de la estructura del directorio en el que se incluye el código programado para el módulo Usuario}
+\caption{Estructura del directorio en el que se incluye el código programado para el módulo Usuario}
 % \source{http://coova.github.io/CoovaChilli/}
 \label{repoGitHub}
 \end{figure}
@@ -1057,6 +1057,8 @@ La principal es, lógicamente, la petición HTTP correspondiente a la raíz del 
 
 La Aplicación Web servida tiene que tener un medio para saber si la reserva de usuarios del servicio está completa, no pudiendo prestar el servicio a ningún usuario más. Para ello se implementa un manejador de ruta en \emph{/serverstatus} que llama a las funciones correspondientes del controlador de usuarios, tal y como se ve en el siguiente código. El cliente contacta con el servidor para conocer esta información por medio de una petición GET.
 
+Nótese que el condicional utilizado sería \emph{true} si el contador utilizado en la función del controlador de usuarios \emph{checkInactiveUser()} tiene un valor distinto de cero:
+
 \begin{listing}[H]
 \begin{minted}
 [
@@ -1081,7 +1083,7 @@ app.get('/serverstatus', function (req, res) {
 % \label{usersControllerImports}
 \end{listing}
 
-Nótese que el condicional utilizado sería \emph{true} si el contador utilizado en la función del controlador de usuarios \emph{checkInactiveUser()} tiene un valor distinto de cero:
+La siguiente ruta a \emph{/creds} se encarga de pasar a la \emph{Aplicación Web} el valor actual de la variable \emph{creds} implementada al principio del código fuente del servidor. El valor de dicho objeto cambiará, obteniendo las credenciales de un usuario recién marcado como activo del controlador de usuarios, cuando un usuario que no esté conectado al servicio envíe un fichero de audio por primera vez al servidor.
 
 \begin{listing}[H]
 \begin{minted}
@@ -1104,7 +1106,7 @@ app.get('/creds', function (req, res) {
 % \label{usersControllerImports}
 \end{listing}
 
-Esta ruta a \emph{/creds} se encarga de pasar a la \emph{Aplicación Web} el valor actual de la variable \emph{creds} implementada al principio del código fuente del servidor. El valor de dicho objeto cambiará, obteniendo las credenciales de un usuario recién marcado como activo del controlador de usuarios, cuando un usuario que no esté conectado al servicio envíe un fichero de audio por primera vez al servidor.
+También hace falta una forma de saber que un usuario de la Aplicación Web se ha desconectado. Cuando esto ocurre la aplicación Web manda un aviso al servidor por medio de una petición POST a la ruta \emph{/userlogoff}, con lo que el servidor hace que el controlador de usuarios marque el usuario en cuestión como desconectado en la base de datos.
 
 \begin{listing}[H]
 \begin{minted}
@@ -1119,7 +1121,7 @@ breaksymbolleft={}
 ]
 {javascript}
 app.post('/userlogoff', function (req, res) {
-    if (req.body.oneTimePass === false) {
+    if (req.body.oneTimePass == "false"){
         userController.userInactive(req.body.id);
         res.end('success');
     }
@@ -1129,7 +1131,7 @@ app.post('/userlogoff', function (req, res) {
 % \label{usersControllerImports}
 \end{listing}
 
-También hace falta una forma de saber que un usuario de la Aplicación Web se ha desconectado. Cuando esto ocurre la aplicación Web manda un aviso al servidor por medio de una petición POST a la ruta \emph{/userlogoff}, con lo que el servidor hace que el controlador de usuarios marque el usuario en cuestión como desconectado en la base de datos.
+A continuación se detalla la función \emph{setCreds()}, que será de vital importancia para los siguientes manejadores de ruta.
 
 \begin{listing}[H]
 \begin{minted}
@@ -1155,9 +1157,9 @@ function setCreds() {
 % \label{usersControllerImports}
 \end{listing}
 
-Esta función tiene de cometido modificar los valores del objeto \emph{creds}, que pasan a contener las credenciales del usuario enviado desde el controlador de usuarios. Existe además una función similar a esta llamada \emph{setCredsOneTime()} que se encarga de la misma tarea pero utilizando el controlador correspondiente a los usuarios con una conexión única de 30 minutos.
+Esta función tiene de cometido modificar los valores del objeto \emph{creds}, que pasan a contener las credenciales del usuario enviado desde el controlador de usuarios, almacenadas previamente en la variable local \emph{data}. Existe además una función similar a esta llamada \emph{setCredsOneTime()} que se encarga de la misma tarea pero utilizando el controlador correspondiente a los usuarios con una conexión única de 30 minutos.
 
-A continuación implantamos los manejadores de ruta más relevantes del \emph{Servidor}, los que gestionan la llegada de ficheros de audio y los guardan en el directorio \emph{uploads} del sistema de ficheros:
+Una vez vistas las funciones \emph{setCreds()} y \emph{setCredsOneTime()} se detallan los manejadores de ruta más relevantes del \emph{Servidor}, los que gestionan la llegada de ficheros de audio y los guardan en el directorio \emph{uploads} del sistema de ficheros.
 
 \begin{listing}[H]
 \begin{minted}
@@ -1278,14 +1280,13 @@ breaksymbolleft={}
 {javascript}
 app.post('/userconnected', function (req, res) {
     if (req.body.connected != 1) {
-        if (req.body.oneTimePass == true) {
+        if (req.body.oneTimePass == "true") {
             userControllerOneTime.userInactiveOneTime(req.body.id);
-
         } else {
             userController.userInactive(req.body.id);
         }
         res.end('success');
-    } else if (req.body.oneTimePass == true) {
+    } else if (req.body.oneTimePass == "true") {
         setTimeout(function () {
             userControllerOneTime.userInactiveOnetime(req.body.id);
         }, 1920000);
