@@ -30,7 +30,7 @@ En cuanto al segundo requisito, se plantea que las únicas interacciones que ten
 
 Para alcanzar el tercer requisito se trata de aumentar la usabilidad del servicio más allá de capturar un fragmento de sonido, obteniendo también su ubicación y una marca de tiempo para poder hacer análisis estadísticos, mapeos de niveles de señal 3D en función del tiempo, etc.
 
-El cuarto requisito ha surgido a partir de las pruebas realizadas y el desarrollo iterativo e incremental del sistema. Esto es, inicialmente se especificó únicamente un modo de conexión a Internet debiendo el cliente Web mantener abierta la pestaña del navegador Web en la que se proporcionó el permiso para acceder al micrófono. La aplicación javascript de esa pestaña capturaba un fragmento de audio de 5 segundos cada 3 minutos. La ventaja es que la ofrece al usuario una conexión más estable. La desventaja es que retiene el control del micrófono en modo exclusivo para esa aplicación Javascript. Haciendo desarrollos incrementales se detectó este comportamiento a priori no explícito, por lo que se observó que este comportamiento no sería adecuado para aquellos usuarios que quisieran hacer uso del micrófono a la vez que está conectado a Internet (por ejemplo, mensajería de audio vía aplicaciones de mensajería instantánea). Por ello, en segundo lugar se especificó como requisito previo que pudiera existir un nuevo modo de conexión a Internet. Esto es, ofrecer un tiempo de conexión fijo de 30 minutos a cambio de un único archivo de audio inicial, tras lo cual podría cerrarse la pestaña del navegador de la Aplicación Web y hacer uso libre del micrófono del dispositivo durante este tiempo.
+El cuarto requisito ha surgido a partir de las pruebas realizadas y el desarrollo iterativo e incremental del sistema. Esto es, inicialmente se especificó únicamente un modo de conexión a Internet debiendo el cliente Web mantener abierta la pestaña del navegador Web en la que se proporcionó el permiso para acceder al micrófono. La aplicación javascript de esa pestaña capturaba un fragmento de audio de 5 segundos cada 3 minutos. La ventaja es que la ofrece al usuario una conexión más estable. La desventaja es que retiene el control del micrófono en modo exclusivo para esa aplicación Javascript. Haciendo desarrollos incrementales se detectó este comportamiento a priori no explícito, por lo que se observó que este comportamiento no sería adecuado para aquellos usuarios que quisieran hacer uso del micrófono a la vez que está conectado a Internet (por ejemplo, mensajería de audio vía aplicaciones de mensajería instantánea). Por ello, en segundo lugar se especificó como requisito previo que pudiera existir un nuevo modo de conexión a Internet. Esto es, ofrecer un tiempo de conexión fijo de 30 minutos a cambio de un único fichero de audio inicial, tras lo cual podría cerrarse la pestaña del navegador de la Aplicación Web y hacer uso libre del micrófono del dispositivo durante este tiempo.
 
 \subsection{Análisis previo}
 
@@ -49,12 +49,12 @@ El sistema está compuesto de varios elementos que interactúan entre sí. A con
 \end{itemize}
 \item \emph{Aplicaciones software desarrolladas desde cero}:
 \begin{itemize}
-\item \emph{Portal cautivo}: enlaza a los usuarios con el control de acceso mediante un sistema de control de usuarios intermedio, realizando también la tarea de captura y almacenamiento de archivos de audio procedentes de los micrófonos de los dispositivos, que es lo que da sentido al sistema global. Su funcionalidad se detalla a continuación. Su funcionalidad básica es:
+\item \emph{Portal cautivo}: enlaza a los usuarios con el control de acceso mediante un sistema de control de usuarios intermedio, realizando también la tarea de captura y almacenamiento de ficheros de audio procedentes de los micrófonos de los dispositivos, que es lo que da sentido al sistema global. Su funcionalidad se detalla a continuación. Su funcionalidad básica es:
 \begin{itemize}
 \item \emph{Servidor Web}: implantado con Node.js, se encargaría de lo siguiente:
 \begin{itemize}
 \item Servir la aplicación Web a los usuarios que se conecten a la red.
-\item Recibir y almacenar archivos de audio de los usuarios conectados.
+\item Recibir y almacenar ficheros de audio de los usuarios conectados.
 \item Llevar un control de los usuarios a los que se ha dado acceso a Internet.
 \item Informar a los clientes del estado del servidor.
 \end{itemize}
@@ -109,7 +109,7 @@ La \emph{Aplicación Web} contiene los datos del portal cautivo al que se rediri
 \item Adquirir los permisos de ubicación y captura de audio del usuario.
 \item Comprobar el estado del servidor para evitar hacer el proceso si este está lleno (haciendo imposible la conexión al servicio).
 \item Capturar una muestra corta de dicho audio una única vez o a intervalos regulares, dependiendo del modo de conexión escogido, y enviarla al servidor.
-\item Recibir las credenciales de usuario enviadas por el servidor, utilizando como nombre de archivo las coordenadas y la marca de tiempo de la última consulta de geolocalización.
+\item Recibir las credenciales de usuario enviadas por el servidor, utilizando como nombre de fichero las coordenadas y la marca de tiempo de la última consulta de geolocalización.
 \item Gestionar la conexión de los usuarios con las credenciales recibidas, todo ello por medio de la configuración y las funciones de la biblioteca CoovaChilli y su controlador.
 \item Además, está programada para cerrar la conexión si su pestaña del navegador se cierra o se recarga de alguna forma.
 \end{itemize}
@@ -132,14 +132,14 @@ El \emph{Servidor} se encarga de enviar la Aplicación Web en forma de HTML est�
 \begin{itemize}
 \item Servir la Aplicación Web.
 \item Comprobar el estado del servidor comunicándose con el \emph{Control de Usuarios}, informando a la \emph{Aplicación Web} si el servicio está disponible o por el contrario está lleno, con lo que no podría prestarse el servicio.
-\item Si recibe un archivo de audio de un cliente que aún no tiene credenciales asignadas, pide al \emph{Control de Usuarios} unas credenciales que se encuentren disponibles en su base de datos y las almacena a la espera de que la \emph{Aplicación Web} las pida.
+\item Si recibe un fichero de audio de un cliente que aún no tiene credenciales asignadas, pide al \emph{Control de Usuarios} unas credenciales que se encuentren disponibles en su base de datos y las almacena a la espera de que la \emph{Aplicación Web} las pida.
 \item Enviar las credenciales almacenadas a la \emph{Aplicación Web}, informando al \emph{Control de Usuarios} para que marque dichas credenciales como utilizadas.
 \item Recibir notificaciones de desconexión de usuarios por parte de la \emph{Aplicación Web} y pasar dicha información al \emph{Control de Usuarios} para marcar un usuario como libre en la base de datos.
 \end{itemize}
 
-Para llevar a cabo todas estas tareas se utiliza Node.js, los módulos de npm \emph{Express} para la funcionalidad de servidor, \emph{Formidable} para la gestión de archivos de audio entrantes. \emph{Body-Parser} para leer determinadas variables procedentes de la Aplicación Web y los módulos del núcleo de Node.js, Fs para acceder al sistema de archivos y escribir en él y Path para trabajar con las rutas de archivos y directorios.
+Para llevar a cabo todas estas tareas se utiliza Node.js, los módulos de npm \emph{Express} para la funcionalidad de servidor, \emph{Formidable} para la gestión de ficheros de audio entrantes. \emph{Body-Parser} para leer determinadas variables procedentes de la Aplicación Web y los módulos del núcleo de Node.js, Fs para acceder al sistema de ficheros y escribir en él y Path para trabajar con las rutas de ficheros y directorios.
 
-El \emph{Control de Usuarios} se encarga de gestionar los usuarios activos e inactivos por medio de una base de datos sencilla, implementada con dos archivos JSON, uno para cada modo de conexión, y dos archivos JavaScript que controlan a cada archivo JSON por separado actuando como módulos Node.js del \emph{Servidor}. Si la cantidad de usuarios posible se hiciera lo suficientemente grande, este módulo y su archivo JSON podrían ser reemplazados por una aplicación de base de datos más potente (MySQL, MongoDB...). Los archivos base de datos JSON constan de un \emph{array} de usuarios, cada uno de ellos con los siguientes atributos:
+El \emph{Control de Usuarios} se encarga de gestionar los usuarios activos e inactivos por medio de una base de datos sencilla, implementada con dos ficheros JSON, uno para cada modo de conexión, y dos ficheros JavaScript que controlan a cada fichero JSON por separado actuando como módulos Node.js del \emph{Servidor}. Si la cantidad de usuarios posible se hiciera lo suficientemente grande, este módulo y su fichero JSON podrían ser reemplazados por una aplicación de base de datos más potente (MySQL, MongoDB...). Los ficheros base de datos JSON constan de un \emph{array} de usuarios, cada uno de ellos con los siguientes atributos:
 
 \begin{itemize}
 \item \emph{id}: un número entero igual o superior a 0 que actúa como identificador interno de usuario.
@@ -148,17 +148,17 @@ El \emph{Control de Usuarios} se encarga de gestionar los usuarios activos e ina
 \item \emph{isActive}: una variable booleana, que tiene la asignación \emph{true} si el usuario está ocupado y \emph{false} en caso contrario.
 \end{itemize}
 
-Las funciones de los archivos JavaScript que controlan al archivo JSON anterior son:
+Las funciones de los ficheros JavaScript que controlan al fichero JSON anterior son:
 
 \begin{itemize}
-\item Buscar un usuario inactivo en el archivo de base de datos, devolviendo el identificador y las credenciales de dicho usuario si lo hubiera.
+\item Buscar un usuario inactivo en el fichero de base de datos, devolviendo el identificador y las credenciales de dicho usuario si lo hubiera.
 \item Asignar usuarios como activos o inactivos escribiendo en el atributo \emph{isActive} correspondiente.
 \item Hacer externas las credenciales del usuario seleccionado para que el \emph{Servidor} pueda accederlas y hacer sus operaciones.
 \end{itemize}
 
-La biblioteca \emph{CoovaChilli} es un archivo JavaScript denominado \verb+ChilliController.js+, proporcionado por la instalación de CoovaChilli en el directorio \verb+/etc/chilli/www/+. Se encarga de enlazar la Aplicación Web con la interfaz JSON de CoovaChilli creando el objeto global \emph{chilliController}, que puede utilizar los métodos descritos en el capítulo anterior para gestionar la conexión y desconexión de usuarios al servicio.
+La biblioteca \emph{CoovaChilli} es un fichero JavaScript denominado \emph{ChilliController.js}, proporcionado por la instalación de CoovaChilli en el directorio \emph{/etc/chilli/www/}. Se encarga de enlazar la Aplicación Web con la interfaz JSON de CoovaChilli creando el objeto global \emph{chilliController}, que puede utilizar los métodos descritos en el capítulo anterior para gestionar la conexión y desconexión de usuarios al servicio.
 
-Por último, el \emph{Controlador CoovaChilli} es un archivo JavaScript de configuración, que modifica los atributos por defecto del objeto \emph{chilliController} creado por la biblioteca CoovaChilli y enlaza los métodos de dicho objeto con acciones concretas de la Aplicación Web.
+Por último, el \emph{Controlador CoovaChilli} es un fichero JavaScript de configuración, que modifica los atributos por defecto del objeto \emph{chilliController} creado por la biblioteca CoovaChilli y enlaza los métodos de dicho objeto con acciones concretas de la Aplicación Web.
 
 \subsubsection{Módulo Control de Acceso}
 Este módulo está basado en instalaciones y configuraciones de \emph{software} concernientes la gestión interna del control de acceso al servicio. Puede dividirse en tres submódulos: \emph{CovaChilli}, \emph{Servidor RADIUS} e \emph{Interfaz Web de control de RADIUS}. Hemos preferido denominar a los dos primeros submódulos con los nombres originales del software utilizado por claridad. La funcionalidad que aprovechamos de estas aplicaciones es la que tienen, en particular, para este TFG. La tarea aquí básicamente es encontrar, tarea no sencilla, la instalación y configuración adecuada de estos submódulos. El tercer submódulo es una implantación propia que llevó mucha dificultad debido a la complejidad de la conexión entre estos submódulos. En la Figura \ref{moduloControlAcceso} se muestra un diagrama de estos submódulos.
@@ -167,7 +167,7 @@ Este módulo está basado en instalaciones y configuraciones de \emph{software} 
 
 El \emph{Servidor RADIUS} es el gestor de AAA requerido por CoovaChilli para funcionar, aunque es posible implantar otro tipo de servicios para llevar a cabo esta gestión, en este TFG se ha utilizado la aplicación \emph{FreeRADIUS}. En este submódulo también se incluye todo aquel \emph{software} que sea obligatorio para que el servidor funcione, como las instalaciones de bases de datos y su respectiva configuración.
 
-Por supuesto, para que el sistema pueda funcionar, la base de usuarios del \emph{servidor RADIUS} y la existente en los archivos JSON del submódulo \emph{Controlador de Usuarios}, pertenecientes al módulo de de \emph{Usuarios}, ha de ser la misma.
+Por supuesto, para que el sistema pueda funcionar, la base de usuarios del \emph{servidor RADIUS} y la existente en los ficheros JSON del submódulo \emph{Controlador de Usuarios}, pertenecientes al módulo de de \emph{Usuarios}, ha de ser la misma.
 
 Opcionalmente, puede instalarse un administrador gráfico del Servidor RADIUS para hacer más intuitiva su gestión. En este caso se incluye el submódulo \emph{Interfaz Web de control RADIUS}, representada por una instalación del administrador Web daloRADIUS funcionando sobre el servidor Web \emph{NGINX}.
 

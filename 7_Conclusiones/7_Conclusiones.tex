@@ -25,7 +25,7 @@ Existen varios aspectos a tener en cuenta a la hora de llevar a cabo este proyec
 
 %\subsubsection{Replicabilidad}
 
-En este Trabajo Fin de Grado se detalla paso a paso cómo conseguir el producto final, descargando y configurando todo el software y realizando el código desde cero. Sin embargo, el hecho de que el sistema esté implementado sobre una Raspberry Pi 3 permite replicar el sistema con gran facilidad. Al estar el sistema operativo en su totalidad almacenado en una tarjeta MicroSD, puede obtenerse un archivo imagen de esta y luego clonarse en todas las tarjetas de este tipo que se desee, obteniendo múltiples copias del sistema en las que solo haría falta modificar unos pocos archivos y configuraciones (como el archivo \emph{config} de CoovaChilli o la contraseña del usuario \emph{root} de Raspbian) para adecuarlo a las necesidades específicas de la implementación.
+En este Trabajo Fin de Grado se detalla paso a paso cómo conseguir el producto final, descargando y configurando todo el software y realizando el código desde cero. Sin embargo, el hecho de que el sistema esté implementado sobre una Raspberry Pi 3 permite replicar el sistema con gran facilidad. Al estar el sistema operativo en su totalidad almacenado en una tarjeta MicroSD, puede obtenerse un fichero imagen de esta y luego clonarse en todas las tarjetas de este tipo que se desee, obteniendo múltiples copias del sistema en las que solo haría falta modificar unos pocos ficheros y configuraciones (como el fichero \emph{config} de CoovaChilli o la contraseña del usuario \emph{root} de Raspbian) para adecuarlo a las necesidades específicas de la implementación.
 
 %\subsubsection{Privacidad}
 
@@ -35,7 +35,7 @@ Otra opción, que queda fuera del ámbito de este trabajo, es el cifrado de los 
 
 %\subsubsection{Procesado del audio obtenido}
 
-Aunque en un principio se deseaba entrar en este aspecto, las restricciones de tiempo hicieron imposible dedicar recursos a los posibles procesados de los archivos de audio generados por el sistema. A continuación se mencionan algunos de estos posibles usos.
+Aunque en un principio se deseaba entrar en este aspecto, las restricciones de tiempo hicieron imposible dedicar recursos a los posibles procesados de los ficheros de audio generados por el sistema. A continuación se mencionan algunos de estos posibles usos.
 
 \begin{itemize}
 \item \emph{Mapeo de nivel de audio}: uno de los usos más inmediatos que son posibles en este sistema es el de realizar mapas de ruido en el área de cobertura del punto de acceso utilizando los ficheros generados y la información de ubicación que les acompaña. La información de estos mapas de nivel puede volverse más fiable si existen varios puntos de acceso que tomen medidas de dispositivos cliente cercanos. En estos casos, sería conveniente también obtener la información del dispositivo que ha grabado el audio para poder aplicar las correcciones y ponderaciones pertinentes a la muestra.

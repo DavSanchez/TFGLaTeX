@@ -14,7 +14,7 @@ Una vez revisado el análisis previo y funcional del sistema de sensado móvil c
 Una vez instalado Raspbian y arrancada con éxito la Raspberry Pi 3 (explicado en el Apéndice \ref{ApendiceA}), es necesario seguir configurando el ecosistema e instalando el \emph{software} necesario, idealmente mediante el gestor de paquetes y manejador de dependencias \emph{apt-get} y trabajando en todo momento desde el terminal \emph{bash}. Esto prepara el \emph{software} de los módulos \emph{Control de Red} y \emph{Control de Acceso}. Se detalla el procedimiento llevado a cabo en el mismo orden en el que se implementó en la práctica para que sea reproducible de forma sencilla la instalación de un nuevo sistema.
 
 \subsubsection{Ajustes e instalaciones preliminares}
-Una de las primeras configuraciones consiste en modificar el archivo \emph{/etc/network/interfaces} para introducir los detalles de nuestra red inalámbrica. Este paso prepara el submódulo \emph{Configuración de Interfaces Red} perteneciente al módulo de \emph{Control de Red}. En este TFG se ha utilizado la siguiente configuración de red para la interfaz inalámbrica \emph{wlan0}, que recordamos es la interfaz inalámbrica a la que se conectan eventualmente los usuarios del servicio.
+Una de las primeras configuraciones consiste en modificar el fichero \emph{/etc/network/interfaces} para introducir los detalles de nuestra red inalámbrica. Este paso prepara el submódulo \emph{Configuración de Interfaces Red} perteneciente al módulo de \emph{Control de Red}. En este TFG se ha utilizado la siguiente configuración de red para la interfaz inalámbrica \emph{wlan0}, que recordamos es la interfaz inalámbrica a la que se conectan eventualmente los usuarios del servicio.
 
 \begin{listing}[H]
 \begin{minted}
@@ -41,7 +41,7 @@ iface wlan0 inet static
 \label{InterfacesConf}
 \end{listing}
 
-La última línea, \emph{post-up echo 1 > /proc/sys/net/ipv4/ip\_forward}, es la activación del \emph{flag} del \emph{kernel} que habilita el paso de datagramas IP tratados en la descripción del módulo de Control de Red. Si se prefiere utilizar esta orden de otra forma y así asegurarse de que el \emph{flag} queda activado también puede editarse el archivo \emph{/etc/sysctl.conf}, quitando el carácter de comentario (\emph{\#}) en la línea \emph{net.ipv4.ip\_forward=1} y reiniciando el servicio de red mediante la siguiente orden: \emph{/etc/init.d/networking restart}.
+La última línea, \emph{post-up echo 1 > /proc/sys/net/ipv4/ip\_forward}, es la activación del \emph{flag} del \emph{kernel} que habilita el paso de datagramas IP tratados en la descripción del módulo de Control de Red. Si se prefiere utilizar esta orden de otra forma y así asegurarse de que el \emph{flag} queda activado también puede editarse el fichero \emph{/etc/sysctl.conf}, quitando el carácter de comentario (\emph{\#}) en la línea \emph{net.ipv4.ip\_forward=1} y reiniciando el servicio de red mediante la siguiente orden: \emph{/etc/init.d/networking restart}.
 
 Una vez configurada la interfaz inalámbrica pueden instalarse los paquetes necesarios para preparar los módulos. Se incluyen algunos paquetes previos necesarios para la instalación posterior de \emph{software}, como herramientas para transferencia de datos (\emph{libcurl}), utilidades de red manejadas por CoovaChilli (\emph{iptables}), compiladores (\emph{gcc}) y gestores de dependencias para los mismos (\emph{make}). Recordamos que esta instalación debe ser realizada por el superusuario, por lo que se debe entrar en \emph{root} ejecutando primero la orden \emph{sudo su} o por el contrario utilizar la orden previa \emph{sudo} para cada orden a introducir. Además, pueden instalarse todos los paquetes necesarios con una sola orden escribiendo todos los nombres seguidos después de la orden \emph{apt-get install} y forzando una respuesta afirmativa a todas las preguntas que nos realice el terminal al instalar los paquetes usando los modificadores \emph{-y --force-yes}.
 
@@ -154,13 +154,13 @@ mysql -u root -p CONTRASEÑA radius < /etc/freeradius/sql/mysql/nas.sql
 \label{RADIUSdatabaseScripts}
 \end{listing}
 
-Como opción antes de ejecutar estas órdenes, y para incrementar la seguridad, se puede modificar la contraseña por defecto de FreeRADIUS para operar en la base de datos (\emph{radpass}) en el archivo \emph{/etc/freeradius/sql/mysql/admin.sql}.
+Como opción antes de ejecutar estas órdenes, y para incrementar la seguridad, se puede modificar la contraseña por defecto de FreeRADIUS para operar en la base de datos (\emph{radpass}) en el fichero \emph{/etc/freeradius/sql/mysql/admin.sql}.
 
-El siguiente paso es habilitar el soporte de SQL en el archivo de configuración de FreeRADIUS y como opción activar los contadores diarios. Para ello se debe editar el archivo ubicado en \emph{/etc/freeradius/radiusd.conf} y eliminando el carácter de comentario (\emph{\#}) de las líneas \emph{\$INCLUDE sql.conf}, \emph{\$INCLUDE sql/mysql/counter.conf} y opcionalmente de \emph{daily}.
+El siguiente paso es habilitar el soporte de SQL en el fichero de configuración de FreeRADIUS y como opción activar los contadores diarios. Para ello se debe editar el fichero ubicado en \emph{/etc/freeradius/radiusd.conf} y eliminando el carácter de comentario (\emph{\#}) de las líneas \emph{\$INCLUDE sql.conf}, \emph{\$INCLUDE sql/mysql/counter.conf} y opcionalmente de \emph{daily}.
 
-Tras editar estos archivos, solo queda detener temporalmente la ejecución de FreeRADIUS, activar la autenticación SQL, comprobar que la configuración es correcta y volver a iniciar el servicio: \emph{service freeradius stop}.
+Tras editar estos ficheros, solo queda detener temporalmente la ejecución de FreeRADIUS, activar la autenticación SQL, comprobar que la configuración es correcta y volver a iniciar el servicio: \emph{service freeradius stop}.
 
-Para activar la autenticación SQL hay que editar el archivo \emph{/etc/freeradius/sites-available/default} y quitar los comentarios de todas las líneas que contengan \emph{sql}. Una vez hecho esto comprobamos la configuración y reanudamos el servicio.
+Para activar la autenticación SQL hay que editar el fichero \emph{/etc/freeradius/sites-available/default} y quitar los comentarios de todas las líneas que contengan \emph{sql}. Una vez hecho esto comprobamos la configuración y reanudamos el servicio.
 
 \begin{listing}[H]
     \begin{minted}
@@ -245,7 +245,7 @@ dpkg-buildpackage -us -uc
 \end{minted}
 \end{listing}
 
-En este punto comienza la compilación del código fuente. Al finalizar, tendríamos un archivo de nombre similar a \emph{coova-chilli\_1.3.0\_armhf.deb} en el directorio \emph{/usr/src/} y podríamos proceder a instalarlo situándonos en dicho directorio y utilizando el gestor de paquetes \emph{dpkg}.
+En este punto comienza la compilación del código fuente. Al finalizar, tendríamos un fichero de nombre similar a \emph{coova-chilli\_1.3.0\_armhf.deb} en el directorio \emph{/usr/src/} y podríamos proceder a instalarlo situándonos en dicho directorio y utilizando el gestor de paquetes \emph{dpkg}.
 
 \begin{listing}[H]
     \begin{minted}
@@ -267,7 +267,7 @@ dpkg -i coova-chilli_1.3.0_armhf.deb
 
 \paragraph{Configuración Inicial de CoovaChilli} \label{CoovaConfig} ~\\
 
-Llegados a este punto el programa CoovaChilli está instalado y podemos proceder a su configuración. Esta configuración en su mayoría se basa, como se adelantó en la descripción del \emph{software} del anterior capítulo, en modificar el archivo \emph{/etc/chilli/defaults} o hacer una copia de éste bajo el nombre \emph{config} teniendo allí las modificaciones con respecto a \emph{defaults}. Sin embargo, hay dos pasos previos a la configuración de este archivo.
+Llegados a este punto el programa CoovaChilli está instalado y podemos proceder a su configuración. Esta configuración en su mayoría se basa, como se adelantó en la descripción del \emph{software} del anterior capítulo, en modificar el fichero \emph{/etc/chilli/defaults} o hacer una copia de éste bajo el nombre \emph{config} teniendo allí las modificaciones con respecto a \emph{defaults}. Sin embargo, hay dos pasos previos a la configuración de este fichero.
 
 En primer lugar debemos modificar el \emph{script} que CoovaChilli ejecuta al ponerse en marcha la interfaz TUN (ubicado en \emph{/etc/chilli/up.sh}) introduciendo una regla de la herramienta \emph{iptables} para permitir el reenvío de los paquetes IP desde la interfaz de red cableada \emph{eth0}, que se almacena en una variable interna de la configuración de CoovaChilli llamada \emph{HS\_WANIF}.
 
@@ -288,9 +288,9 @@ En primer lugar debemos modificar el \emph{script} que CoovaChilli ejecuta al po
     \end{minted}
     \end{listing}
 
-También debemos activar el \emph{flag} que permite activar CoovaChilli en el archivo \emph{/etc/default/chilli/} cambiando el valor de la variable \emph{START\_CHILLI} de 0 a 1.
+También debemos activar el \emph{flag} que permite activar CoovaChilli en el fichero \emph{/etc/default/chilli/} cambiando el valor de la variable \emph{START\_CHILLI} de 0 a 1.
 
-Tras esto, se debe editar el archivo de configuración de CoovaChilli introduciendo los valores adecuados a nuestro sistema en los atributos relevantes en este momento en el archivo \emph{/etc/chilli/defaults} o bien en su copia renombrada como \emph{/etc/chilli/config}, que al iniciar el sistema reemplaza los valores dados en defaults donde difieran. Dado que en este momento aún no se encuentra instalada la herramienta Hostapd (ver más adelante) aún no tenemos habilitado un SSID para nuestro sistema, por lo que en un paso posterior tras la instalación de Hostapd debemos volver a este archivo de configuración e introducir el nombre del SSID que hayamos establecido. En el caso de este TFG, el SSID utilizado es \emph{RasPiDav}.
+Tras esto, se debe editar el fichero de configuración de CoovaChilli introduciendo los valores adecuados a nuestro sistema en los atributos relevantes en este momento en el fichero \emph{/etc/chilli/defaults} o bien en su copia renombrada como \emph{/etc/chilli/config}, que al iniciar el sistema reemplaza los valores dados en defaults donde difieran. Dado que en este momento aún no se encuentra instalada la herramienta Hostapd (ver más adelante) aún no tenemos habilitado un SSID para nuestro sistema, por lo que en un paso posterior tras la instalación de Hostapd debemos volver a este fichero de configuración e introducir el nombre del SSID que hayamos establecido. En el caso de este TFG, el SSID utilizado es \emph{RasPiDav}.
 
 \begin{listing}[H]
 \begin{minted}
@@ -347,7 +347,7 @@ make install
 \label{HaserlInstall}
 \end{listing}
 
-Tras esto actualizamos la ruta de \emph{Haserl} para CoovaChilli en el archivo \emph{/etc/chilli/wwwsh} buscando la línea \emph{haserl=} y modificándola a \emph{haserl=/usr/local/bin/haserl}. Tras esto, solo queda poner en marcha CoovaChilli con la siguiente orden.
+Tras esto actualizamos la ruta de \emph{Haserl} para CoovaChilli en el fichero \emph{/etc/chilli/wwwsh} buscando la línea \emph{haserl=} y modificándola a \emph{haserl=/usr/local/bin/haserl}. Tras esto, solo queda poner en marcha CoovaChilli con la siguiente orden.
 
 \begin{listing}[H]
     \begin{minted}
@@ -387,9 +387,9 @@ apt-get install -y --force-yes hostapd
 \end{minted}
 \end{listing}
 
-Cuando termine la instalación se edita el archivo de configuración \emph{/etc/default/hostapd} añadiendo la ruta del archivo de configuración que contiene los atributos deseados para nuestro punto de acceso, que está ubicado en \emph{/etc/hostapd/hostapd.conf}. Para ello buscamos la línea que contenga \emph{DAEMON\_CONF=}, nos aseguraremos de que está sin comentar y le especificaremos la ruta entre comillas, de manera que quede de la siguiente forma: \emph{DAEMON\_CONF=``/etc/hostapd/hostapd.conf''}.
+Cuando termine la instalación se edita el fichero de configuración \emph{/etc/default/hostapd} añadiendo la ruta del fichero de configuración que contiene los atributos deseados para nuestro punto de acceso, que está ubicado en \emph{/etc/hostapd/hostapd.conf}. Para ello buscamos la línea que contenga \emph{DAEMON\_CONF=}, nos aseguraremos de que está sin comentar y le especificaremos la ruta entre comillas, de manera que quede de la siguiente forma: \emph{DAEMON\_CONF=``/etc/hostapd/hostapd.conf''}.
 
-Ahora configuramos el mismo archivo cuya ruta hemos indicado en el ajuste anterior, indicando todos los atributos para nuestro punto de acceso incluyendo el driver a utilizar (\emph{nl80211}). Recordamos que la interfaz establecida ha de ser la misma que indicamos en el archivo de configuración \emph{defaults} o \emph{config} de CoovaChilli como \emph{HS\_LANIF}, en nuestro caso \emph{wlan0}, que tiene la red estática ya configurada en el archivo interfaces al principio de la implantación. Además, el SSID también ha de ser el mismo que indicamos a CoovaChilli con la variable \emph{HS\_SSID}.
+Ahora configuramos el mismo fichero cuya ruta hemos indicado en el ajuste anterior, indicando todos los atributos para nuestro punto de acceso incluyendo el driver a utilizar (\emph{nl80211}). Recordamos que la interfaz establecida ha de ser la misma que indicamos en el fichero de configuración \emph{defaults} o \emph{config} de CoovaChilli como \emph{HS\_LANIF}, en nuestro caso \emph{wlan0}, que tiene la red estática ya configurada en el fichero interfaces al principio de la implantación. Además, el SSID también ha de ser el mismo que indicamos a CoovaChilli con la variable \emph{HS\_SSID}.
 
 \begin{listing}[H]
 \begin{minted}
@@ -452,7 +452,7 @@ En este punto reiniciamos Hostapd para que utilice los ajustes deseados. Al ejec
 
 \subsubsection{La interfaz Web de daloRADIUS} \label{daloRADIUSInstall}
 
-Para facilitar la administración del servicio, incluyendo la gestión del servidor RADIUS, puede resultar útil implementar servicios que ofrecen interfaces gráficas fáciles de comprender y manejar. Para hacer uso de uno de los servicios de este tipo más conocidos para FreeRADIUS, conocido como daloRADIUS, instalamos el servidor Web NGINX y alojamos allí los archivos necesarios para gestionar el servidor RADIUS desde una aplicación tan sencilla y ubicua como el navegador Web.
+Para facilitar la administración del servicio, incluyendo la gestión del servidor RADIUS, puede resultar útil implementar servicios que ofrecen interfaces gráficas fáciles de comprender y manejar. Para hacer uso de uno de los servicios de este tipo más conocidos para FreeRADIUS, conocido como daloRADIUS, instalamos el servidor Web NGINX y alojamos allí los ficheros necesarios para gestionar el servidor RADIUS desde una aplicación tan sencilla y ubicua como el navegador Web.
 
 En primer lugar, instalamos el servidor Web y las herramientas necesarias para utilizar daloRADIUS, que son sobre todo librerías de soporte PHP.
 
@@ -498,7 +498,7 @@ mv /usr/share/nginx/html/daloradius-0.9-9 /usr/share/nginx/html/daloradius
 
 Aunque no los usamos en este TFG, conviene remarcar que daloRADIUS también incluye portales cautivos de ejemplo para ser usados con \emph{CoovaChilli} en el árbol de directorios que hemos descomprimido y renombrado, implementados usando PHP y JavaScript. Tras nuestros cambios, estos portales cautivos quedan ubicados en la ruta \emph{/usr/share/nginx/html/daloradius/contrib/chilli/}.
 
-La descarga de daloRADIUS contiene archivos específicos que lo habilitan para ser usado con \emph{FreeRADIUS} y \emph{MySQL}. Para utilizarlos debemos copiar dichos archivos existentes en el árbol de directorios de \emph{daloRADIUS} y colocarlos en los directorios de \emph{FreeRADIUS} indicados en las siguientes órdenes, reemplazando las originales. Por seguridad conviene detener el servicio \emph{FreeRADIUS} antes de modificar archivos y hacer copia de seguridad de los archivos que quedan reemplazados, renombrándolos o cambiando las extensiones.
+La descarga de daloRADIUS contiene ficheros específicos que lo habilitan para ser usado con \emph{FreeRADIUS} y \emph{MySQL}. Para utilizarlos debemos copiar dichos ficheros existentes en el árbol de directorios de \emph{daloRADIUS} y colocarlos en los directorios de \emph{FreeRADIUS} indicados en las siguientes órdenes, reemplazando las originales. Por seguridad conviene detener el servicio \emph{FreeRADIUS} antes de modificar ficheros y hacer copia de seguridad de los ficheros que quedan reemplazados, renombrándolos o cambiando las extensiones.
 
 \begin{listing}[H]
 \begin{minted}
@@ -522,7 +522,7 @@ cp /usr/share/nginx/html/daloradius/contrib/configs/freeradius-2.1.8/cfg1/raddb/
 \label{RADIUSdatabases}
 \end{listing}
 
-Dado que el último archivo que hemos ubicado (\emph{/etc/freeradius/sql.conf}) procede de una instalación nueva de daloRADIUS contiene la contraseña utilizada por defecto en FreeRADIUS, por lo que debemos editarlo para que tenga la contraseña que indicamos en el paso correspondiente del apartado \ref{RADIUSConf}. Recordamos que, si no se cambió, la contraseña utilizada por defecto es \emph{radpass}.
+Dado que el último fichero que hemos ubicado (\emph{/etc/freeradius/sql.conf}) procede de una instalación nueva de daloRADIUS contiene la contraseña utilizada por defecto en FreeRADIUS, por lo que debemos editarlo para que tenga la contraseña que indicamos en el paso correspondiente del apartado \ref{RADIUSConf}. Recordamos que, si no se cambió, la contraseña utilizada por defecto es \emph{radpass}.
 
 Tras estos pasos podemos iniciar el servidor RADIUS de nuevo y utilizar el \emph{script} específico de \emph{daloRADIUS} incluido en la instalación para añadir la configuración de \emph{daloRADIUS} en MySQL, añadiendo también los permisos de usuario correspondientes para poder manejar el servidor. Recordamos que la palabra CONTRASEÑA en mayúscula en este caso hace referencia a la contraseña utilizada para el usuario \emph{root} del servidor MySQL.
 
@@ -548,7 +548,7 @@ mysql -u root -p CONTRASEÑA < /tmp/grant.sql
 \label{daloRADIUSdatabases}
 \end{listing}
 
-Además, actualizamos el archivo de daloRADIUS que contiene el usuario y contraseña de la base de datos para que tenga el usuario y contraseña del servidor RADIUS. Este archivo está en \emph{/usr/share/nginx/html/daloradius/library/daloradius.conf.php} y ha de tener los siguientes valores en los campos correspondientes. Recordamos que esta contraseña es la del servidor RADIUS, indicada por CONTRASEÑA-RADIUS, (por defecto \emph{radpass} si no la cambiamos).
+Además, actualizamos el fichero de daloRADIUS que contiene el usuario y contraseña de la base de datos para que tenga el usuario y contraseña del servidor RADIUS. Este fichero está en \emph{/usr/share/nginx/html/daloradius/library/daloradius.conf.php} y ha de tener los siguientes valores en los campos correspondientes. Recordamos que esta contraseña es la del servidor RADIUS, indicada por CONTRASEÑA-RADIUS, (por defecto \emph{radpass} si no la cambiamos).
 
 \begin{listing}[H]
     \begin{minted}
@@ -570,7 +570,7 @@ $configValues['CONFIG_DB_PASS'] = 'CONTRASEÑA-RADIUS';
 
 \paragraph{Configurando NGINX para servir daloRADIUS} \label{NGINXdaloRADIUS} ~\\
 
-Tras preparar \emph{daloRADIUS} para su funcionamiento hemos de configurar el servidor NGINX para que nos sirva la página principal correcta al introducir la ruta adecuada en el navegador. Para esta configuración editamos el archivo \emph{/etc/nginx/sites-available/default} añadiendo la siguiente directriz de servidor. Para acceder a la interfaz Web en el futuro utilizamos el puerto 80.
+Tras preparar \emph{daloRADIUS} para su funcionamiento hemos de configurar el servidor NGINX para que nos sirva la página principal correcta al introducir la ruta adecuada en el navegador. Para esta configuración editamos el fichero \emph{/etc/nginx/sites-available/default} añadiendo la siguiente directriz de servidor. Para acceder a la interfaz Web en el futuro utilizamos el puerto 80.
 
 \begin{listing}[H]
 \begin{minted}
@@ -674,7 +674,7 @@ Además de registrar usuarios es posible asignarlos en grupos y modificar alguno
 \label{daloAttributes}
 \end{figure}
 
-Para añadir usuarios en bloque, daloRADIUS ofrece un modo de añadir conjuntos completos de usuarios, facilitando en gran parte el proceso de población de la base de datos. Para ello, en el submenú \emph{Management} puede seleccionarse la opción \emph{Batch Users}, tras lo cual la opción de añadir usuarios en bloque, consultarlos o eliminarlos queda disponible en la barra lateral izquierda. Es posible gestionar el modo en que se generan los nombres de usuario, la longitud de los caracteres utilizados, el número de instancias o los grupos a los que pertenecerán. Este conjunto de usuarios, recién creado, puede exportarse a un archivo Excel y \emph{Comma Separated Values} (\acrshort{CSV}), que pueden ser pasados a un \emph{parser} que pase los pares usuario-contraseña a otro formato, como se ha hecho en este TFG, o incluso imprimirse en forma de tarjetas para entregar a posibles usuarios (Figura \ref{daloBatchUsers}).
+Para añadir usuarios en bloque, daloRADIUS ofrece un modo de añadir conjuntos completos de usuarios, facilitando en gran parte el proceso de población de la base de datos. Para ello, en el submenú \emph{Management} puede seleccionarse la opción \emph{Batch Users}, tras lo cual la opción de añadir usuarios en bloque, consultarlos o eliminarlos queda disponible en la barra lateral izquierda. Es posible gestionar el modo en que se generan los nombres de usuario, la longitud de los caracteres utilizados, el número de instancias o los grupos a los que pertenecerán. Este conjunto de usuarios, recién creado, puede exportarse a un fichero Excel y \emph{Comma Separated Values} (\acrshort{CSV}), que pueden ser pasados a un \emph{parser} que pase los pares usuario-contraseña a otro formato, como se ha hecho en este TFG, o incluso imprimirse en forma de tarjetas para entregar a posibles usuarios (Figura \ref{daloBatchUsers}).
 
 \begin{figure}[!t]
 \begin{center}
@@ -697,7 +697,7 @@ Para implantar dos tipos de usuarios, el caso de este TFG, donde hay un conjunto
 \end{figure}
 
 \subsection{Módulo de Usuarios}
-A diferencia de los dos módulos anteriores, cuya implantación se basa únicamente en la instalación y configuración de \emph{software}, el módulo de usuarios cuenta con un mayor esfuerzo de programación, encontrándose el módulo en su totalidad contenido en único directorio del sistema constituido por archivos JavaScript, JSON, HTML y CSS. A continuación analizamos la implantación general y de cada uno de los submódulos que constituyen el módulo de usuarios, sobre todo aquellos que han sido programados desde cero, entrando en un mayor detalle sobre sus funciones individuales.
+A diferencia de los dos módulos anteriores, cuya implantación se basa únicamente en la instalación y configuración de \emph{software}, el módulo de usuarios cuenta con un mayor esfuerzo de programación, encontrándose el módulo en su totalidad contenido en único directorio del sistema constituido por ficheros JavaScript, JSON, HTML y CSS. A continuación analizamos la implantación general y de cada uno de los submódulos que constituyen el módulo de usuarios, sobre todo aquellos que han sido programados desde cero, entrando en un mayor detalle sobre sus funciones individuales.
 
 \subsubsection{Configuración previa y estructura del módulo} \label{userModuleConfig}
 Dado que el módulo de usuarios basa su funcionamiento en Node.js y npm debemos instalar estos dos componentes, pues habitualmente la versión de los mismos incluida por defecto en los sistemas operativos Linux es muy antigua. Los pasos necesarios para descargar e instalar ambas utilidades varían según el sistema operativo. En nuestro caso, Node.js no está incluido por defecto en los repositorios por lo que en principio no puede instalarse con un sencillo comando de \emph{apt-get}. Podemos añadir un repositorio de su última versión para su fácil instalación y actualización con un único paso previo desde el terminal, tras el cual podremos instalarlo siguiendo el procedimiento habitual.
@@ -733,13 +733,13 @@ Se ha implementado el módulo de usuarios completo en un único directorio. En l
 \label{repoGitHub}
 \end{figure}
 
-%A excepción de los directorios scripts y csvgen y del archivo CaptivePortal.iml, correspondientes respectivamente a utilidades de configuración y archivos propios del \emph{software} de trabajo, c
-Cada archivo o directorio está directamente relacionado con uno de los submódulos, quedando distribuidos de la siguiente forma.
+%A excepción de los directorios scripts y csvgen y del fichero CaptivePortal.iml, correspondientes respectivamente a utilidades de configuración y ficheros propios del \emph{software} de trabajo, c
+Cada fichero o directorio está directamente relacionado con uno de los submódulos, quedando distribuidos de la siguiente forma.
 
 \begin{itemize}
-\item \emph{Control de Usuarios}: directorio \emph{users} y todos sus archivos.
-\item \emph{Servidor}: archivos \emph{nodeserver.js}, \emph{captiveportalserver.config.js}, \emph{package.json} y \emph{package-lock.json} y directorio \emph{uploads}.
-\item \emph{Aplicación Web}: archivos \emph{index.html} y directorios \emph{js}, \emph{css}, \emph{ssl} y todos sus archivos.
+\item \emph{Control de Usuarios}: directorio \emph{users} y todos sus ficheros.
+\item \emph{Servidor}: ficheros \emph{nodeserver.js}, \emph{captiveportalserver.config.js}, \emph{package.json} y \emph{package-lock.json} y directorio \emph{uploads}.
+\item \emph{Aplicación Web}: ficheros \emph{index.html} y directorios \emph{js}, \emph{css}, \emph{ssl} y todos sus ficheros.
 \end{itemize}
 
 El funcionamiento de dicho módulo y las interrelaciones existentes entre sus submódulos se adelantaron en secciones anteriores de este capítulo. El diagrama de secuencia de la Figura \ref{diagramUML} muestra la interacción de la aplicación Web (\emph{Web App}), el servidor (\emph{Server}) y el las acciones que puede hacer el usuario (\emph{User Ctrl}).
@@ -758,24 +758,24 @@ Donde las auto-interacciones 5, 6 y 7 son pedidas al usuario y las 13 y 16 son l
 
 \subsubsection{Submódulo de Control Usuarios} \label{userControl}
 
-Como ya adelantamos, en cuanto a estructura de directorios, el submódulo de control de usuarios está totalmente contenido en el directorio \emph{users} de nuestro módulo de Usuario. Consta de cuatro archivos: dos bases de datos de usuarios JSON (\emph{users.json} y \emph{usersOneTime.json}) y los archivos JavaScript que controlan dichas bases de datos (\emph{userController.js} y \emph{userControllerOneTime.js}). Los archivos con el sufijo \emph{--OneTime} en el nombre indican que son la base de datos y controlador correspondientes a la opción de conectarse durante 30 minutos a cambio de un único archivo de audio (Figura \ref{usersDir}).
+Como ya adelantamos, en cuanto a estructura de directorios, el submódulo de control de usuarios está totalmente contenido en el directorio \emph{users} de nuestro módulo de Usuario. Consta de cuatro ficheros: dos bases de datos de usuarios JSON (\emph{users.json} y \emph{usersOneTime.json}) y los ficheros JavaScript que controlan dichas bases de datos (\emph{userController.js} y \emph{userControllerOneTime.js}). Los ficheros con el sufijo \emph{--OneTime} en el nombre indican que son la base de datos y controlador correspondientes a la opción de conectarse durante 30 minutos a cambio de un único fichero de audio (Figura \ref{usersDir}).
 
 \begin{figure}[!t]
 \begin{center}
 \includegraphics[width=0.75\linewidth]{./5_AnalisisOrganico/Img/usersDir.png}
 \end{center}
-\caption{Vista del directorio con los archivos del submódulo Control de Usuarios}
+\caption{Vista del directorio con los ficheros del submódulo Control de Usuarios}
 % \source{http://coova.github.io/CoovaChilli/}
 \label{usersDir}
 \end{figure}
 
 Si la base de usuarios se vuelve lo suficientemente grande y soporta una carga mucho mayor que la existente en las pruebas realizadas en este TFG este módulo podría reemplazarse por una herramienta de base de datos más potente a utilizar (SQL, MongoDB) o incluso dejar de ser un submódulo separado del propio servidor RADIUS del módulo de control de acceso, permitiendo al servidor trabajar directamente con la base de datos de FreeRADIUS.
 
-Dado que cuatro los archivos constituyen dos pares muy similares se analizan en el mismo apartado.
+Dado que cuatro los ficheros constituyen dos pares muy similares se analizan en el mismo apartado.
 
-\paragraph{Los archivos \emph{users.json} y \emph{usersOneTime.json}} \label{usersJSONFiles} ~\\
+\paragraph{Los ficheros \emph{users.json} y \emph{usersOneTime.json}} \label{usersJSONFiles} ~\\
 
-Estos archivos alojan una base de datos muy sencilla en forma de un array de usuarios con cuatro atributos cada uno, estructurada de la manera mostrada en el bloque de código \ref{usersJSONstructure}.
+Estos ficheros alojan una base de datos muy sencilla en forma de un array de usuarios con cuatro atributos cada uno, estructurada de la manera mostrada en el bloque de código \ref{usersJSONstructure}.
 
 El atributo \emph{id} se utiliza a efectos de programación, para llevar un control de los usuarios sin utilizar cadenas de caracteres; el \emph{username} y \emph{password} son obviamente las credenciales de cada usuario y el atributo booleano \emph{isActive} actúa como un \emph{flag} que marca los usuarios activos en ese momento en el sistema.
 
@@ -822,7 +822,7 @@ breaksymbolleft={}
 
 \subparagraph{\emph{userController.js} y \emph{userControllerOneTime.js}} \label{usersControllers} ~\\
 
-Estos archivos controlan la base de datos detallada en el apartado anterior, consultando y actualizando sus valores a petición del servidor. Sus funciones están definidas mediante los siguientes métodos y requerimientos.
+Estos ficheros controlan la base de datos detallada en el apartado anterior, consultando y actualizando sus valores a petición del servidor. Sus funciones están definidas mediante los siguientes métodos y requerimientos.
 
 \begin{listing}[H]
 \begin{minted}
@@ -843,7 +843,7 @@ var userObj = require('./users.json');
 % \label{usersControllerImports}
 \end{listing}
 
-El objeto \emph{fs} es la importación del módulo \emph{fs} de Node.js, que permite la lectura y escritura síncrona o asíncrona de archivos. Lo utilizamos para actualizar los campos de la base de datos según sea necesario. El objeto \emph{userObj}, como puede observarse, es la importación del archivo de la propia base de datos JSON.
+El objeto \emph{fs} es la importación del módulo \emph{fs} de Node.js, que permite la lectura y escritura síncrona o asíncrona de ficheros. Lo utilizamos para actualizar los campos de la base de datos según sea necesario. El objeto \emph{userObj}, como puede observarse, es la importación del fichero de la propia base de datos JSON.
 
 Aparte, el controlador de usuarios tiene tres funciones externas, a usar por el servidor, y cuatro funciones internas que usa el propio controlador. Comenzamos presentando las funciones internas y luego, de cara al análisis del servidor, pasamos a las externas.
 
@@ -873,7 +873,7 @@ function setUserInactive(userId) {
 % \label{usersControllerImports}
 \end{listing}
 
-Estas dos funciones se explican de forma sencilla con ayuda del \emph{log} que emiten en consola al ser llamadas. Su función es modificar el objeto \emph{userObj}, que recordemos contiene la base de datos, marcando el usuario pasado como parámetro como activo, y por tanto ocupado, o inactivo (libre). Tras modificar estos valores se escriben en el archivo original llamando a la función \emph{writeUsersFile()}.
+Estas dos funciones se explican de forma sencilla con ayuda del \emph{log} que emiten en consola al ser llamadas. Su función es modificar el objeto \emph{userObj}, que recordemos contiene la base de datos, marcando el usuario pasado como parámetro como activo, y por tanto ocupado, o inactivo (libre). Tras modificar estos valores se escriben en el fichero original llamando a la función \emph{writeUsersFile()}.
 
 \begin{listing}[H]
 \begin{minted}
@@ -895,7 +895,7 @@ function writeUsersFile(userJSON){
 % \label{usersControllerImports}
 \end{listing}
 
-Esta es la función que escribe en el archivo JSON el estado actual del objeto \emph{userObj}, a efectos reemplazando el archivo antiguo por uno nuevo. El último parámetro pasado a la función \emph{JSON.stringify()} sirve para dar formato de saltos de línea e indentación, con el objetivo de mejorar la lectura del archivo para humanos:
+Esta es la función que escribe en el fichero JSON el estado actual del objeto \emph{userObj}, a efectos reemplazando el fichero antiguo por uno nuevo. El último parámetro pasado a la función \emph{JSON.stringify()} sirve para dar formato de saltos de línea e indentación, con el objetivo de mejorar la lectura del fichero para humanos:
 
 \begin{listing}[H]
 \begin{minted}
@@ -920,7 +920,7 @@ El objetivo de esta última función interna es retornar un vector de cinco elem
 
 A continuación se detallan las funciones externas, que recordamos sirven de interfaz entre el \emph{Control de Usuarios} y el \emph{Servidor}, este las llama para obtener credenciales, pedir el estado de la base de datos y actualizar valores de la misma.
 
-Nótese el cambio en la implantación de las funciones. Mientras que las funciones internas pueden programarse utilizando primero la palabra reservada \emph{function}, el operador de asignación y tras este el nombre de la función y su comportamiento, Node.js requiere de una sintaxis diferente para externalizar funciones. Ha de utilizarse el formato \emph{exports.nombreDeLaFuncion = function(...) \{...\}} para que otros archivos JavaScript de Node.js puedan utilizarlas, importando el archivo donde estas se encuentran de la misma forma que si fuese un módulo \emph{npm}.
+Nótese el cambio en la implantación de las funciones. Mientras que las funciones internas pueden programarse utilizando primero la palabra reservada \emph{function}, el operador de asignación y tras este el nombre de la función y su comportamiento, Node.js requiere de una sintaxis diferente para externalizar funciones. Ha de utilizarse el formato \emph{exports.nombreDeLaFuncion = function(...) \{...\}} para que otros ficheros JavaScript de Node.js puedan utilizarlas, importando el fichero donde estas se encuentran de la misma forma que si fuese un módulo \emph{npm}.
 
 \begin{listing}[H]
 \begin{minted}
@@ -1003,7 +1003,7 @@ var creds = {
 % \label{usersControllerImports}
 \end{listing}
 
-Aparte de las importaciones de módulos y paquetes \emph{npm}, destacan las tres últimas declaraciones de variables. La variable \emph{userController} que contiene al archivo JavaScript correspondiente al submódulo de controlador de usuarios, la variable \emph{app} que no es más que el objeto Express que implementa todas las funcionalidades de servidor, y la variable \emph{creds} que es el objeto donde se almacenan temporalmente las credenciales a enviar a la instancia de la aplicación Web, estando la id en el valor -1 para indicar cuando no hay ningún usuario almacenado.
+Aparte de las importaciones de módulos y paquetes \emph{npm}, destacan las tres últimas declaraciones de variables. La variable \emph{userController} que contiene al fichero JavaScript correspondiente al submódulo de controlador de usuarios, la variable \emph{app} que no es más que el objeto Express que implementa todas las funcionalidades de servidor, y la variable \emph{creds} que es el objeto donde se almacenan temporalmente las credenciales a enviar a la instancia de la aplicación Web, estando la id en el valor -1 para indicar cuando no hay ningún usuario almacenado.
 
 Como ya vimos en el capítulo anterior al detallar las tecnologías a utilizar, el funcionamiento de servidor mediante Express se logra mediante unas pocas líneas de código. Sin embargo, previamente han de configurarse los diferentes \emph{middlewares} a utilizar e implantarse los diferentes manejadores de rutas a las que se envían las peticiones HTTP. Empezando por orden, primero se establecen los \emph{middlewares} de nivel de aplicación mediante las funciones \emph{app.use(...)}.
 
@@ -1029,7 +1029,7 @@ app.use(bodyParser.urlencoded({
 % \label{usersControllerImports}
 \end{listing}
 
-Estos usos corresponden al servicio de archivos HTML estáticos y a los analizadores sintácticos de los datos recibidos, a cuyos contenidos podremos acceder si están codificados con los tipos declarados aquí, JSON y URL-encoded.
+Estos usos corresponden al servicio de ficheros HTML estáticos y a los analizadores sintácticos de los datos recibidos, a cuyos contenidos podremos acceder si están codificados con los tipos declarados aquí, JSON y URL-encoded.
 
 A continuación se procede a declarar los manejadores de las posibles rutas a las que llegan peticiones HTTP y el procedimiento a llevar a cabo cuando esto ocurra. Estas rutas se declaran mediante la sintaxis \emph{app.method(`/ruta/', function(req, res) \{...\})}, donde \emph{method} es el método HTTP con el que llega la petición (GET, POST, PUT…), \emph{req} el objeto petición y \emph{res} el objeto respuesta.
 
@@ -1053,7 +1053,7 @@ app.get('/', function(req, res){
 % \label{usersControllerImports}
 \end{listing}
 
-La principal es, lógicamente, la petición HTTP correspondiente a la raíz del servicio Web. Esto corresponde a servir el archivo HTML index.html del que se habla en la sección del submódulo aplicación Web.
+La principal es, lógicamente, la petición HTTP correspondiente a la raíz del servicio Web. Esto corresponde a servir el fichero HTML index.html del que se habla en la sección del submódulo aplicación Web.
 
 La Aplicación Web servida tiene que tener un medio para saber si la reserva de usuarios del servicio está completa, no pudiendo prestar el servicio a ningún usuario más. Para ello se implementa un manejador de ruta en \emph{/serverstatus} que llama a las funciones correspondientes del controlador de usuarios, tal y como se ve en el siguiente código. El cliente contacta con el servidor para conocer esta información por medio de una petición GET.
 
@@ -1104,7 +1104,7 @@ app.get('/creds', function (req, res) {
 % \label{usersControllerImports}
 \end{listing}
 
-Esta ruta a \emph{/creds} se encarga de pasar a la \emph{Aplicación Web} el valor actual de la variable \emph{creds} implementada al principio del código fuente del servidor. El valor de dicho objeto cambiará, obteniendo las credenciales de un usuario recién marcado como activo del controlador de usuarios, cuando un usuario que no esté conectado al servicio envíe un archivo de audio por primera vez al servidor.
+Esta ruta a \emph{/creds} se encarga de pasar a la \emph{Aplicación Web} el valor actual de la variable \emph{creds} implementada al principio del código fuente del servidor. El valor de dicho objeto cambiará, obteniendo las credenciales de un usuario recién marcado como activo del controlador de usuarios, cuando un usuario que no esté conectado al servicio envíe un fichero de audio por primera vez al servidor.
 
 \begin{listing}[H]
 \begin{minted}
@@ -1157,7 +1157,7 @@ function setCreds() {
 
 Esta función tiene de cometido modificar los valores del objeto \emph{creds}, que pasan a contener las credenciales del usuario enviado desde el controlador de usuarios. Existe además una función similar a esta llamada \emph{setCredsOneTime()} que se encarga de la misma tarea pero utilizando el controlador correspondiente a los usuarios con una conexión única de 30 minutos.
 
-A continuación implantamos los manejadores de ruta más relevantes del \emph{Servidor}, los que gestionan la llegada de archivos de audio y los guardan en el directorio \emph{uploads} del sistema de archivos:
+A continuación implantamos los manejadores de ruta más relevantes del \emph{Servidor}, los que gestionan la llegada de ficheros de audio y los guardan en el directorio \emph{uploads} del sistema de ficheros:
 
 \begin{listing}[H]
 \begin{minted}
@@ -1258,9 +1258,9 @@ app.post('/onetimepassupload', function (req, res) {
 % \label{usersControllerImports}
 \end{listing}
 
-Estos tres manejadores de ruta son prácticamente idénticos en cuanto a que gestionan la llegada de archivos de audio al sistema, la única diferencia que existe entre ellos radica que la ruta \emph{/loggedupload} se utiliza cuando el archivo de audio proviene de una instancia de la \emph{Aplicación Web} cuyo usuario ya está conectado al servicio —esto es, tiene acceso a Internet—, por lo que no hace falta buscar unas credenciales inactivas nuevas para que le sean proporcionadas. Por ello, en el \emph{callback} asociado al evento de finalización de la transacción de archivos, el primer manejador de ruta (\emph{/upload}) llama a la función \emph{setCreds()} para preparar las credenciales que son enviadas con las peticiones a las rutas vistas anteriormente. La ruta \emph{/onetimepassupload} se encarga de los archivos de audio procedentes de los usuarios que han optado por la conexión de 30 minutos.
+Estos tres manejadores de ruta son prácticamente idénticos en cuanto a que gestionan la llegada de ficheros de audio al sistema, la única diferencia que existe entre ellos radica que la ruta \emph{/loggedupload} se utiliza cuando el fichero de audio proviene de una instancia de la \emph{Aplicación Web} cuyo usuario ya está conectado al servicio —esto es, tiene acceso a Internet—, por lo que no hace falta buscar unas credenciales inactivas nuevas para que le sean proporcionadas. Por ello, en el \emph{callback} asociado al evento de finalización de la transacción de ficheros, el primer manejador de ruta (\emph{/upload}) llama a la función \emph{setCreds()} para preparar las credenciales que son enviadas con las peticiones a las rutas vistas anteriormente. La ruta \emph{/onetimepassupload} se encarga de los ficheros de audio procedentes de los usuarios que han optado por la conexión de 30 minutos.
 
-Nótese también la diferencia entre la ruta de la petición HTTP de la primera ruta (\emph{upload}) y la ruta del directorio de destino en el sistema de archivos (\emph{uploads}), que puede llevar a conclusión debido a la similitud de los nombres.
+Nótese también la diferencia entre la ruta de la petición HTTP de la primera ruta (\emph{upload}) y la ruta del directorio de destino en el sistema de ficheros (\emph{uploads}), que puede llevar a conclusión debido a la similitud de los nombres.
 
 Este último manejador de ruta se encarga de comprobar si el usuario se ha conectado correctamente en cada caso, liberando el usuario de la base de datos si la conexión no ha podido realizarse y estableciendo una cuenta atrás de 32 minutos para el caso de los usuarios que hayan escogido la opción de 30 m, tras la cual se libera el usuario utilizado.
 
@@ -1297,7 +1297,7 @@ app.post('/userconnected', function (req, res) {
 % \label{usersControllerImports}
 \end{listing}
 
-Tras implementar todos los manejadores, solo queda implementar la función que pone en marcha el servidor al llamar al archivo \emph{nodeserver.js} mediante el comando \emph{node}, que como ya habíamos visto se consigue en escasas líneas de código. La única diferencia radica en que en este TFG se utiliza la opción segura HTTPS, dado que los navegadores ya no aceptan que un servicio Web tome los datos de audio y ubicación del dispositivo si el contexto no es seguro. Los pasos para obtener un certificado y clave \acrshort{SSL} necesarios para implementar HTTPS se detallan a continuación.
+Tras implementar todos los manejadores, solo queda implementar la función que pone en marcha el servidor al llamar al fichero \emph{nodeserver.js} mediante el comando \emph{node}, que como ya habíamos visto se consigue en escasas líneas de código. La única diferencia radica en que en este TFG se utiliza la opción segura HTTPS, dado que los navegadores ya no aceptan que un servicio Web tome los datos de audio y ubicación del dispositivo si el contexto no es seguro. Los pasos para obtener un certificado y clave \acrshort{SSL} necesarios para implementar HTTPS se detallan a continuación.
 
 Para habilitar el servidor con HTTPS en nuestra aplicación Node.js solo debemos utilizar el siguiente código.
 
@@ -1328,13 +1328,13 @@ https.createServer(options, app).listen(3000, function () {
 % \label{usersControllerImports}
 \end{listing}
 
-Donde la variable \emph{options} contiene los archivos de certificado, clave y la \emph{passphrase} necesarios para ofrecer el servicio.
+Donde la variable \emph{options} contiene los ficheros de certificado, clave y la \emph{passphrase} necesarios para ofrecer el servicio.
 
 Para implementar correctamente transacciones con HTTPS se han de realizar una serie de configuraciones para habilitar \emph{Secure Sockets Layer} (SSL) en nuestros servicios, generando los certificados y claves pertinentes.
 
 Existen varios servicios y proveedores de certificados autorizados con diferentes planes de precios. En este TFG se han utilizado certificados auto-firmados para ofrecer el servicio, lo que no es nada recomendable en una implantación real puesto que los navegadores Web advierten al usuario sobre la presencia de un certificado SSL de estas características, teniendo que añadir excepciones manualmente en dos direcciones diferentes (la de nuestro portal cautivo y la dirección IP de la interfaz JSON, 1.0.0.1) para ignorar dichas advertencias.
 
-Para generar nuestra clave y certificado SSL puede utilizarse la herramienta OpenSSL, disponible en sistemas macOS y Linux. Con un solo orden pueden generarse los dos archivos necesarios.
+Para generar nuestra clave y certificado SSL puede utilizarse la herramienta OpenSSL, disponible en sistemas macOS y Linux. Con un solo orden pueden generarse los dos ficheros necesarios.
 
 \begin{listing}[H]
     \begin{minted}
@@ -1353,7 +1353,7 @@ openssl req -x509 -sha256 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 3
     \end{minted}
 \end{listing}
 
-Tras una serie de preguntas, entre las que se encuentra la \emph{passphrase} utilizada en el servidor, se generan los dos archivos necesarios: \emph{key.pem} y \emph{cert.pem}. Pueden ubicarse estos archivos en un directorio aparte y luego referenciarse en las configuraciones pertinentes. Para que la Aplicación Web Node.js haga uso de estos archivos, como ya se explicó anteriormente, hay que declarar sus rutas junto a la \emph{passphrase} en el objeto options que luego se utiliza en la función createServer(). Se vuelve a adjuntar el código utilizado por comodidad.
+Tras una serie de preguntas, entre las que se encuentra la \emph{passphrase} utilizada en el servidor, se generan los dos ficheros necesarios: \emph{key.pem} y \emph{cert.pem}. Pueden ubicarse estos ficheros en un directorio aparte y luego referenciarse en las configuraciones pertinentes. Para que la Aplicación Web Node.js haga uso de estos ficheros, como ya se explicó anteriormente, hay que declarar sus rutas junto a la \emph{passphrase} en el objeto options que luego se utiliza en la función createServer(). Se vuelve a adjuntar el código utilizado por comodidad.
 
 \begin{listing}[H]
 \begin{minted}
@@ -1382,9 +1382,9 @@ https.createServer(options, app).listen(3000, function () {
 % \label{usersControllerImports}
 \end{listing}
 
-También hay que habilitar el uso de SSL en el objeto \emph{chilliController}, definiendo el atributo necesario en el archivo \emph{chilliController.js}, que analizaremos más adelante, con la declaración: \emph{chilliController.ssl = true;}.
+También hay que habilitar el uso de SSL en el objeto \emph{chilliController}, definiendo el atributo necesario en el fichero \emph{chilliController.js}, que analizaremos más adelante, con la declaración: \emph{chilliController.ssl = true;}.
 
-Por último, el propio \emph{software} CoovaChilli debe tener habilitado SSL en su configuración y referenciar el certificado y clave en la ruta donde se encuentren. Para ello se edita el archivo \emph{/etc/chilli/config} tal y como se vio en apartados anteriores, definiendo los siguientes atributos.
+Por último, el propio \emph{software} CoovaChilli debe tener habilitado SSL en su configuración y referenciar el certificado y clave en la ruta donde se encuentren. Para ello se edita el fichero \emph{/etc/chilli/config} tal y como se vio en apartados anteriores, definiendo los siguientes atributos.
 
 \begin{listing}[H]
     \begin{minted}
@@ -1407,11 +1407,11 @@ HS_SSLCERTFILE=/etc/chilli/sslkey/cert.pem
 
 \subsubsection{Submódulos de Aplicación Web} \label{webAppSubmodule}
 
-Este submódulo es el que depende de un mayor número de archivos escritos en varios lenguajes y muy relacionados entre sí. Se procede a analizar uno por uno los más relevantes: \emph{index.html}, \emph{chilliController.js} y \emph{script.js}.
+Este submódulo es el que depende de un mayor número de ficheros escritos en varios lenguajes y muy relacionados entre sí. Se procede a analizar uno por uno los más relevantes: \emph{index.html}, \emph{chilliController.js} y \emph{script.js}.
 
-\paragraph{El archivo \emph{index.html}} \label{index.html} ~\\
+\paragraph{El fichero \emph{index.html}} \label{index.html} ~\\
 
-El archivo HTML es el elemento principal del submódulo, enviado al navegador como respuesta a una petición HTTP GET al servidor Node.js, proporciona un entorno simple con un título, una breve descripción y tres botones. Esta descripción y la función de los botones mostrados cambian según las acciones llevadas a cabo por el usuario (Figura \ref{flujoBotones}).
+El fichero HTML es el elemento principal del submódulo, enviado al navegador como respuesta a una petición HTTP GET al servidor Node.js, proporciona un entorno simple con un título, una breve descripción y tres botones. Esta descripción y la función de los botones mostrados cambian según las acciones llevadas a cabo por el usuario (Figura \ref{flujoBotones}).
 
 \begin{figure}[!t]
 \begin{center}
@@ -1433,9 +1433,9 @@ Usando Bootstrap se logra un diseño responsivo. Esto es, la apariencia de la p�
 \label{responsiveDesign}
 \end{figure}
 
-El comportamiento de la aplicación Web aparte de su contenido visual vienen determinados por los \emph{scripts} incluidos en el archivo HTML justo antes de cerrar la etiqueta \emph{body}, que son analizados en el bloque de código \ref{HTMLScripts}. Los archivos se encuentran en el directorio \emph{js} de nuestro árbol de directorios.
+El comportamiento de la aplicación Web aparte de su contenido visual vienen determinados por los \emph{scripts} incluidos en el fichero HTML justo antes de cerrar la etiqueta \emph{body}, que son analizados en el bloque de código \ref{HTMLScripts}. Los ficheros se encuentran en el directorio \emph{js} de nuestro árbol de directorios.
 
-Los dos primeros \emph{scripts} incluidos son los \emph{frameworks} jQuery y Bootstrap, utilizados para facilitar la programación de peticiones AJAX y gestionar la interfaz de usuario, respectivamente, también se incluyó en la cabecera un archivo CSS de Bootstrap para funcionar junto al archivo JavaScript. Además, el \emph{framework} Bootstrap por sí mismo requiere de jQuery para funcionar correctamente.
+Los dos primeros \emph{scripts} incluidos son los \emph{frameworks} jQuery y Bootstrap, utilizados para facilitar la programación de peticiones AJAX y gestionar la interfaz de usuario, respectivamente, también se incluyó en la cabecera un fichero CSS de Bootstrap para funcionar junto al fichero JavaScript. Además, el \emph{framework} Bootstrap por sí mismo requiere de jQuery para funcionar correctamente.
 
 \begin{listing}[H]
 \begin{minted}
@@ -1468,9 +1468,9 @@ breaksymbolleft={}
 \label{HTMLScripts}
 \end{listing}
 
-El archivo \emph{ChilliLibrary.js}, como ya se adelantó en el capítulo 2, se encarga de crear un objeto global denominado \emph{chilliController} en nuestra \emph{Aplicación Web}, mediante el cual podemos comunicarnos con CoovaChilli, gestionar el inicio y cierre de sesiones y consultar la información de contabilidad.
+El fichero \emph{ChilliLibrary.js}, como ya se adelantó en el capítulo 2, se encarga de crear un objeto global denominado \emph{chilliController} en nuestra \emph{Aplicación Web}, mediante el cual podemos comunicarnos con CoovaChilli, gestionar el inicio y cierre de sesiones y consultar la información de contabilidad.
 
-El archivo \emph{chilliController.js} ajusta los parámetros del objeto \emph{chilliController} y aporta los métodos a ser usados por la \emph{Aplicación Web} actuando como capa intermedia entre el objeto \emph{chilliController} y el resto de elementos de la misma, como puede verse en los métodos de \emph{connect()} y \emph{disconnect()} que son llamados por el archivo \emph{script.js}.
+El fichero \emph{chilliController.js} ajusta los parámetros del objeto \emph{chilliController} y aporta los métodos a ser usados por la \emph{Aplicación Web} actuando como capa intermedia entre el objeto \emph{chilliController} y el resto de elementos de la misma, como puede verse en los métodos de \emph{connect()} y \emph{disconnect()} que son llamados por el fichero \emph{script.js}.
 
 \begin{listing}[H]
 \begin{minted}
@@ -1497,7 +1497,7 @@ function disconnect(userCreds){
 % \label{usersControllerImports}
 \end{listing}
 
-La función \emph{liberateUser()} se analiza en el apartado \ref{script.js} dedicado al archivo \emph{scripts.js}.
+La función \emph{liberateUser()} se analiza en el apartado \ref{script.js} dedicado al fichero \emph{scripts.js}.
 Además, asocia funciones locales a eventos del objeto \emph{chilliController} y se encarga de consultar el estado del mismo al ejecutarse por primera vez.
 
 %\begin{listing}[H]
@@ -1529,7 +1529,7 @@ Además, asocia funciones locales a eventos del objeto \emph{chilliController} y
 
 \paragraph{El fichero \emph{script.js}} \label{script.js} ~\\
 
-La funcionalidad de la Aplicación Web viene determinada en gran medida por este archivo JavaScript, que hace uso de los siguientes variables y métodos.
+La funcionalidad de la Aplicación Web viene determinada en gran medida por este fichero JavaScript, que hace uso de los siguientes variables y métodos.
 
 \begin{listing}[H]
 \begin{minted}
@@ -1565,7 +1565,7 @@ La primera variable utiliza la función flecha (\emph{arrow function}) implement
 
 La variable \emph{failedRecordTries} llevará una cuenta de los intentos fallidos de grabación. Si este valor es igual o mayor a tres intentos el sistema se desconectará y el usuario deberá iniciar el proceso de nuevo.
 
-Las variables \emph{stream}, \emph{recorder}, \emph{chunks} y \emph{media} son utilizadas por las API WebRTC y \emph{MediaStream Recording} para su funcionalidad, que veríamos en acción al analizar los métodos del archivo. Las variables \emph{serverStatus}, \emph{locationTime} y \emph{userCreds} almacenan el estado del servidor en forma booleana, la latitud, longitud y marca de tiempo para usar en los nombres de los archivos de audio y las credenciales de usuario recibidas desde el servidor, respectivamente.
+Las variables \emph{stream}, \emph{recorder}, \emph{chunks} y \emph{media} son utilizadas por las API WebRTC y \emph{MediaStream Recording} para su funcionalidad, que veríamos en acción al analizar los métodos del fichero. Las variables \emph{serverStatus}, \emph{locationTime} y \emph{userCreds} almacenan el estado del servidor en forma booleana, la latitud, longitud y marca de tiempo para usar en los nombres de los ficheros de audio y las credenciales de usuario recibidas desde el servidor, respectivamente.
 
 Al ser cargada la \emph{Aplicación Web} se ejecutan los siguientes métodos por medio de \emph{window.onload}.
 
@@ -1622,7 +1622,7 @@ function checkServerStatus() {
 % \label{usersControllerImports}
 \end{listing}
 
-La función \emph{prepareSite()} simplemente inicializa el contador de intentos fallidos e intenta activar la geolocalización del dispositivo a lo largo del tiempo mediante la función \emph{watchPosition()}, lo que implica que nada más cargar la página aparece la petición de permisos de ubicación, que el usuario puede aceptar o negar sin que eso perturbe el resto de la experiencia de usuario. Obviamente, si el usuario niega los permisos el servicio no contaría con los datos de ubicación de los archivos de audio procedentes de esta instancia de la Aplicación Web, pero en principio se ha diseñado teniéndolo en cuenta.
+La función \emph{prepareSite()} simplemente inicializa el contador de intentos fallidos e intenta activar la geolocalización del dispositivo a lo largo del tiempo mediante la función \emph{watchPosition()}, lo que implica que nada más cargar la página aparece la petición de permisos de ubicación, que el usuario puede aceptar o negar sin que eso perturbe el resto de la experiencia de usuario. Obviamente, si el usuario niega los permisos el servicio no contaría con los datos de ubicación de los ficheros de audio procedentes de esta instancia de la Aplicación Web, pero en principio se ha diseñado teniéndolo en cuenta.
 
 La función \emph{watchPosition()} cuenta con dos funciones \emph{callback} (en orden, manejadores de éxito y error) como dos primeros parámetros y un tercer parámetro de opciones, que en este caso simplemente activa la alta precisión de los datos entregados a la aplicación Web. Aquí se ven las implantaciones de estos tres parámetros.
 
@@ -1656,7 +1656,7 @@ function positionError(positionError) {
 % \label{usersControllerImports}
 \end{listing}
 
-Como puede verse, la función llamada al tener éxito en la solicitud de permisos de ubicación es la que almacena en la variable \emph{locationTime} los datos de ubicación y marca de tiempo, tal y como comentábamos al principio de la sección dedicada a este archivo.
+Como puede verse, la función llamada al tener éxito en la solicitud de permisos de ubicación es la que almacena en la variable \emph{locationTime} los datos de ubicación y marca de tiempo, tal y como comentábamos al principio de la sección dedicada a este fichero.
 
 La función \emph{checkServerStatus()} cuenta con la primera petición AJAX (de tipo GET a la ruta \emph{/serverstatus} que ya analizamos en la sección del servidor) realizada por el sistema. Aquí la \emph{Aplicación Web} insta al servidor a que compruebe su estado, buscando si hay usuarios libres para que la instancia de la aplicación pueda unir al usuario al servicio. Se establece también un intervalo de tiempo pasado el cual se vuelve a consultar el estado del servidor.
 
@@ -1717,7 +1717,7 @@ function liberateUser(creds) {
 % \label{usersControllerImports}
 \end{listing}
 
-Después de esto se programan los comportamientos de los botones. El primer botón que aparece en la visualización de la página es el que se debe pulsar al estar de acuerdo con las condiciones que se expresan en la primera descripción, teniendo este el identificador \emph{agreeBtn}. Este botón intenta configurar la captura de audio en el dispositivo según las API WebRTC y \emph{MediaStream Recording}, configurando las opciones de la grabación (en nuestro caso declarando que se captura audio, utilizando el \emph{\acrshort{MIME} type} y la extensión de archivo correspondiente al formato \emph{Ogg} \cite{OggRFC1, OggRFC2}) y determinando qué hacer con los archivos de audio generados según el tipo de usuario o si este tiene credenciales ya asignadas. Si el usuario deniega permisos o el dispositivo no soporta la tecnología utilizada el botón se desactiva y es imposible seguir adelante. Si hay un error, el sistema llama a la función \emph{errorHandler()} por medio de las acciones del manejador de eventos \emph{recorder.onerror}.
+Después de esto se programan los comportamientos de los botones. El primer botón que aparece en la visualización de la página es el que se debe pulsar al estar de acuerdo con las condiciones que se expresan en la primera descripción, teniendo este el identificador \emph{agreeBtn}. Este botón intenta configurar la captura de audio en el dispositivo según las API WebRTC y \emph{MediaStream Recording}, configurando las opciones de la grabación (en nuestro caso declarando que se captura audio, utilizando el \emph{\acrshort{MIME} type} y la extensión de fichero correspondiente al formato \emph{Ogg} \cite{OggRFC1, OggRFC2}) y determinando qué hacer con los ficheros de audio generados según el tipo de usuario o si este tiene credenciales ya asignadas. Si el usuario deniega permisos o el dispositivo no soporta la tecnología utilizada el botón se desactiva y es imposible seguir adelante. Si hay un error, el sistema llama a la función \emph{errorHandler()} por medio de las acciones del manejador de eventos \emph{recorder.onerror}.
 
 \begin{listing}[H]
 \begin{minted}
@@ -1824,7 +1824,7 @@ function stopRecording() {
 % \label{usersControllerImports}
 \end{listing}
 
-Como también puede verse en el último condicional de la función \emph{agreeBtn.onclick}, la anterior al último bloque de código, la función que se llamaría al final de cada grabación depende de si el usuario del servicio tiene unas credenciales asignadas o no en la variable \emph{userCreds} de su instancia de la aplicación Web o si, por el contrario, solo optó por conectarse durante 30 minutos. Estas tres funciones son muy similares en cuanto a que preparan el archivo para su envío al servidor mediante AJAX y lo renombran según los datos de ubicación y tiempo obtenidos y las opciones de audio, pero las rutas son diferentes y solo se intenta obtener credenciales en el caso de que no existan ya unas asignadas.
+Como también puede verse en el último condicional de la función \emph{agreeBtn.onclick}, la anterior al último bloque de código, la función que se llamaría al final de cada grabación depende de si el usuario del servicio tiene unas credenciales asignadas o no en la variable \emph{userCreds} de su instancia de la aplicación Web o si, por el contrario, solo optó por conectarse durante 30 minutos. Estas tres funciones son muy similares en cuanto a que preparan el fichero para su envío al servidor mediante AJAX y lo renombran según los datos de ubicación y tiempo obtenidos y las opciones de audio, pero las rutas son diferentes y solo se intenta obtener credenciales en el caso de que no existan ya unas asignadas.
 
 Nótese que en la segunda función, \emph{loggedUserSaveAndSend()}, aparte de variar la ruta, no se llama a la función \emph{receiveResponse()} al finalizar la transacción con éxito. En el caso de la primera función, el servidor habría guardado en su variable \emph{creds} las credenciales a utilizar, por lo que la \emph{Aplicación Web} realiza otra petición AJAX para obtenerlas. Además, la tercera función, \emph{saveAndSendOneTimePass}, no llama al manejador de errores si falla el envío, sino que directamente avisa al usuario de el error para que intente el proceso de conexión de nuevo.
 
@@ -2030,7 +2030,7 @@ function errorHandler() {
 % \label{usersControllerImports}
 \end{listing}
 
-Por último, la \emph{Aplicación Web} tiene un campo de alertas que notifican al usuario de la recepción de archivos de audio o errores durante las mismas mediante la función \emph{setAlert()}, llamada por \emph{errorHandler()} otras funciones de este archivo ya expuestas anteriormente. Las alertas siguen la estética del resto de la aplicación web, puede verse un ejemplo de alerta por fichero enviado en la Figura \ref{alertaBootsOK} y su mecanismo de funcionamiento en el bloque de código \ref{Alertas}.
+Por último, la \emph{Aplicación Web} tiene un campo de alertas que notifican al usuario de la recepción de ficheros de audio o errores durante las mismas mediante la función \emph{setAlert()}, llamada por \emph{errorHandler()} otras funciones de este fichero ya expuestas anteriormente. Las alertas siguen la estética del resto de la aplicación web, puede verse un ejemplo de alerta por fichero enviado en la Figura \ref{alertaBootsOK} y su mecanismo de funcionamiento en el bloque de código \ref{Alertas}.
 
 \begin{figure}[H]
 \begin{center}

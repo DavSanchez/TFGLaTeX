@@ -49,7 +49,7 @@ La principal característica de la Raspberry Pi 3 para este TFG es su capacidad 
 
 Es una utilidad software cuya funcionalidad es transformar las interfaces de red en puntos de acceso y servidores de autenticación. Implementa la gestión de puntos de acceso \acrshort{IEEE} 802.11, autenticación \acrshort{IEEE} 802.11X, \emph{\acrshort{WiFi} Protected Access} (WPA), \acrshort{WPA2}, \emph{Extensible Authentication Protocol} (\acrshort{EAP}), cliente \acrshort{RADIUS}, servidor \acrshort{EAP} y servidor de autenticación \acrshort{RADIUS}. Soporta interfaces con drivers presentes en sistemas Linux y FreeBSD.
 
-Como \emph{daemon} ha sido diseñado para operar en segundo plano como componente \emph{back-end}, soportando aplicaciones front-end separadas. Ha sido programado para funcionar de forma modular por medio de código C organizado en archivos separados. En la Figura \ref{hostapd} se muestra un esquema de la organización del funcionamiento de \acrshort{Hostapd}.
+Como \emph{daemon} ha sido diseñado para operar en segundo plano como componente \emph{back-end}, soportando aplicaciones front-end separadas. Ha sido programado para funcionar de forma modular por medio de código C organizado en ficheros separados. En la Figura \ref{hostapd} se muestra un esquema de la organización del funcionamiento de \acrshort{Hostapd}.
 
 \begin{figure}[!t]
 \begin{center}
@@ -60,7 +60,7 @@ Como \emph{daemon} ha sido diseñado para operar en segundo plano como component
 \label{hostapd}
 \end{figure}
 
-Hostapd se configura por medio de un archivo de texto que lista todos los parámetros de configuración, alojado en el archivo \emph{/etc/hostapd/hostapd.conf}, que cuenta con los siguientes atributos relevantes y comúnmente utilizados, entre otros:
+Hostapd se configura por medio de un fichero de texto que lista todos los parámetros de configuración, alojado en el fichero \emph{/etc/hostapd/hostapd.conf}, que cuenta con los siguientes atributos relevantes y comúnmente utilizados, entre otros:
 \begin{itemize}
 \item Atributos de Interfaz Inalámbrica:
 \begin{itemize}
@@ -92,7 +92,7 @@ Hostapd se configura por medio de un archivo de texto que lista todos los parám
 \end{itemize}
 \end{itemize}
 
-En el bloque de código \ref{HostapdConf1} se muestra un ejemplo de archivo de configuración. 
+En el bloque de código \ref{HostapdConf1} se muestra un ejemplo de fichero de configuración. 
 
 \begin{listing}[H]
 \begin{minted}
@@ -120,7 +120,7 @@ beacon_int=100
 auth_algs=3
 wmm_enabled=1
 \end{minted}
-\caption{Ejemplo de archivo de configuración de Hostapd}
+\caption{Ejemplo de fichero de configuración de Hostapd}
 \label{HostapdConf1}
 \end{listing}
 
@@ -134,7 +134,7 @@ RADIUS es un protocolo cliente/servidor que proporciona gestión de AAA de forma
 
 La autenticación y autorización de RADIUS es la descrita en la \emph{Request For Comments} (\acrshort{RFC}) 2865 mientras que la contabilidad es la descrita en la \acrshort{RFC} 2866.
 
-Para la autenticación y autorización, el cliente envía una petición al \emph{Servidor de Acceso a la Red} (\acrshort{NAS}) para obtener acceso a un recurso de red particular utilizando credenciales de acceso. Estas credenciales llegan a este dispositivo mediante los protocolos de nivel de enlace. En respuesta, el \acrshort{NAS} envía un mensaje RADIUS de Petición de Acceso al servidor RADIUS, pidiendo autorización para conceder el acceso mediante el protocolo \acrshort{RADIUS}. Esta petición incluye credenciales de acceso, habitualmente un nombre de usuario y contraseña o un certificado de seguridad proporcionados por el usuario. El servidor RADIUS comprueba que la información es correcta utilizando patrones de autenticación como \emph{Password Authentication Protocol} (\acrshort{PAP}), \emph{Challenge-Handshake Authentication Protocol} (\acrshort{CHAP}) o \acrshort{EAP}. En este punto se verifica la información de identificación con las almacenadas en un archivo del servidor o una fuente externa, como una base de datos \acrshort{SQL}. Tras esto, el servidor \acrshort{RADIUS} puede responder de tres formas (Figura \ref{RADIUSAccept}):
+Para la autenticación y autorización, el cliente envía una petición al \emph{Servidor de Acceso a la Red} (\acrshort{NAS}) para obtener acceso a un recurso de red particular utilizando credenciales de acceso. Estas credenciales llegan a este dispositivo mediante los protocolos de nivel de enlace. En respuesta, el \acrshort{NAS} envía un mensaje RADIUS de Petición de Acceso al servidor RADIUS, pidiendo autorización para conceder el acceso mediante el protocolo \acrshort{RADIUS}. Esta petición incluye credenciales de acceso, habitualmente un nombre de usuario y contraseña o un certificado de seguridad proporcionados por el usuario. El servidor RADIUS comprueba que la información es correcta utilizando patrones de autenticación como \emph{Password Authentication Protocol} (\acrshort{PAP}), \emph{Challenge-Handshake Authentication Protocol} (\acrshort{CHAP}) o \acrshort{EAP}. En este punto se verifica la información de identificación con las almacenadas en un fichero del servidor o una fuente externa, como una base de datos \acrshort{SQL}. Tras esto, el servidor \acrshort{RADIUS} puede responder de tres formas (Figura \ref{RADIUSAccept}):
 
 \begin{itemize}
 \item \emph{Access Accept}: se concede acceso al usuario.
@@ -219,18 +219,18 @@ La interfaz de enlace ascendente se implementa utilizando drivers \emph{network 
 
 \subsubsection{Configuración}
 
-El archivo principal de CoovaChilli es  \emph{/usr/local/etc/chilli.conf} el cual incluye otros tres: \emph{main.conf}, \emph{hs.conf} y \emph{local.conf}. Los dos primeros son creados por los scripts del shell existentes en el archivo \emph{functions} basándose en las configuraciones de otros archivos mencionados a continuación y obteniendo algunas configuraciones del servidor RADIUS y otras \acrshort{URL}. El archivo \emph{local.conf} está reservado para configuraciones de lugares específicos.
-Las configuraciones por defecto que son establecidas en \emph{chilli.conf} se encuentran en \emph{/usr/local/etc/chilli/defaults}. Los valores existentes en este último archivo pueden sobreescribirse durante la inicialización de chilli si existe otro archivo en \emph{/usr/local/etc/chilli/config}, que no es más que una copia del archivo defaults sobrescribiendo los valores de los atributos que se desea cambiar.
-Cada vez que se enciende el dispositivo en el que está instalado CoovaChilli, el script presente en \emph{/usr/local/etc/init.d/chilli} se ejecuta tomando las configuraciones de los archivos \emph{defaults} y \emph{config} mencionados anteriormente, ejecutando también el script \emph{/usr/local/etc/chilli/functions} para asistir en esta configuración y la de otros archivos relevantes para el funcionamiento del programa, creando de este modo los respectivos archivos \emph{main.conf}, \emph{hs.conf} y \emph{local.conf}.
+El fichero principal de CoovaChilli es  \emph{/usr/local/etc/chilli.conf} el cual incluye otros tres: \emph{main.conf}, \emph{hs.conf} y \emph{local.conf}. Los dos primeros son creados por los scripts del shell existentes en el fichero \emph{functions} basándose en las configuraciones de otros ficheros mencionados a continuación y obteniendo algunas configuraciones del servidor RADIUS y otras \acrshort{URL}. El fichero \emph{local.conf} está reservado para configuraciones de lugares específicos.
+Las configuraciones por defecto que son establecidas en \emph{chilli.conf} se encuentran en \emph{/usr/local/etc/chilli/defaults}. Los valores existentes en este último fichero pueden sobreescribirse durante la inicialización de chilli si existe otro fichero en \emph{/usr/local/etc/chilli/config}, que no es más que una copia del fichero \emph{defaults} sobrescribiendo los valores de los atributos que se desea cambiar.
+Cada vez que se enciende el dispositivo en el que está instalado CoovaChilli, el script presente en \emph{/usr/local/etc/init.d/chilli} se ejecuta tomando las configuraciones de los ficheros \emph{defaults} y \emph{config} mencionados anteriormente, ejecutando también el script \emph{/usr/local/etc/chilli/functions} para asistir en esta configuración y la de otros ficheros relevantes para el funcionamiento del programa, creando de este modo los respectivos ficheros \emph{main.conf}, \emph{hs.conf} y \emph{local.conf}.
 
-Adicionalmente, CoovaChilli implementa un servidor Web mínimo destinado a servir contenido en el directorio \emph{/etc/local/etc/chilli/www/}, lugar en el que puede ubicarse un servicio de portal cautivo sencillo. Por defecto, en este directorio se implementa un portal cautivo con pantalla de espera que redirige a un formulario ensamblado con plantillas HTML y archivos de Web scripts \emph{Common Gateway Interface} (\acrshort{CGI}) para contenido dinámico. Estos archivos (con la extensión .chi) son procesados con el software Haserl \cite{Haserl}, por lo que si se usa la configuración por defecto de CoovaChilli este programa ha de estar instalado.
+Adicionalmente, CoovaChilli implementa un servidor Web mínimo destinado a servir contenido en el directorio \emph{/etc/local/etc/chilli/www/}, lugar en el que puede ubicarse un servicio de portal cautivo sencillo. Por defecto, en este directorio se implementa un portal cautivo con pantalla de espera que redirige a un formulario ensamblado con plantillas HTML y ficheros de Web scripts \emph{Common Gateway Interface} (\acrshort{CGI}) para contenido dinámico. Estos ficheros (con la extensión .chi) son procesados con el software Haserl \cite{Haserl}, por lo que si se usa la configuración por defecto de CoovaChilli este programa ha de estar instalado.
 
-Aunque CoovaChilli cuenta con numerosas opciones, en este TFG se usa y modifica tan solo un subconjunto de ellas, asignándoles valores en los archivos \emph{defaults} y \emph{config}:
+Aunque CoovaChilli cuenta con numerosas opciones, en este TFG se usa y modifica tan solo un subconjunto de ellas, asignándoles valores en los ficheros \emph{defaults} y \emph{config}:
 
 \begin{itemize}
 \item \emph{HS\_WANIF}: especifica la interfaz de red que cuenta con acceso a internet, habitualmente la interfaz Ethernet del dispositivo, \emph{eth0}.
 \item \emph{HS\_LANIF}: interfaz a la que se conectan los clientes, habitualmente la interfaz WiFi del dispositivo, \emph{wlan0}.
-\item \emph{HS\_NETWORK}: dirección IP de la red a la que se conectan los clientes, por ejemplo 192.160.10.0. Habitualmente esta dirección es la determinada al configurar una IP estática para \emph{wlan0} en el archivo \emph{/etc/network/interfaces} del sistema operativo.
+\item \emph{HS\_NETWORK}: dirección IP de la red a la que se conectan los clientes, por ejemplo 192.160.10.0. Habitualmente esta dirección es la determinada al configurar una IP estática para \emph{wlan0} en el fichero \emph{/etc/network/interfaces} del sistema operativo.
 \item \emph{HS\_UAMLISTEN}: la IP del dispositivo de red al que se conectan los clientes. Por supuesto, debe pertenecer al rango IP de la red especificada en el atributo anterior, siguiendo el ejemplo dicha IP sería 192.168.10.1.
 \item \emph{HS\_UAMALLOW}: redes y dominios en los que los usuarios no autenticados sí tienen permitida la navegación. Habitualmente solo se permite la red local desde la que también se serviría el portal cautivo (el mismo valor que el atributo \emph{HS\_NETWORK}), aunque para otros servicios de portal cautivo más avanzados podría permitirse el acceso a otros dominios, por ejemplo a la URL de la correspondiente API de Facebook para la autenticación por esta red social o al dominio de PayPal para realizar pagos de tarifas.
 \item \emph{HS\_UAMSECRET}: clave secreta con la que se cifran las credenciales que se envíen desde el servidor Web del portal cautivo hacia CoovaChilli.
@@ -241,7 +241,7 @@ Aunque CoovaChilli cuenta con numerosas opciones, en este TFG se usa y modifica 
 
 \subsubsection{Interfaz \emph{JavaScript Object Notation}}
 
-\emph{JavaScript Object Notation} (JSON) es perfil de transmición de datos desde un servidor Web a un navegador. Tiene menos datos de cabecera que el \emph{Xtensible Markup Language} (\acrshort{XML}) habitualmente utilizado en \emph{Asynchronous JavaScript And XML}(\acrshort{AJAX}) y otros servicios y por ello se ha considerado una alternativa a este y ha alcanzado gran popularidad. CoovaChilli usa JSON para realizar el control de usuarios de forma que pueda utilizarse un portal cautivo de cualquier tipo e incluso en servidores distintos al incorporado en el programa a los que pueda acceder el cliente, previa habilitación del acceso al dominio correspondiente en el atributo \emph{HS\_UAMALLOW} del archivo de configuración. Un usuario puede autenticarse a través de ella, obtener el estado de su conexión o desconectarse del portal cautivo.
+\emph{JavaScript Object Notation} (JSON) es perfil de transmición de datos desde un servidor Web a un navegador. Tiene menos datos de cabecera que el \emph{Xtensible Markup Language} (\acrshort{XML}) habitualmente utilizado en \emph{Asynchronous JavaScript And XML}(\acrshort{AJAX}) y otros servicios y por ello se ha considerado una alternativa a este y ha alcanzado gran popularidad. CoovaChilli usa JSON para realizar el control de usuarios de forma que pueda utilizarse un portal cautivo de cualquier tipo e incluso en servidores distintos al incorporado en el programa a los que pueda acceder el cliente, previa habilitación del acceso al dominio correspondiente en el atributo \emph{HS\_UAMALLOW} del fichero de configuración. Un usuario puede autenticarse a través de ella, obtener el estado de su conexión o desconectarse del portal cautivo.
 
 Para comunicarse con la interfaz JSON de CoovaChilli se utiliza una biblioteca JavaScript, instalada por defecto en \emph{/usr/local/etc/chilli/www/ChilliLibrary.js}. Esta biblioteca crea el objeto global \emph{chilliController}, que ha de inicializarse con los valores necesarios según nuestra configuración. El portal cautivo que se implemente pasa a utilizar los métodos expuestos por el objeto \emph{chilliController} para comunicarse con CoovaChilli, enviándole peticiones HTTP GET a este y recibiendo respuestas en el formato JSON.
 
@@ -523,14 +523,14 @@ Este sencillo código, al ejecutarse en Node.js, implementa una respuesta de tex
 
 Como parte del entorno de Node.js se incluye \emph{npm}, un gestor de paquetes JavaScript utilizado para instalar bibliotecas adicionales almacenadas en el registro npm, un repositorio online de paquetes públicos. 
 Permite tanto instalar como distribuir módulos y gestionar las dependencias de un proyecto determinado desde la línea de órdenes, dependencias que luego pueden utilizarse en el proyecto mediante el método \emph{require()}. 
-Puede gestionar paquetes JavaScript instalados globalmente. Mediante un archivo \emph{package.json} ubicado habitualmente en la raíz de un proyecto Node.js, \emph{npm} puede instalar todas las dependencias necesarias con una sola orden, atendiendo al rango de versiones posibles para evitar incompatibilidades.
+Puede gestionar paquetes JavaScript instalados globalmente. Mediante un fichero \emph{package.json} ubicado habitualmente en la raíz de un proyecto Node.js, \emph{npm} puede instalar todas las dependencias necesarias con una sola orden, atendiendo al rango de versiones posibles para evitar incompatibilidades.
 
 \subsubsection{El \emph{framework Express}}
 Express, también referido como \emph{Express.js}, es un \emph{framework} para Node.js. Instalable mediante \emph{npm}, está diseñado para desarrollar tanto aplicaciones Web como API y se ha convertido en el \emph{framework} de servidor estándar de facto para Node.js. Intenta ser mínimo a la par que flexible, pudiendo implantar un servidor sencillo en unas pocas líneas de código e ir implementando las funcionalidades requeridas según sea necesario.
 
 Express representa parte del \emph{back-end} de lo que se ha dado a conocer como el \emph{\acrshort{MEAN} stack}, un conjunto de subsistemas de software basados en JavaScript y constituido por \emph{MongoDB} \cite{MongoDB}, un sistema de bases de datos no-SQL, \emph{Angular}, un \emph{framework} para implantar patrones de diseño software de \emph{Modelo-Vista-Controlador} (MVC) en aplicaciones Web de página única, \emph{Express} y el propio Node.js.
 
-Para implantar la funcionalidad del código del ejemplo anterior, esta vez haciendo uso del \emph{framework} Express, puede escribirse el código del bloque de código \ref{ExpressServer} en un archivo JavaScript llamado por ejemplo \emph{app.js} y luego ejecutar este archivo en la línea de órdenes mediante la orden \emph{node app.js}.
+Para implantar la funcionalidad del código del ejemplo anterior, esta vez haciendo uso del \emph{framework} Express, puede escribirse el código del bloque de código \ref{ExpressServer} en un fichero JavaScript llamado por ejemplo \emph{app.js} y luego ejecutar este fichero en la línea de órdenes mediante la orden \emph{node app.js}.
 
 
 \begin{listing}[H]
@@ -560,19 +560,19 @@ app.listen(3000, function() {
 \label{ExpressServer}
 \end{listing}
 
-Las dos primeras líneas realizan la importación del módulo Express y crean la aplicación en la variable \emph{app}, que contendría todos los métodos para recibir las peticiones HTTP, configurar lógicas adicionales y otros controles de comportamiento de la aplicación Web. La orden \emph{app.get()} representa la definición de un camino; especifica una función \emph{callback} como segundo parámetro que se ejecutaría cuando haya una petición HTTP GET con la ruta determinada en el primer parámetro (relativa a la raíz). La función \emph{callback} tiene objetos de petición y respuesta como argumentos y llama al método \emph{send()} en la respuesta para devolver la \emph{string Hello World}. El bloque final inicia el servidor en el puerto 3000 e imprime un \emph{log} en la consola. Si se visita \url{localhost:3000} en el navegador local después de ejecutar este archivo con Node.js se vería la respuesta.
+Las dos primeras líneas realizan la importación del módulo Express y crean la aplicación en la variable \emph{app}, que contendría todos los métodos para recibir las peticiones HTTP, configurar lógicas adicionales y otros controles de comportamiento de la aplicación Web. La orden \emph{app.get()} representa la definición de un camino; especifica una función \emph{callback} como segundo parámetro que se ejecutaría cuando haya una petición HTTP GET con la ruta determinada en el primer parámetro (relativa a la raíz). La función \emph{callback} tiene objetos de petición y respuesta como argumentos y llama al método \emph{send()} en la respuesta para devolver la \emph{string Hello World}. El bloque final inicia el servidor en el puerto 3000 e imprime un \emph{log} en la consola. Si se visita \url{localhost:3000} en el navegador local después de ejecutar este fichero con Node.js se vería la respuesta.
 
 \subsubsection{El módulo \emph{formidable}}
-El módulo \emph{formidable} de análisis sintáctico (\emph{parsing}) de datos de tipo formulario, especializado en subida de archivos a servidores, incluyendo subida múltiple. Con el uso de este paquete \emph{npm} es posible gestionar los datos enviados al servidor desde el portal cautivo.
-Para poder hacer uso del módulo primero ha de incluirse al archivo que ejecutamos con \emph{node} mediante la orden \emph{require(‘formidable’)}, como también sucedía con \emph{express} y con el resto de módulos. Su API funciona de la siguiente manera:
+El módulo \emph{formidable} de análisis sintáctico (\emph{parsing}) de datos de tipo formulario, especializado en subida de ficheros a servidores, incluyendo subida múltiple. Con el uso de este paquete \emph{npm} es posible gestionar los datos enviados al servidor desde el portal cautivo.
+Para poder hacer uso del módulo primero ha de incluirse al fichero que ejecutamos con \emph{node} mediante la orden \emph{require(‘formidable’)}, como también sucedía con \emph{express} y con el resto de módulos. Su API funciona de la siguiente manera:
 
 \begin{itemize}
 \item Se crea un objeto formulario entrante y se asocia a una variable con la siguiente asignación \emph{var form = new formidable.IncomingForm()}.
-\item Tras esto, pueden especificarse detalles como el directorio en el se suben los archivos con el siguiente código:  \emph{form.uploadDir = ``/ruta/hacia/el/archivo'';}. 
+\item Tras esto, pueden especificarse detalles como el directorio en el se suben los ficheros con el siguiente código:  \emph{form.uploadDir = ``/ruta/hacia/el/fichero'';}. 
 \item Para realizar el parsing de una petición que incluya datos de tipo formulario se usa la siguiente función, donde \emph{request} es la petición entrante: \emph{form.parse(request);}.
 \end{itemize}
 
-Los eventos se manejan con la función \emph{on}, que incluye una \emph{string} con el nombre del evento como primer parámetro y una función \emph{callback} como segundo parámetro, a ejecutar cuando dicho evento ocurre. Ejemplos de eventos son ‘\emph{progress}’, ‘\emph{file}’, ‘\emph{error}’ y ‘\emph{end}’. Un ejemplo de manejo de eventos que gestionaría qué ocurre cuando se ha recibido una petición y todos los archivos ya han terminado de llegar al disco se muestra en el bloque de código \ref{ResponseEvent}.
+Los eventos se manejan con la función \emph{on}, que incluye una \emph{string} con el nombre del evento como primer parámetro y una función \emph{callback} como segundo parámetro, a ejecutar cuando dicho evento ocurre. Ejemplos de eventos son ‘\emph{progress}’, ‘\emph{file}’, ‘\emph{error}’ y ‘\emph{end}’. Un ejemplo de manejo de eventos que gestionaría qué ocurre cuando se ha recibido una petición y todos los ficheros ya han terminado de llegar al disco se muestra en el bloque de código \ref{ResponseEvent}.
 
 \begin{listing}[H]
 \begin{minted}
@@ -665,7 +665,7 @@ Aunque en este TFG se trabaja con el estándar de JavaScript llamado ECMAScript 
 
 \paragraph{\emph{Web Real-Time Communications}}~\\
 
-WebRTC es una tecnología que permite a las aplicaciones Web capturar y transmitir datos de audio y vídeo, así como intercambiar datos entre navegadores sin un intermediario. Los estándares que componen WebRTC hacen posible compartir datos y realizar videoconferencias \emph{peer-to-peer}, sin que sea necesario que los usuarios instalen complementos u otros elementos \emph{software} de terceros. Junto a las API \emph{MediaStream Recording} y \emph{Media Capture and Streams} proporcionan a la Web una gama de capacidades multimedia que incluyen captura y grabación de multimedia en disco, conferencias de audio y vídeo, intercambio de archivos e incluso gestión de identidad.
+WebRTC es una tecnología que permite a las aplicaciones Web capturar y transmitir datos de audio y vídeo, así como intercambiar datos entre navegadores sin un intermediario. Los estándares que componen WebRTC hacen posible compartir datos y realizar videoconferencias \emph{peer-to-peer}, sin que sea necesario que los usuarios instalen complementos u otros elementos \emph{software} de terceros. Junto a las API \emph{MediaStream Recording} y \emph{Media Capture and Streams} proporcionan a la Web una gama de capacidades multimedia que incluyen captura y grabación de multimedia en disco, conferencias de audio y vídeo, intercambio de ficheros e incluso gestión de identidad.
 
 Es un estándar actualmente en desarrollo por la \emph{World Wide Web Consortium} (\acrshort{W3C}) y el IETF. Para transferir los datos multimedia se utiliza el protocolo \emph{Realtime Transport Protocol }(\acrshort{RTP}).
 
@@ -689,7 +689,7 @@ AJAX utiliza peticiones HTTP para que las aplicaciones Web puedan enviar datos a
 
 \paragraph{\emph{jQuery}}~\\
 
-A menudo, trabajar con determinadas funciones de JavaScript (manipulación del DOM, manejar eventos, usar AJAX) puede generar documentos difíciles de leer por su extensión y lo confuso de su sintaxis. La jQuery es una biblioteca JavaScript gratuita y de código abierto que trata de simplificar todos estos procesos del lado del cliente. Permite a los desarrolladores crear complementos con los que añadir una capa más de abstracción a las interacciones de bajo nivel siguiendo un enfoque modular. Actualmente se halla en su versión 3. Para utilizarlo en un sitio Web ha de ser incluido como se incluiría un archivo JavaScript cualquiera en un archivo HTML. La popularidad de jQuery radica en cómo simplifica la lectura y el análisis del código. Por ejemplo, si desde un archivo JavaScript deseamos realizar una petición AJAX de tipo GET al archivo del servidor \emph{send-ajax.php} se tendría que escribir el bloque de código \ref{AJAX} (cliente).
+A menudo, trabajar con determinadas funciones de JavaScript (manipulación del DOM, manejar eventos, usar AJAX) puede generar documentos difíciles de leer por su extensión y lo confuso de su sintaxis. La jQuery es una biblioteca JavaScript gratuita y de código abierto que trata de simplificar todos estos procesos del lado del cliente. Permite a los desarrolladores crear complementos con los que añadir una capa más de abstracción a las interacciones de bajo nivel siguiendo un enfoque modular. Actualmente se halla en su versión 3. Para utilizarlo en un sitio Web ha de ser incluido como se incluiría un fichero JavaScript cualquiera en un fichero HTML. La popularidad de jQuery radica en cómo simplifica la lectura y el análisis del código. Por ejemplo, si desde un fichero JavaScript deseamos realizar una petición AJAX de tipo GET al fichero del servidor \emph{send-ajax.php} se tendría que escribir el bloque de código \ref{AJAX} (cliente).
 
 \begin{listing}[H]
 \begin{minted}

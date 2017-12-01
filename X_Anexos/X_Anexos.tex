@@ -21,9 +21,9 @@ En este Apéndice se asume que se dispone de conexión a Internet operativa a la
 
 Para poner en marcha la Raspberry Pi 3 de forma sencilla es necesario disponer de la propia placa, una fuente de alimentación USB Micro (un adaptador de corriente como el de la mayoría de teléfonos móviles actuales), teclado y ratón, una tarjeta microSD de al menos 8 GB clase 4 y un monitor con entrada HDMI, para lo que puede servir una pantalla de televisión. También hace falta disponer de conexión a Internet, ya sea mediante red cableada o una red inalámbrica a la que la Raspberry Pi 3 pueda conectarse.
 
-La tarjeta microSD debe de tener ya almacenado el sistema operativo Raspbian desde el principio o por el contrario hacer uso de la solución recomendada desde la propia página Web oficial, la herramienta \emph{New Out Of Box Software} (\emph{\acrshort{NOOBS}}, que en inglés significa \emph{novatos}). Esta herramienta es un gestor de instalaciones de sistemas operativos para la Raspberry Pi, disponible desde su página Web oficial. Puede comprarse la tarjeta SD con dicha herramienta preinstalada o puede instalarse manualmente haciendo uso de un ordenador, descargando el archivo comprimido de NOOBS y descomprimiéndolo en una tarjeta SD vacía y formateada en FAT32, de forma que los archivos estén en el directorio raíz de la tarjeta. Tras este proceso la tarjeta queda preparada para funcionar insertándose en la Raspberry Pi 3, enchufando la misma al teclado, ratón y monitor y por último a la corriente eléctrica.
+La tarjeta microSD debe de tener ya almacenado el sistema operativo Raspbian desde el principio o por el contrario hacer uso de la solución recomendada desde la propia página Web oficial, la herramienta \emph{New Out Of Box Software} (\emph{\acrshort{NOOBS}}, que en inglés significa \emph{novatos}). Esta herramienta es un gestor de instalaciones de sistemas operativos para la Raspberry Pi, disponible desde su página Web oficial. Puede comprarse la tarjeta SD con dicha herramienta preinstalada o puede instalarse manualmente haciendo uso de un ordenador, descargando el fichero comprimido de NOOBS y descomprimiéndolo en una tarjeta SD vacía y formateada en FAT32, de forma que los ficheros estén en el directorio raíz de la tarjeta. Tras este proceso la tarjeta queda preparada para funcionar insertándose en la Raspberry Pi 3, enchufando la misma al teclado, ratón y monitor y por último a la corriente eléctrica.
 
-Al ser enchufada a la corriente la Raspberry Pi se inicia de forma automática y carga la herramienta NOOBS, tras lo que aparece la pantalla de selección de sistemas operativos en el que debemos seleccionar Raspbian (Figura \ref{NOOBS}) y pulsar el botón \emph{Instalar} en la esquina superior izquierda del menú, tras lo cual comienza el proceso de instalación de Raspbian utilizando la totalidad de la tarjeta microSD para su sistema de archivos (si utilizamos la versión ligera de NOOBS primero se efectúa la descarga del mismo, ya que no vendría incluido en la herramienta). Al terminar, la herramienta avisa y se procede al reinicio del dispositivo.
+Al ser enchufada a la corriente la Raspberry Pi se inicia de forma automática y carga la herramienta NOOBS, tras lo que aparece la pantalla de selección de sistemas operativos en el que debemos seleccionar Raspbian (Figura \ref{NOOBS}) y pulsar el botón \emph{Instalar} en la esquina superior izquierda del menú, tras lo cual comienza el proceso de instalación de Raspbian utilizando la totalidad de la tarjeta microSD para su sistema de ficheros (si utilizamos la versión ligera de NOOBS primero se efectúa la descarga del mismo, ya que no vendría incluido en la herramienta). Al terminar, la herramienta avisa y se procede al reinicio del dispositivo.
 
 \begin{figure}[!t]
 \begin{center}
@@ -53,7 +53,7 @@ Hoy en día la tendencia es a alojar los proyectos de libre distribución y cód
 \vspace{\stretch{3}} % \vfill % equivalent to \vspace{\fill}
 \clearpage% https://tex.stackexchange.com/questions/70714/center-horizontally-and-vertically-a-block-of-text
 
-Para implementar el servicio, en lugar de replicar el código manualmente, puede clonarse el repositorio online habilitado explícitamente para ello mediante la herramienta de control de versiones \emph{git}, situándose en el directorio donde se quiera almacenar los archivos y ejecutando la siguiente orden en el terminal: 
+Para implementar el servicio, en lugar de replicar el código manualmente, puede clonarse el repositorio online habilitado explícitamente para ello mediante la herramienta de control de versiones \emph{git}, situándose en el directorio donde se quiera almacenar los ficheros y ejecutando la siguiente orden en el terminal: 
 
 \begin{listing}[H]
   \begin{minted}
@@ -107,7 +107,7 @@ Proporcionando la orden de arranque del Apéndice \ref{ApendiceB} (\emph{node no
 
 La orden ejecutada justo al final del apartado anterior basta para poner en marcha el servicio, pero no protege ante la situación de que un fallo detenga su ejecución y requiere que un administrador lo ejecute siempre que el hardware se pone en marcha. Existen diversas utilidades para solucionar esta situación no deseada; la utilizada en este TFG es PM2.
 
-PM2 es un gestor de procesos para Node.js que nos permite configurar el comportamiento del servicio Web implementado frente a cambios en los archivos locales (como una actualización) u otras situaciones. Puede instalarse a través del gestor de paquetes \emph{npm}:
+PM2 es un gestor de procesos para Node.js que nos permite configurar el comportamiento del servicio Web implementado frente a cambios en los ficheros locales (como una actualización) u otras situaciones. Puede instalarse a través del gestor de paquetes \emph{npm}:
 
 \begin{listing}[H]
   \begin{minted}
@@ -187,7 +187,7 @@ Tras este proceso, solo queda configurar los parámetros a usar por PM2, ejecuta
 
 Este paso asegura que la aplicación Node.js vuelve a ejecutarse tras un reinicio del sistema, ya sea un reinicio programado o el ocurrido tras un corte accidental.
 
-Para conseguir lo anterior es necesario configurar el entorno de programación. Para ello se puede utilizar un archivo de configuración como el empleado en este TFG, ubicado en la raíz del repositorio de GitHub con el nombre \emph{captiveportalserver.config.js}. El contenido de este archivo es el siguiente:
+Para conseguir lo anterior es necesario configurar el entorno de programación. Para ello se puede utilizar un fichero de configuración como el empleado en este TFG, ubicado en la raíz del repositorio de GitHub con el nombre \emph{captiveportalserver.config.js}. El contenido de este fichero es el siguiente:
 
 \begin{listing}[H]
 \begin{minted}
@@ -220,9 +220,9 @@ Se observa que se trata esencialmente de un objeto JavaScript con los siguientes
 
 \begin{itemize}
 \item \emph{name}: el nombre asignado al proceso.
-\item \emph{script}: la ubicación del archivo Node.js que ejecutaríamos normalmente con la orden \emph{node}.
-\item \emph{watch}: un flag que vigila cambios en nuestros archivos, reiniciando la aplicación Node.js si se detectara uno.
-\item \emph{ignore\_watch}: \emph{Array} de archivos y directorios que no se vigilan con el \emph{flag} anterior.
+\item \emph{script}: la ubicación del fichero Node.js que ejecutaríamos normalmente con la orden \emph{node}.
+\item \emph{watch}: un flag que vigila cambios en nuestros ficheros, reiniciando la aplicación Node.js si se detectara uno.
+\item \emph{ignore\_watch}: \emph{Array} de ficheros y directorios que no se vigilan con el \emph{flag} anterior.
 \end{itemize}
 
 Si nuestro entorno requiriese de más aplicaciones Node.js ejecutadas simultáneamente podrían añadirse como nuevas instancias del objeto \emph{apps}.
@@ -271,7 +271,7 @@ En este apéndice se presenta una visión rápida del ciclo de vida del TFG. El 
 
 El desarrollo de este TFG no consistió en considerar un único curso de acción y desarrollar la solución. Durante las etapas iniciales se tuvieron en cuenta e investigaron varias alternativas con el objetivo de llegar al mismo resultado final, elementos que se vieron reflejados en los mecanismos de seguimiento presentados. A continuación detallamos algunos de estas primeras aproximaciones y se explica el motivo de haberlas declinado en favor del camino finalmente escogido.
 
-La primera solución propuesta para el TFG, apareciendo así en la primera versión de la propuesta o anteproyecto, consistía en programar una aplicación nativa para terminales Android que gestionara la captura del audio y la ubicación, habilitando el acceso a Internet una vez transferidos los archivos al servidor. Esta solución podría extenderse más adelante a sistemas iOS. Se pensó también implementar una aplicación universal mediante un \emph{wrapper} como \emph{Apache Cordova}, la tecnología anteriormente conocida como \emph{PhoneGap}, con lo que con una sola programación se podrían obtener aplicaciones para diversos sistemas móviles.
+La primera solución propuesta para el TFG, apareciendo así en la primera versión de la propuesta o anteproyecto, consistía en programar una aplicación nativa para terminales Android que gestionara la captura del audio y la ubicación, habilitando el acceso a Internet una vez transferidos los ficheros al servidor. Esta solución podría extenderse más adelante a sistemas iOS. Se pensó también implementar una aplicación universal mediante un \emph{wrapper} como \emph{Apache Cordova}, la tecnología anteriormente conocida como \emph{PhoneGap}, con lo que con una sola programación se podrían obtener aplicaciones para diversos sistemas móviles.
 
 Sin embargo, la propuesta de aplicación nativa resultaba altamente situacional, implicando que un hipotético usuario del servicio tuviera una aplicación instalada en su dispositivo de antemano si quería poder acceder a la red. Además, el desarrollo de aplicaciones nativas orientadas a terminales móviles excluía a los ordenadores portátiles, que sin ser \emph{smartphones} ni \emph{tablets} debían poder utilizar el servicio sin problema. Este enfoque requeriría entonces programar aplicaciones de escritorio separadas o implementar alguna otra solución específica para ellos, lo que alargaría el proceso de programación.
 

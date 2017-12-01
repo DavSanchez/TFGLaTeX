@@ -67,7 +67,7 @@ En la Figura \ref{pm2monitNode} se muestra una cifra más inmediata del consumo 
 \begin{center}
 \includegraphics[width=0.75\linewidth]{./6_EvalEmpirica/Img/pm2monitNode.png}
 \end{center}
-\caption{Ventana de consumo usando la orden pms monit}
+\caption{Ventana de consumo usando la orden pm2 monit}
 \label{pm2monitNode}
 \end{figure}
 
@@ -148,7 +148,7 @@ El consumo de recursos en Vivaldi sin extensiones ni complementos se mantiene en
 \label{vivaldiRAM}
 \end{figure}
 
-El consumo de RAM en Microsoft Edge, resaltado en rojo, es mucho menor. Dado que la transferencia de archivos de audio por la red ocurre de forma puntual y a intervalos muy cortos de tiempo, los indicadores de consumo de red son nulos en el momento de tomar la captura debido a que se encontraban entre envíos (Figura \ref{edgeRAM}).
+El consumo de RAM en Microsoft Edge, resaltado en rojo, es mucho menor. Dado que la transferencia de ficheros de audio por la red ocurre de forma puntual y a intervalos muy cortos de tiempo, los indicadores de consumo de red son nulos en el momento de tomar la captura debido a que se encontraban entre envíos (Figura \ref{edgeRAM}).
 
 \begin{figure}[!t]
 \begin{center}
@@ -166,7 +166,7 @@ En una de las pruebas del sistema con el navegador de escritorio Firefox y cuand
 \begin{center}
 \includegraphics[width=0.75\linewidth]{./6_EvalEmpirica/Img/traffic.png}
 \end{center}
-\caption{Throughput de tráfico TCP y HTTP para comunicación de un archivo de audio}
+\caption{Throughput de tráfico TCP y HTTP para comunicación de un fichero de audio}
 \label{traffic}
 \end{figure}
 
@@ -180,22 +180,22 @@ Además, en las pruebas con sistemas de escritorio se realizó una prueba de vel
 \label{speed}
 \end{figure}
 
-\subsection{Análisis de los archivos de audio generados}
-Los archivos de audio generados y enviados al servidor son renombrados por la \emph{Aplicación Web} siguiendo la estructura de la Figura \ref{audioFiles}: el prefijo \emph{Lat} seguido de la latitud, el prefijo \emph{Lon} seguido de la longitud y el prefijo \emph{Time} seguido del \emph{timestamp} completo.
+\subsection{Análisis de los ficheros de audio generados}
+Los ficheros de audio generados y enviados al servidor son renombrados por la \emph{Aplicación Web} siguiendo la estructura de la Figura \ref{audioFiles}: el prefijo \emph{Lat} seguido de la latitud, el prefijo \emph{Lon} seguido de la longitud y el prefijo \emph{Time} seguido del \emph{timestamp} completo.
 
 \begin{figure}[!t]
 \begin{center}
 \includegraphics[width=0.75\linewidth]{./6_EvalEmpirica/Img/audioFiles.png}
 \end{center}
-\caption{Formato del archivo de audio etiquetado con geolocalización y temporización}
+\caption{Formato del fichero de audio etiquetado con geolocalización y temporización}
 \label{audioFiles}
 \end{figure}
 
-Cada archivo tiene una duración de 4 segundos, está codificado en \emph{Opus Audio} \cite{OpusCodec} y almacenado en un contenedor de formato \emph{Ogg}. La tasa de muestreo de la codificación es \emph{fullband} (48 kHz, como puede verse en la imagen). El fichero generado ronda los 63 KB de tamaño, lo que confirma lo apreciado en la captura del tráfico TCP correspondiente a un fichero enviado, de tamaño total ligeramente mayor y dividido en varias tramas (Figura \ref{audioInfo}).
+Cada fichero tiene una duración de 4 segundos, está codificado en \emph{Opus Audio} \cite{OpusCodec} y almacenado en un contenedor de formato \emph{Ogg}. La tasa de muestreo de la codificación es \emph{fullband} (48 kHz, como puede verse en la imagen). El fichero generado ronda los 63 KB de tamaño, lo que confirma lo apreciado en la captura del tráfico TCP correspondiente a un fichero enviado, de tamaño total ligeramente mayor y dividido en varias tramas (Figura \ref{audioInfo}).
 
 \begin{figure}[!t]
 \begin{center}
-\includegraphics[width=0.75\linewidth]{./6_EvalEmpirica/Img/audioInfo.png}
+\includegraphics[width=0.5\linewidth]{./6_EvalEmpirica/Img/audioInfo.png}
 \end{center}
 \caption{Codificación del audio}
 \label{audioInfo}
