@@ -11,7 +11,7 @@ Para el correcto funcionamiento de nuestro sistema de sensado móvil colaborativ
 \clearpage% https://tex.stackexchange.com/questions/70714/center-horizontally-and-vertically-a-block-of-text
 
 \subsection{Introducción}
-Como habíamos comentado en el capítulo 2, el hardware que necesita el propietario del local es básicamente una Rapberry Pi 3. Para que el sistema de sensado funcione debemos instalar en la Raspberry Pi 3 software que nos permita definir la funcionalidad del portal cautivo que nos permitiría implantar la aplicación de sensado móvil colaborativo de acceso a Internet. En la Figura \ref{CoovaScheme} se muestra un esquema general del \emph{software} necesario. En concreto instalamos el siguiente:
+Como habíamos comentado en el capítulo 2, el \emph{hardware} que necesita el propietario del local es básicamente una Rapberry Pi 3. Para que el sistema de sensado funcione debemos instalar en la Raspberry Pi 3 \emph{software} que nos permita definir la funcionalidad del portal cautivo que nos permitiría implantar la aplicación de sensado móvil colaborativo de acceso a Internet. En la Figura \ref{CoovaScheme} se muestra un esquema general del \emph{software} necesario. En concreto instalamos el siguiente:
 
 \begin{figure}[!t]
 \begin{center}
@@ -60,7 +60,7 @@ Como \emph{daemon} ha sido diseñado para operar en segundo plano como component
 \label{hostapd}
 \end{figure}
 
-El hostapd se configura por medio de un archivo de texto que lista todos los parámetros de configuración, alojado en el archivo \emph{/etc/hostapd/hostapd.conf}, que cuenta con los siguientes atributos relevantes y comúnmente utilizados, entre otros:
+Hostapd se configura por medio de un archivo de texto que lista todos los parámetros de configuración, alojado en el archivo \emph{/etc/hostapd/hostapd.conf}, que cuenta con los siguientes atributos relevantes y comúnmente utilizados, entre otros:
 \begin{itemize}
 \item Atributos de Interfaz Inalámbrica:
 \begin{itemize}
@@ -72,7 +72,7 @@ El hostapd se configura por medio de un archivo de texto que lista todos los par
 \begin{itemize}
 \item \emph{ssid}: nombre o \emph{Service Set IDentifier} (\acrshort{SSID}) de la red que aparecería en la lista de redes disponibles al hacer la habitual búsqueda de red desde un dispositivo inalámbrico.
 \item \emph{hw\_mode}: fija el modo de operación de la interfaz y los canales permitidos. Los valores permitidos dependen del hardware pero siempre son un subconjunto de \emph{a}, \emph{b} o \emph{g}. Aunque se configure una red \acrshort{IEEE} 802.11n no es aquí donde debe indicarse, ya que \acrshort{IEEE} 802.11n opera sobre la funcionalidad de \acrshort{IEEE} 802.11a o \acrshort{IEEE} 802.11g.
-\item \emph{channel}: el canal en el que hostapd operaría como punto de acceso. Debe ser un canal soportado por el modo de hardware establecido en el atributo \emph{hw\_mode}. Los canales de \acrshort{IEEE} 802.11 son de 20 MHz de anchura (4 canales) en el espectro, solapándose entre ellos, por lo que deben escogerse de forma que esto no suceda. Por ejemplo, si la mayoría de puntos de acceso de la red utilizan el canal 6 sería óptimo utilizar el canal 1 o el canal 11 para evitar interferencias por solapamiento.
+\item \emph{channel}: el canal en el que Hostapd operaría como punto de acceso. Debe ser un canal soportado por el modo de hardware establecido en el atributo \emph{hw\_mode}. Los canales de \acrshort{IEEE} 802.11 son de 20 MHz de anchura (4 canales) en el espectro, solapándose entre ellos, por lo que deben escogerse de forma que esto no suceda. Por ejemplo, si la mayoría de puntos de acceso de la red utilizan el canal 6 sería óptimo utilizar el canal 1 o el canal 11 para evitar interferencias por solapamiento.
 \end{itemize}
 \item Atributos de \acrshort{IEEE} 802.11n:
 \begin{itemize}
@@ -335,7 +335,7 @@ CoovaChilli ha implementado los siguientes manejadores de eventos:
 
 Como se ha mencionado anteriormente, los órdenes se envían a CoovaChilli mediante peticiones HTTP. El parámetro GET \emph{lang} se usa en \emph{logon} para pasar el idioma preferido. El campo \emph{version} se utiliza para controlar las diferentes versiones del protocolo JSON de CoovaChilli. Si un parámetro para hacer \emph{callbacks} existe, CoovaChilli pone el texto de salida JSON entre paréntesis y lo adjunta con la función de \emph{callback}. La salida sería como una llamada a una función con el objeto JSON pasado como parámetro.
 
-Para el logon, siguiendo el ejemplo del bloque de código que configuró el objeto chilliController en apartados anteriores, cuando se llama al método \emph{logon()} del Controlador el objeto genera un desafío CHAP aleatorio (string hexadecimal) y realiza la petición a la \acrshort{URL} \emph{http://192.168.182.1:3990/json/logon} con las siguientes \emph{strings} de petición: \emph{?username=XXXX\&chapchallenge=YYYY\&chappassword=0123456789abcdef\&lang=EN}.
+Para el logon, siguiendo el ejemplo del bloque de código que configuró el objeto \emph{chilliController} en apartados anteriores, cuando se llama al método \emph{logon()} del Controlador el objeto genera un desafío CHAP aleatorio (\emph{string} hexadecimal) y realiza la petición a la \acrshort{URL} \emph{http://192.168.182.1:3990/json/logon} con las siguientes \emph{strings} de petición: \emph{?username=XXXX\&chapchallenge=YYYY\&chappassword=0123456789abcdef\&lang=EN}.
 CoovaChilli responde con un objeto en formato JSON del bloque de código \ref{JSONResponseYES}:
 
 \begin{listing}[H]
@@ -417,7 +417,7 @@ breaksymbolleft={}
 \label{JSONResponseNO}
 \end{listing}
 
-Para el logoff, cuando se llama al método de desconexión se realiza la petición a \emph{http://192.168.182.1:3990/json/logoff?lang=en\&callback=myfunc}. La respuesta JSON pasa a tener esta forma: \emph{myfunc ( { ``version'': ``1.0'', ``clientState'': 0 } )}. 
+Para el \emph{logoff}, cuando se llama al método de desconexión se realiza la petición a \emph{http://192.168.182.1:3990/json/logoff?lang=en\&callback=myfunc}. La respuesta JSON pasa a tener esta forma: \emph{myfunc (\{``version'': ``1.0'', ``clientState'': 0\})}.
 
 Para el \emph{Refresh}, cuando se llama al método de actualización se realiza la petición a \emph{http://192.168.182.1:3990/json/status?lang=en}. La respuesta JSON en este caso se muestra en el bloque de código \ref{JSONRefresh1}.
 
@@ -476,7 +476,7 @@ breaksymbolleft={}
 \label{JSONNoAuthorized}
 \end{listing}
 
-\subsection{El entorno node.js para programación de back-end }
+\subsection{El entorno node.js para programación de back-end}
 
 JavaScript junto a HTML y CSS son los tres pilares básicos de la programación \emph{front-end} (cliente). Los servidores (\emph{back-end}), suelen estar programados en otros lenguajes como \emph{Hypertext Preprocessor} (PHP), Java \cite{JavaServer} o Python \cite{Python}... Poco a poco JavaScript se ha convertido en una opción para programar los \emph{back-ends} debido a la aparición de Node.js.  Esto se debe a la iniciativa de intentar unificar todo el desarrollo Web en un único lenguaje de programación introduciendo el  paradigma \emph{JavaScript en todas partes}.
 
@@ -556,11 +556,11 @@ app.listen(3000, function() {
   console.log('Example app listening on port 3000!');
 });
 \end{minted}
-\caption{Servidor web implementado con Express}
+\caption{Servidor Web implementado con Express}
 \label{ExpressServer}
 \end{listing}
 
-Las dos primeras líneas realizan la importación del módulo Express y crean la aplicación en la variable \emph{app}, que contendría todos los métodos para recibir las peticiones HTTP, configurar lógicas adicionales y otros controles de comportamiento de la aplicación Web. La orden \emph{app.get()} representa la definición de un camino; especifica una función \emph{callback} como segundo parámetro que se ejecutaría cuando haya una petición HTTP GET con la ruta determinada en el primer parámetro (relativa a la raíz). La función \emph{callback} tiene objetos de petición y respuesta como argumentos y llama al método \emph{send()} en la respuesta para devolver la \emph{string Hello World}. El bloque final inicia el servidor en el puerto 3000 e imprime un log en la consola. Si se visita \url{localhost:3000} en el navegador local después de ejecutar este archivo con Node.js se vería la respuesta.
+Las dos primeras líneas realizan la importación del módulo Express y crean la aplicación en la variable \emph{app}, que contendría todos los métodos para recibir las peticiones HTTP, configurar lógicas adicionales y otros controles de comportamiento de la aplicación Web. La orden \emph{app.get()} representa la definición de un camino; especifica una función \emph{callback} como segundo parámetro que se ejecutaría cuando haya una petición HTTP GET con la ruta determinada en el primer parámetro (relativa a la raíz). La función \emph{callback} tiene objetos de petición y respuesta como argumentos y llama al método \emph{send()} en la respuesta para devolver la \emph{string Hello World}. El bloque final inicia el servidor en el puerto 3000 e imprime un \emph{log} en la consola. Si se visita \url{localhost:3000} en el navegador local después de ejecutar este archivo con Node.js se vería la respuesta.
 
 \subsubsection{El módulo \emph{formidable}}
 El módulo \emph{formidable} de análisis sintáctico (\emph{parsing}) de datos de tipo formulario, especializado en subida de archivos a servidores, incluyendo subida múltiple. Con el uso de este paquete \emph{npm} es posible gestionar los datos enviados al servidor desde el portal cautivo.
@@ -632,13 +632,13 @@ app.use(function (req, res) {
 \end{listing}
 
 
-\subsection{Programación del front-end}
+\subsection{Programación del \emph{front-end}}
 
 El \emph{front-end} implica la producción de contenido, apariencia y comportamiento de una página o aplicación Web de forma que el usuario pueda verla e interactuar con ella. En la actualidad las tecnologías usadas para el desarrollo \emph{front-end} se hallan en proceso de cambio y actualización constante, complicado aún más por la aparición en escena de los diferentes dispositivos actuales capaces de acceder a estas aplicaciones Web, con diferentes tamaños de pantalla y distinto grado de soporte de las tecnologías disponibles.
 
 Las herramientas básicas del desarrollo front-end la forman un conjunto de tres tecnologías. HTML, CSS y JavaScript.
 
-\subsubsection{HTML y  el CCS}
+\subsubsection{HTML y  CCS}
 
 La última versión de HTML es conocida como HTML5 y fue publicada en octubre de 2014. Esta versión contiene nuevas formas de manejar elementos, sobre todo en el ámbito de la multimedia (como el audio y el vídeo), y nuevos descriptores y posibilidades de metadatos con los que se busca conseguir una mayor interoperabilidad entre sistemas y una mayor semántica de la Web. Dado que introduce varias API y marcado para aplicaciones Web complejas y también ha sido diseñado teniendo en mente dispositivos de bajo consumo, su uso también está planteado para aplicaciones móviles multiplataforma.
 
@@ -647,6 +647,7 @@ El CSS define el aspecto o la presentación de la página Web. Un documento CSS 
 Al mismo tiempo, la variedad de módulos existentes actualmente trata de dar un mayor dinamismo y responsividad a las páginas Web, incluyendo animaciones o diseño en múltiples columnas que se adaptan a los tamaños de pantalla.
 
 \subsubsection{JavaScript: bibliotecas, API y complementos}
+
 JavaScript es un lenguaje de programación interpretado de alto nivel que define el comportamiento de una aplicación o página Web (interactividad y ejecución de programas online). Todos los navegadores modernos soportan una implementación parcial o completa de la especificación ECMAScript \cite{ECMAScript2016}.
 
 El \emph{Document Object Module} (\acrshort{DOM}) es la especificación de la jerarquía de los elementos usados por HTML, que puede entenderse como un diagrama de árbol en el que cada objeto representa una parte del documento. JavaScript manipula el DOM pudiendo acceder a cada elemento y realizando cambios en él que luego se verían reflejados en la visualización del sitio Web, a efectos creando HTML dinámico en el que pueden alterarse los elementos y atributos, cambiar el estilo CSS, reaccionar a eventos de la página o crear eventos nuevos. En la Figura \ref{DOMModel} se muestra un ejemplo gráfico del DOM.
@@ -660,10 +661,9 @@ El \emph{Document Object Module} (\acrshort{DOM}) es la especificación de la je
 \label{DOMModel}
 \end{figure}
 
-
 Aunque en este TFG se trabaja con el estándar de JavaScript llamado ECMAScript 2016, en la actualidad la última versión es ECMAScript 2017, lanzada en Junio de este mismo año. A continuación se detallan algunos elementos de importancia que se utilizaron en la elaboración de este TFG. Su lugar de uso se detalla en el siguiente capítulo del presente documento.
 
-\paragraph{\emph{Web Real-Time Communications}} ~\\
+\paragraph{\emph{Web Real-Time Communications}}~\\
 
 WebRTC es una tecnología que permite a las aplicaciones Web capturar y transmitir datos de audio y vídeo, así como intercambiar datos entre navegadores sin un intermediario. Los estándares que componen WebRTC hacen posible compartir datos y realizar videoconferencias \emph{peer-to-peer}, sin que sea necesario que los usuarios instalen complementos u otros elementos \emph{software} de terceros. Junto a las API \emph{MediaStream Recording} y \emph{Media Capture and Streams} proporcionan a la Web una gama de capacidades multimedia que incluyen captura y grabación de multimedia en disco, conferencias de audio y vídeo, intercambio de archivos e incluso gestión de identidad.
 
@@ -683,11 +683,11 @@ La API \emph{MediaStream Recording} está muy relacionada captura los datos gene
 
 La transmisión de datos en Web puede verse enormemente beneficiada por JSON soportado de forma nativa desde ECMAScript 5, aunque debido a su popularidad son ya muchos los lenguajes que han incluido generadores y analizadores de su sintaxis.
 
-\paragraph{\emph{AJAX}} ~\\
+\paragraph{\emph{AJAX}}~\\
 
-El AJAX utiliza peticiones HTTP para que las aplicaciones Web puedan enviar datos al servidor y recibir datos del mismo en segundo plano, sin interferir en el comportamiento y la visualización de la Web. De este modo, junto a la manipulación del DOM realizada por JavaScript, se permite cambiar el contenido dinámicamente con información procedente del servidor sin tener que actualizar la totalidad de la página. En la actualidad se utiliza JSON en lugar de XML por su integración nativa con JavaScript.
+AJAX utiliza peticiones HTTP para que las aplicaciones Web puedan enviar datos al servidor y recibir datos del mismo en segundo plano, sin interferir en el comportamiento y la visualización de la Web. De este modo, junto a la manipulación del DOM realizada por JavaScript, se permite cambiar el contenido dinámicamente con información procedente del servidor sin tener que actualizar la totalidad de la página. En la actualidad se utiliza JSON en lugar de XML por su integración nativa con JavaScript.
 
-\paragraph{\emph{jQuery}} ~\\
+\paragraph{\emph{jQuery}}~\\
 
 A menudo, trabajar con determinadas funciones de JavaScript (manipulación del DOM, manejar eventos, usar AJAX) puede generar documentos difíciles de leer por su extensión y lo confuso de su sintaxis. La jQuery es una biblioteca JavaScript gratuita y de código abierto que trata de simplificar todos estos procesos del lado del cliente. Permite a los desarrolladores crear complementos con los que añadir una capa más de abstracción a las interacciones de bajo nivel siguiendo un enfoque modular. Actualmente se halla en su versión 3. Para utilizarlo en un sitio Web ha de ser incluido como se incluiría un archivo JavaScript cualquiera en un archivo HTML. La popularidad de jQuery radica en cómo simplifica la lectura y el análisis del código. Por ejemplo, si desde un archivo JavaScript deseamos realizar una petición AJAX de tipo GET al archivo del servidor \emph{send-ajax.php} se tendría que escribir el bloque de código \ref{AJAX} (cliente).
 
@@ -752,7 +752,7 @@ $.get('send-ajax-data.php')
 \label{jQueryAJAX}
 \end{listing}
 
-\paragraph{\emph{Bootstrap}} ~\\
+\paragraph{\emph{Bootstrap}}~\\
 
 Bootstrap es un \emph{framework} que simplifica la carga de trabajo, adaptada para el diseño de aplicaciones móviles. Contiene plantillas basadas en HTML y CSS para tipografías, formas, botones, navegación y otros componentes, así como algunos componentes opcionales de JavaScript. Utiliza un sistema de rejilla o \emph{grid} para ayudar en el diseño de la web, proporcionando así un sencillo sistema de filas, cada una de ellas subdividida hasta en 12 columnas, con el que puede establecerse la proporción visual de los elementos de la pantalla. En la Figura \ref{gridBootstrap} se muestra un ejemplo de uso del sistema de rejilla en Bootstrap, con un elemento sirviendo de cabecera y varios contenedores alineados bajo el mismo en grupos de tres.
 

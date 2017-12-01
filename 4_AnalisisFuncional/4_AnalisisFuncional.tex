@@ -28,7 +28,7 @@ Los estándares utilizados para implantar la funcionalidad de captura de sonido,
 
 En cuanto al segundo requisito, se plantea que las únicas interacciones que tenga que hacer el usuario con el servicio intermedio de portal cautivo antes de obtener acceso a Internet sea la concesión de permisos de ubicación y captura de audio y otro botón para comenzar el proceso de conexión, representando una ventaja sobre otros sistemas de portal cautivo donde hay múltiples redirecciones, procesos de creación de cuentas de usuario y de inicio de sesión.
 
-Para alcanzar el tercer requisito se trata de aumentar la usabilidad del servicio más allá de capturar un fragmento de sonido, obteniendo también su ubicación y una marca de tiempo para poder hacer análisis estadísticos, mapeos de niveles de señal 3D en función del tiempo…\\
+Para alcanzar el tercer requisito se trata de aumentar la usabilidad del servicio más allá de capturar un fragmento de sonido, obteniendo también su ubicación y una marca de tiempo para poder hacer análisis estadísticos, mapeos de niveles de señal 3D en función del tiempo, etc.
 
 El cuarto requisito ha surgido a partir de las pruebas realizadas y el desarrollo iterativo e incremental del sistema. Esto es, inicialmente se especificó únicamente un modo de conexión a Internet debiendo el cliente Web mantener abierta la pestaña del navegador Web en la que se proporcionó el permiso para acceder al micrófono. La aplicación javascript de esa pestaña capturaba un fragmento de audio de 5 segundos cada 3 minutos. La ventaja es que la ofrece al usuario una conexión más estable. La desventaja es que retiene el control del micrófono en modo exclusivo para esa aplicación Javascript. Haciendo desarrollos incrementales se detectó este comportamiento a priori no explícito, por lo que se observó que este comportamiento no sería adecuado para aquellos usuarios que quisieran hacer uso del micrófono a la vez que está conectado a Internet (por ejemplo, mensajería de audio vía aplicaciones de mensajería instantánea). Por ello, en segundo lugar se especificó como requisito previo que pudiera existir un nuevo modo de conexión a Internet. Esto es, ofrecer un tiempo de conexión fijo de 30 minutos a cambio de un único archivo de audio inicial, tras lo cual podría cerrarse la pestaña del navegador de la Aplicación Web y hacer uso libre del micrófono del dispositivo durante este tiempo.
 
@@ -207,7 +207,7 @@ Esta configuración incluye el paso necesario de habilitar el \emph{flag} del \e
 \label{modulosTotal}
 \end{figure}
 
-Como también se adelantó en el anterior capítulo, \emph{Hostapd} es un servicio que se ejecuta en segundo plano, configurando y permitiendo el uso de la interfaz inalámbrica \emph{wlan0} como punto de acceso WiFi 802.11n para que los clientes se conecten a nuestro servicio.
+Como también se adelantó en el anterior capítulo, Hostapd es un servicio que se ejecuta en segundo plano, configurando y permitiendo el uso de la interfaz inalámbrica \emph{wlan0} como punto de acceso WiFi 802.11n para que los clientes se conecten a nuestro servicio.
 
 El submódulo \emph{Raspberry Pi}, con el sistema operativo Raspbian, proporciona las interfaces de red necesarias, \emph{software} y dependencias para instalar todo el ecosistema y las opciones de configuración de red que hacen posible la implementación total del servicio.
 

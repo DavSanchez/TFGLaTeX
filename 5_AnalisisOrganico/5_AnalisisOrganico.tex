@@ -4,7 +4,7 @@
 \begin{minipage}{.75\textwidth}
 \section{Análisis orgánico de la implantación del \emph{software}}
 
-Una vez revisado el análisis previo y funcional del sistema de sensado móvil colaborativo mediante una visión \emph{top-down}, en este capítulo presentamos  el análisis orgánico de la implantación mediante una visión \emph{bottom-up}. Esto es, primero se configura el nivel inferior y el \emph{Control de Red}, tras lo cual se va ascendiendo en el modelo hasta llegar a la implantación del portal cautivo, en el nivel de \emph{Usuarios} y el nivel más alto del sistema. La descripción de la instalación del hardware se presenta en el Apéndice \ref{ApendiceA}.
+Una vez revisado el análisis previo y funcional del sistema de sensado móvil colaborativo mediante una visión \emph{top-down}, en este capítulo presentamos  el análisis orgánico de la implantación mediante una visión \emph{bottom-up}. Esto es, primero se configura el nivel inferior y el \emph{Control de Red}, tras lo cual se va ascendiendo en el modelo hasta llegar a la implantación del portal cautivo, en el nivel de \emph{Usuarios} y el nivel más alto del sistema. La descripción de la instalación del \emph{hardware} se presenta en el Apéndice \ref{ApendiceA}.
 \end{minipage}
 \end{center}
 \vspace{\stretch{3}} % \vfill % equivalent to \vspace{\fill}
@@ -290,7 +290,7 @@ En primer lugar debemos modificar el \emph{script} que CoovaChilli ejecuta al po
 
 También debemos activar el \emph{flag} que permite activar CoovaChilli en el archivo \emph{/etc/default/chilli/} cambiando el valor de la variable \emph{START\_CHILLI} de 0 a 1.
 
-Tras esto, se debe editar el archivo de configuración de CoovaChilli introduciendo los valores adecuados a nuestro sistema en los atributos relevantes en este momento en el archivo \emph{/etc/chilli/defaults} o bien en su copia renombrada como \emph{/etc/chilli/config}, que al iniciar el sistema reemplaza los valores dados en defaults donde difieran. Dado que en este momento aún no se encuentra instalada la herramienta \emph{hostapd} (ver más adelante) aún no tenemos habilitado un SSID para nuestro sistema, por lo que en un paso posterior tras la instalación de \emph{hostapd} debemos volver a este archivo de configuración e introducir el nombre del SSID que hayamos establecido. En el caso de este TFG, el SSID utilizado es \emph{RasPiDav}.
+Tras esto, se debe editar el archivo de configuración de CoovaChilli introduciendo los valores adecuados a nuestro sistema en los atributos relevantes en este momento en el archivo \emph{/etc/chilli/defaults} o bien en su copia renombrada como \emph{/etc/chilli/config}, que al iniciar el sistema reemplaza los valores dados en defaults donde difieran. Dado que en este momento aún no se encuentra instalada la herramienta Hostapd (ver más adelante) aún no tenemos habilitado un SSID para nuestro sistema, por lo que en un paso posterior tras la instalación de Hostapd debemos volver a este archivo de configuración e introducir el nombre del SSID que hayamos establecido. En el caso de este TFG, el SSID utilizado es \emph{RasPiDav}.
 
 \begin{listing}[H]
 \begin{minted}
@@ -368,7 +368,7 @@ service chilli start
 
 \subsubsection{Instalación y configuración de Hostapd} \label{HostapdInstallConfig}
 
-En este momento se prepara la herramienta \emph{hostapd} para poner en marcha la interfaz WiFi como Punto de Acceso IEEE 802.11n, comenzando por su instalación y continuando con su configuración.
+En este momento se prepara la herramienta Hostapd para poner en marcha la interfaz WiFi como Punto de Acceso IEEE 802.11n, comenzando por su instalación y continuando con su configuración.
 
 \begin{listing}[H]
     \begin{minted}
@@ -422,7 +422,7 @@ ht_capab=[HT40][SHORT-GI-20][DSSS_CCK-40]
 \label{HostapdConf}
 \end{listing}
 
-En este punto reiniciamos hostapd para que utilice los ajustes deseados. Al ejecutar este orden ya sería visible la red WiFi de la Raspberry Pi 3 (Figura \ref{redesVisibles}) desde otros dispositivos con el SSID indicado:
+En este punto reiniciamos Hostapd para que utilice los ajustes deseados. Al ejecutar este orden ya sería visible la red WiFi de la Raspberry Pi 3 (Figura \ref{redesVisibles}) desde otros dispositivos con el SSID indicado:
 
 \begin{listing}[H]
     \begin{minted}
@@ -603,7 +603,7 @@ server {
 \label{directiveNGINX}
 \end{listing}
 
-Llegados a este punto solo queda comprobar que la configuración de NGINX es la correcta y reiniciar tanto el servidor Web como \emph{hostapd}.
+Llegados a este punto solo queda comprobar que la configuración de NGINX es la correcta y reiniciar tanto el servidor Web como Hostapd.
 
 \begin{listing}[H]
     \begin{minted}

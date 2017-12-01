@@ -283,9 +283,9 @@ Durante el proceso de documentación, previa a la implementación del TFG se pen
 
 En cuanto a los servidores Web para alojar el portal cautivo, inicialmente se pensó en utilizar un enfoque tradicional con servidores como \emph{Apache}, \emph{Nginx} o soluciones ligeras como \emph{lighttpd} junto a PHP o \emph{web scripts} CGI. Finalmente fueron parcialmente descartados como implementación principal en favor de tecnologías web de gran popularidad actual como Node.js, usando el servidor web Nginx solamente para alojar la interfaz web daloRADIUS.
 
-Aunque Raspbian es la oficial, la Raspberry Pi permite instalar otras distribuciones y sistemas operativos. Uno de ellos es \emph{OpenWRT}, una solución de código abierto para sistemas empotrados orientados a encaminamiento de tráfico de red. Puede instalarse en pasarelas residenciales, ordenadores portátiles e incluso teléfonos móviles, por lo que su instalación es viable en la Raspberry Pi. OpenWRT tiene disponible una gran cantidad de protocolos como DNS y DHCP, \acrshort{NAT}, mapeo de puertos, aplicaciones de seguridad... también es posible el uso de portales cautivos instalando \emph{CoovaChilli}.
+Aunque Raspbian es la oficial, la Raspberry Pi permite instalar otras distribuciones y sistemas operativos. Uno de ellos es \emph{OpenWRT}, una solución de código abierto para sistemas empotrados orientados a encaminamiento de tráfico de red. Puede instalarse en pasarelas residenciales, ordenadores portátiles e incluso teléfonos móviles, por lo que su instalación es viable en la Raspberry Pi. OpenWRT tiene disponible una gran cantidad de protocolos como DNS y DHCP, \acrshort{NAT}, mapeo de puertos, aplicaciones de seguridad... También es posible el uso de portales cautivos instalando \emph{CoovaChilli}.
 
-Finalmente se decidió no optar por esta solución debido a que la distribución basada en \emph{Debian} predeterminada para la Raspberry Pi ofrece un soporte más amplio en cuanto a documentación y mayores posibilidades para implementar otras tareas relacionadas con el proyecto: gestión, análisis y procesado de los ficheros de audio, simulaciones de ubicación acústica...
+Finalmente se decidió no optar por esta solución debido a que la distribución basada en \emph{Debian} predeterminada para la Raspberry Pi ofrece un soporte más amplio en cuanto a documentación y mayores posibilidades para implementar otras tareas relacionadas con el proyecto: gestión, análisis y procesado de los ficheros de audio, simulaciones de ubicación acústica, etc.
 
 Junto a CoovaChilli se evaluó otra solución de control de acceso a la red disponible para Linux: \emph{PacketFence}. Este programa de código abierto es también muy completo, ofreciendo facilidades de monitorización, análisis de ficheros transmitidos, gestión centralizada tanto cableada como inalámbrica (802.1X) y utilidades de portal cautivo. Lamentablemente, cuando se estudió su uso \emph{PacketFence} no garantizaba compatibilidad total para la Raspberry Pi, por lo que también fue descartado.
 
@@ -311,7 +311,7 @@ Dado que OpenSSL genera certificados auto-firmados, y por tanto no reconocidos p
 \vspace*{\stretch{2}}%{\fill}
 \begin{center}
 \begin{minipage}{.75\textwidth}
-\section{Tabla de desarrollo temporal}\label{ApendiceF}
+\section{Desarrollo temporal}\label{ApendiceF}
 
 Se presenta una tabla de desarrollo temporal.
 \end{minipage}
