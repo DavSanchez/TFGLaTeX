@@ -123,7 +123,7 @@ bottom=25mm}
 \cleardoublepage
 
 % Referencias, para crearlas compilamos primero ESTE documento en LaTeX,
-% luego, lo compilamos en BibTeX o BibTaTeX (pillará el documento .bib referenciado en bibliography)
+% luego, lo compilamos en BibTeX o BibLaTeX (pillará el documento .bib referenciado en bibliography)
 % finalmente, compilamos en LaTeX DOS VECES.
 
 \nocite{*}
@@ -135,6 +135,9 @@ bottom=25mm}
 \cleardoublepage
 
 \printnoidxglossary[type=acronym,title={Glosario},toctitle={Glosario}]
+\cleardoublepage
+
+\newpage\null\thispagestyle{empty}\newpage
 
 % Termina el documento
 \end{document}
